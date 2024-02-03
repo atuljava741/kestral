@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../apicalls/login_mutation.dart';
+import '../dashboard/dashboard.dart';
+import '../kestrel_pro_page.dart';
 
 class LandingPageViewModel extends ChangeNotifier {
 
@@ -22,25 +24,71 @@ class LandingPageViewModel extends ChangeNotifier {
     return null;
   }
 
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty || value.length< 8) {
-      return "Enter correct password";
-    } else {
-      return null;
-    }
-  }
-  Future<void> handleButtonClick(BuildContext context) async {
-    String email = emailController.text;
-    String password = passwordController.text;
+   String? validatePassword(String? value) {
+     if (value == null || value.isEmpty || value.length < 8) {
+       return "Password must be at least 8 characters";
+     }
+     return null;
+   }
 
-    if (formKey.currentState?.validate() ?? false) {
-      await customLoginMutation(email, password);
-      //navigate to dashboard
-    } else {
-      // bottom sheet showing ," Please enter the corrent information" and ok button which will close the bottom sheet.
-    }
-  }
-  String morningText = "Hey! Good Morning";
+   Future<void> handleButtonClick(BuildContext context) async {
+     String email = emailController.text;
+     String password = passwordController.text;
+
+     // Validate email and password
+     bool isEmailValid = formKey.currentState?.validate() ?? false;
+     bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;
+
+     //if (isEmailValid && isPasswordValid) {
+     if(true) {
+       password = "Test@123";
+       email = "sanyam.sharma@47billion.com";
+       // Fields are valid, perform login action
+       await customLoginMutation(email, password);
+
+       // Navigate to the new page
+       Navigator.push(
+         context,
+         MaterialPageRoute(builder: (context) => KestralScreen()),
+       );
+     } else {
+       // Fields are not valid, show a modal bottom sheet with an error message
+       showModalBottomSheet(
+         context: context,
+         builder: (BuildContext context) {
+           return Container(
+             width: double.infinity,
+             padding: EdgeInsets.all(16),
+             child: Column(
+               mainAxisSize: MainAxisSize.min,
+               children: [
+                 const Text(
+                   'Please enter the correct information.',
+                   style: TextStyle(
+                     fontSize: 18,
+                   ),
+                 ),
+                 const SizedBox(height: 20),
+                 ElevatedButton(
+                   onPressed: () {
+                     // Close the bottom sheet
+                     Navigator.pop(context);
+                   },
+                   style: ElevatedButton.styleFrom(
+                     primary: Colors.blue, // Set the background color to blue
+                   ),
+                   child: Text('OK', style: TextStyle(color: Colors.white)),
+                 ),
+               ],
+             ),
+           );
+         },
+       );
+     }
+   }
+
+
+   String morningText = "Hey! Good Morning";
   var emailAddressText = "Email Address";
   var passwordText = "Password";
   var buttonLogInText = "Login";

@@ -1,17 +1,22 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:kestral/component/category_list_view.dart';
 import 'package:kestral/utils/appt_text_style.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:kestral/utils/utils.dart';
 import 'package:stacked/stacked.dart';
+import '../apicalls/add_task.dart';
 import '../apicalls/get_projects.dart';
 import '../apicalls/get_task.dart';
 import '../apicalls/get_task_categories.dart';
 import '../apicalls/login_mutation.dart';
+import '../component/project_list_view.dart';
+import '../component/task_list_view.dart';
+import '../datamodal/incomplete_task.dart';
 import 'dashboard_viewmodel.dart';
 
 class KestralScreen extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     apiTest();
@@ -21,143 +26,146 @@ class KestralScreen extends StatelessWidget {
         viewModelBuilder: () => DashboardViewModel(),
         onViewModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, child) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F5F0),
-      body: Stack(
-        children: [
-          getTopLogoAndText(context, viewModel),
-          getProjectAndTaskUI(context, viewModel),
-          Positioned(
-            top: (MediaQuery.of(context).size.height - 100) / 2,
-            left: (MediaQuery.of(context).size.width - 100) / 2,
-            child: Container(
-              height: 100,
-              width: 100,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue, // Change color as needed
-              ),
-              child:   Center(
-                child: GestureDetector(
-                  onTap: () {
-                    viewModel.toggleState();
-                    viewModel.togglePlayState();
-                    viewModel.toggleColorState();
-                    viewModel.refreshUI();
-                  },
+          return Scaffold(
+            backgroundColor: const Color(0xFFF8F5F0),
+            body: Stack(
+              children: [
+                getTopLogoAndText(context, viewModel),
+                getProjectAndTaskUI(context, viewModel),
+                Positioned(
+                  top: (MediaQuery.of(context).size.height - 100) / 2,
+                  left: (MediaQuery.of(context).size.width - 100) / 2,
                   child: Container(
-                    width: 120,
-                    height: 120,
-                    child: Stack(
-                      children: [
-                        Center(
-                            child:Utils.getIcon("assets/images/bottom_layer.png", 120, 120)),
-                        Center(
-                          child: Opacity(
-                            opacity: 1,
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    width: 85,
-                                    height: 85,
-                                    decoration: ShapeDecoration(
-                                      color: viewModel.getColor(),
-                                      shape: const OvalBorder(
-                                        side: BorderSide(width: 8, color: Color(0XFFFFFFFF)),
-                                      ),
-                                      shadows: const [
-                                        BoxShadow(
-                                          color: Color(0x3F000000),
-                                          blurRadius: 50,
-                                          offset: Offset(0, 8),
-                                          spreadRadius: 3,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Utils.getIcon(viewModel.getImage(), 60, 60),
-                        ),
-                      ],
+                    height: 100,
+                    width: 100,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue, // Change color as needed
                     ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                width: double.infinity,
-                height: 64.Sw,
-                decoration: const BoxDecoration(
-                  color: Color(0XFFFFFFFF),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.0),
-                    topRight: Radius.circular(15.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      spreadRadius: 0,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Row( // Nested Row to group left-side elements
-                      children: [
-                        Utils.getIcon("assets/images/contact.png", 24, 24),
-                         SizedBox(width: 8.Sw), // Adjust spacing as needed
-                         Text(
-                          'Adam Lang',
-                          style: AppTextStyle.textStylePoppins21w600,
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Stack( // Wrap the bottom sheet content with a Stack
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          onStartButtonClicked(viewModel);
+                        },
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          child: Stack(
                             children: [
-                              Container( // Background container
-                                width: double.infinity,
-                                height: 200,
-                                decoration: const ShapeDecoration(
-                                  color: Color(0xFFF8F5F0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16),
-                                      topRight: Radius.circular(16),
+                              Center(
+                                  child: Utils.getIcon(
+                                      "assets/images/bottom_layer.png",
+                                      120,
+                                      120)),
+                              Center(
+                                child: Opacity(
+                                  opacity: 1,
+                                  child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Container(
+                                          width: 85,
+                                          height: 85,
+                                          decoration: ShapeDecoration(
+                                            color: viewModel.getColor(),
+                                            shape: const OvalBorder(
+                                              side: BorderSide(
+                                                  width: 8,
+                                                  color: Color(0XFFFFFFFF)),
+                                            ),
+                                            shadows: const [
+                                              BoxShadow(
+                                                color: Color(0x3F000000),
+                                                blurRadius: 50,
+                                                offset: Offset(0, 8),
+                                                spreadRadius: 3,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                              Positioned( // Position the second container within the Stack
-                                top: 20, // Adjust positioning as needed
-                                left: 20,
-                                right: 20,
-                                child: Container(
+                              Center(
+                                child:
+                                    Utils.getIcon(viewModel.getImage(), 60, 60),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    height: 64.Sw,
+                    decoration: const BoxDecoration(
+                      color: Color(0XFFFFFFFF),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          spreadRadius: 0,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          // Nested Row to group left-side elements
+                          children: [
+                            Utils.getIcon(
+                                "assets/images/contact.png", 24, 24),
+                            SizedBox(width: 8.Sw), // Adjust spacing as needed
+                            Text(
+                              viewModel.getAdamLongText(),
+                              style: AppTextStyle.textStylePoppins21w600,
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => Container(
+                                    // Background container
+                                    width: double.infinity,
+                                    height: 200,
+                                    decoration: const ShapeDecoration(
+                                      color: Color(0xFFF8F5F0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          topRight: Radius.circular(16),
+                                        ),
+                                      ),
+                                    ),
+                                child: Stack(
+                                  children: [
+                                    SizedBox(height: 20,),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 20,right: 20),
                                   width: 320,
                                   height: 167,
                                   decoration: ShapeDecoration(
                                     color: Colors.white,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius:
+                                      BorderRadius.circular(12),
                                     ),
                                     shadows: const [
                                       BoxShadow(
@@ -194,40 +202,53 @@ class KestralScreen extends StatelessWidget {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(20),
-                                    child: Column( // Arrange rows vertically
-                                      crossAxisAlignment: CrossAxisAlignment.start, // Align rows to the left
+                                    child: Column(
+                                      // Arrange rows vertically
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      // Align rows to the left
                                       children: [
                                         Row(
                                           children: [
-                                            Utils.getIcon("assets/images/watch.png", 24, 24),
-                                             SizedBox(width: 11),
-                                             Text(
-                                              'Sync Time',
-                                              style: AppTextStyle.textStylePoppins22w400,
+                                            Utils.getIcon(
+                                                "assets/images/watch.png",24,24),
+                                            const SizedBox(width: 11),
+                                            Text(
+                                              viewModel.getSyncTimeText(),
+                                              style: AppTextStyle
+                                                  .textStylePoppins22w400,
                                             ),
                                           ],
                                         ),
-                                         SizedBox(height: 24), // Add spacing between rows
+                                        const SizedBox(height: 24),
+                                        // Add spacing between rows
                                         Row(
                                           children: [
                                             // Add widgets for the second row here
-                                            Utils.getIcon("assets/images/delete.png", 24, 24),
-                                             SizedBox(width: 11),
-                                             Text(
-                                              'Clear Cache',
-                                              style: AppTextStyle.textStylePoppins22w400,
+                                            Utils.getIcon(
+                                                "assets/images/delete.png",24,24),
+                                            const SizedBox(width: 11),
+                                            Text(
+                                              viewModel.getClearCacheText(),
+                                              style: AppTextStyle
+                                                  .textStylePoppins22w400,
                                             ),
                                           ],
                                         ),
-                                         SizedBox(height: 24), // Add spacing between rows
+                                        const SizedBox(height: 24),
+                                        // Add spacing between rows
                                         Row(
                                           children: [
                                             // Add widgets for the second row here
-                                            Utils.getIcon("assets/images/logout.png", 24, 24),
-                                             SizedBox(width: 11),
-                                             Text(
-                                              'Logout',
-                                              style: AppTextStyle.textStylePoppins22w400,
+                                            Utils.getIcon(
+                                                "assets/images/logout.png",
+                                                24,
+                                                24),
+                                            const SizedBox(width: 11),
+                                            Text(
+                                              viewModel.getLogOutText(),
+                                              style: AppTextStyle
+                                                  .textStylePoppins22w400,
                                             ),
                                           ],
                                         ),
@@ -235,45 +256,47 @@ class KestralScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: Utils.getIcon("assets/images/threepoints.png", 24, 24),
-                    ),// Right-side icon
-                  ],
+                                ],
+                                  ),
+                            ));
+                          },
+                          child: Utils.getIcon(
+                              "assets/images/threepoints.png", 24, 24),
+                        ), // Right-side icon
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );});
+          );
+        });
   }
 
-  List<Widget> projectContainer(DashboardViewModel viewModel) {
+  /*List<Widget> projectContainer(DashboardViewModel viewModel) {
     List<Widget> list = [];
-    for(var i = 0; i < viewModel.projectList.length; i++) {
+    for (var i = 0; i < viewModel.projectList.length; i++) {
       Widget w = GestureDetector(
         onTap: () {
           // view model me jo selectProject varaible me uska naam likhna hai jisko tap kiya
           viewModel.seletedProject = viewModel.projectList.elementAt(i).projectName;
+          viewModel.getSubTask(viewModel.projectList.elementAt(i).projectId);
           viewModel.refreshUI();
         },
-        child:  Container(
+        child: Container(
           width: double.infinity,
           height: 48.Sh,
-          decoration: const BoxDecoration(color: Colors.white,
+          decoration: const BoxDecoration(
+            color: Colors.white,
           ),
-          child:  Padding(
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 viewModel.projectList.elementAt(i).projectName,
                 textAlign: TextAlign.center, // Center text horizontally
-                style:  AppTextStyle.textStylePoppins15w400,
+                style: AppTextStyle.textStylePoppins15w400,
               ),
             ),
           ),
@@ -282,39 +305,53 @@ class KestralScreen extends StatelessWidget {
       list.add(w);
     }
     return list;
+  }*/
 
-  }
-
-  Widget TaskContainer(String text) {
-    return GestureDetector(
-      onTap: () {
-      },
-      child:   Container(
-        width: double.infinity,
-        height: 48.Sh,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              text,
-              textAlign: TextAlign.center, // Center text horizontally
-              style: AppTextStyle.textStylePoppins15w400,
+  /*List<Widget> taskContainer(DashboardViewModel viewModel) {
+    List<Widget> list = [];
+    for (var j = 0; j < viewModel.taskList.length; j++) {
+      Widget x = GestureDetector(
+        onTap: () {
+          viewModel.selectedTask = viewModel.taskList.elementAt(j).taskName;
+          viewModel.refreshUI();
+        },
+        child: Container(
+          width: double.infinity,
+          height: 48.Sh,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                viewModel.taskList.elementAt(j).taskName,
+                textAlign: TextAlign.center, // Center text horizontally
+                style: AppTextStyle.textStylePoppins15w400,
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
+      list.add(x);
+    }
+    return list;
+  }*/
 
-  Widget CreateTask(String text) {
+  Widget CreateTask(DashboardViewModel viewModel,String text, {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: () {
+        // Call onTap callback if it is not null
+        onTap?.call();
+        // Print the text when tapped
+        //print(text);
       },
-      child:  Container(
+      child: Container(
         width: double.infinity,
         height: 48.Sh,
-        decoration: const BoxDecoration(color: Colors.white,
+        decoration: const BoxDecoration(
+          color: Colors.white,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -335,8 +372,8 @@ class KestralScreen extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
-      margin:  EdgeInsets.only(left: 10.Sw,right: 10.Sw),
-      padding:  EdgeInsets.only(top:50.Sh),
+      margin: EdgeInsets.only(left: 10.Sw, right: 10.Sw),
+      padding: EdgeInsets.only(top: 50.Sh),
       decoration: BoxDecoration(
         gradient: viewModel.getLinearGradient(),
       ),
@@ -393,8 +430,9 @@ class KestralScreen extends StatelessWidget {
                       width: 320.Sw,
                       height: 64.Sh,
                       decoration: ShapeDecoration(
-                        color: Color(0xFFFBFAFA),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        color: const Color(0xFFFBFAFA),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
                         shadows: const [
                           BoxShadow(
                             color: Color(0x1E343330),
@@ -405,7 +443,8 @@ class KestralScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    GestureDetector( // Wrap the Container with a GestureDetector
+                    GestureDetector(
+                      // Wrap the Container with a GestureDetector
                       onTap: () {
                         showModalBottomSheet(
                             context: context,
@@ -427,14 +466,16 @@ class KestralScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: 20.Sw,right: 20.Sw,top: 60.Sh),
+                                    padding: EdgeInsets.only(
+                                        left: 20.Sw, right: 20.Sw, top: 60.Sh),
                                     child: Container(
                                       width: double.infinity,
                                       height: 312.Sh,
                                       decoration: ShapeDecoration(
                                         color: Colors.white,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         shadows: const [
                                           BoxShadow(
@@ -469,126 +510,99 @@ class KestralScreen extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                      child: Stack(
-                                        children: [
-                                          Column( // Arrange rows vertically
-                                            crossAxisAlignment: CrossAxisAlignment.start, // Align rows to the left
-                                            children:
-                                              projectContainer(viewModel)
-                                            ),
-                                        ],
-                                      ),
+                                      child: ProjectsListView(viewModel.projectList, viewModel, (index) {
+                                        viewModel.selectedProjectId = viewModel.projectList.elementAt(index).projectId;
+                                        viewModel.selectProjectText = viewModel.projectList.elementAt(index).projectName;
+                                        print(viewModel.selectProjectText);
+
+                                      })
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: 20.Sw,right: 20.Sw,top: 401.Sh,bottom: 20.Sh),
+                                    padding: EdgeInsets.only(
+                                        left: 20.Sw,
+                                        right: 20.Sw,
+                                        top: 401.Sh,
+                                        bottom: 20.Sh),
                                     child: GestureDetector(
-                                      onTap: () {
-
+                                      onTap: () async {
+                                        InCompleteTaskList incompleteTashList = await getMyTaskList(viewModel.selectedProjectId,Utils.userInformation!.data.userAuthentication.employeeId);
+                                        viewModel.taskList = incompleteTashList.data.getInCompleteTasks;
+                                        Navigator.pop(context);
+                                        viewModel.refreshUI();
                                       },
                                       child: Container(
                                           width: double.infinity,
                                           height: 48.Sh,
                                           decoration: ShapeDecoration(
                                             color: const Color(0xFF1589CA),
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
                                           ),
                                           child: Center(
                                             child: Text(
                                               'Continue',
-                                              style: AppTextStyle.textStylePoppins16w500,
+                                              style: AppTextStyle
+                                                  .textStylePoppins16w500,
                                             ),
-                                          )
-                                      ),
+                                          )),
                                     ),
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(top: 23.Sh,bottom: 21.Sh),
+                                        padding: EdgeInsets.only(
+                                            top: 23.Sh, bottom: 21.Sh),
                                         child: Text(
-                                          'Select Project',
-                                          style: AppTextStyle.textStylePoppins16w600,
+                                          viewModel.selectProjectText,
+                                          style: AppTextStyle
+                                              .textStylePoppins16w600,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ],
                               );
-                            }
-                        );
+                            });
                       },
                       child: Container(
                         width: 256.Sw,
                         height: 64.Sh,
-                        decoration: const ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4),
-                              bottomLeft: Radius.circular(4),
-                            ),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x19969696),
-                              blurRadius: 3,
-                              offset: Offset(2, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x16969696),
-                              blurRadius: 6,
-                              offset: Offset(6, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x0C969696),
-                              blurRadius: 8,
-                              offset: Offset(14, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x02969696),
-                              blurRadius: 10,
-                              offset: Offset(25, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x00969696),
-                              blurRadius: 11,
-                              offset: Offset(39, 0),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
+                        decoration: AppTextStyle.getShapeDecoration3(),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding:  EdgeInsets.only(left: 13.Sw,top: 14.Sh),
+                              padding: EdgeInsets.only(left: 13.Sw, top: 14.Sh),
                               child: Column(
                                 children: [
                                   Row(
                                     children: [
                                       Text(
-                                        'PROJECT',
-                                        style: AppTextStyle.textStylePoppins12w400,
+                                        viewModel.getProjectText(),
+                                        style:
+                                            AppTextStyle.textStylePoppins12w400,
                                       ),
                                     ],
                                   ),
-                                   SizedBox(height: 10.Sh,),
+                                  SizedBox(
+                                    height: 10.Sh,
+                                  ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        viewModel.seletedProject,
-                                        style: AppTextStyle.textStylePoppins18w600,
+                                        viewModel.selectProjectText,
+                                        style:
+                                            AppTextStyle.textStylePoppins18w600,
                                       ),
-                                       Padding(
+                                      Padding(
                                         padding: EdgeInsets.only(right: 18.Sw),
-                                        child: Icon(Icons.arrow_drop_down,color: Colors.black),
+                                        child: const Icon(Icons.arrow_drop_down,
+                                            color: Colors.black),
                                       ),
                                     ],
                                   ),
@@ -600,13 +614,14 @@ class KestralScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding:  EdgeInsets.only(left: 265.Sw, top: 10.Sh),
+                      padding: EdgeInsets.only(left: 265.Sw, top: 10.Sh),
                       child: GestureDetector(
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
                             builder: (context) => StatefulBuilder(
-                              builder: (BuildContext context, StateSetter setState) {
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
                                 return Container(
                                   width: double.infinity,
                                   height: 96.Sh,
@@ -622,17 +637,26 @@ class KestralScreen extends StatelessWidget {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                       SizedBox(height: 10.Sh,),
+                                      SizedBox(
+                                        height: 10.Sh,
+                                      ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           viewModel.showCheckIcon
-                                              ? const Icon(Icons.check, size: 32, color: Colors.green)
-                                              : const CircularProgressIndicator(color: Colors.black,),
-                                          const SizedBox(width: 13,),
+                                              ? const Icon(Icons.check,
+                                                  size: 32, color: Colors.green)
+                                              : const CircularProgressIndicator(
+                                                  color: Colors.black,
+                                                ),
+                                          const SizedBox(
+                                            width: 13,
+                                          ),
                                           Text(
                                             'Refreshing Project List',
-                                            style: AppTextStyle.textStylePoppins16w600,
+                                            style: AppTextStyle
+                                                .textStylePoppins16w600,
                                           )
                                         ],
                                       ),
@@ -642,7 +666,6 @@ class KestralScreen extends StatelessWidget {
                               },
                             ),
                           );
-
                           // Simulate loading for 2 seconds
                           Future.delayed(Duration(seconds: 2), () {
                             viewModel.showCheckIcon = true;
@@ -653,13 +676,15 @@ class KestralScreen extends StatelessWidget {
                           width: 48.Sw,
                           height: 48.Sh,
                           decoration: ShapeDecoration(
-                            color: Color(0xFF1589CA),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                            color: const Color(0xFF1589CA),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
                           ),
                           child: SizedBox(
                             width: 24,
                             height: 24,
-                            child: Utils.getIcon("assets/images/refresh_image.png.png", 72, 64),
+                            child: Utils.getIcon(
+                                "assets/images/refresh_image.png.png", 72, 64),
                           ),
                         ),
                       ),
@@ -668,7 +693,9 @@ class KestralScreen extends StatelessWidget {
                 ),
               ],
             ),
-             SizedBox(height: 18.Sh,),
+            SizedBox(
+              height: 18.Sh,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -679,7 +706,8 @@ class KestralScreen extends StatelessWidget {
                       height: 64.Sh,
                       decoration: ShapeDecoration(
                         color: const Color(0xFFFBFAFA),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
                         shadows: const [
                           BoxShadow(
                             color: Color(0x1E343330),
@@ -690,12 +718,14 @@ class KestralScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    GestureDetector( // Wrap the Container with a GestureDetector
+                    GestureDetector(
+                      // Wrap the Container with a GestureDetector
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          builder: (context) => Stack( // Wrap the bottom sheet content with a Stack
+                          builder: (context) => Stack(
+                            // Wrap the bottom sheet content with a Stack
                             children: [
                               Container(
                                 width: double.infinity,
@@ -711,102 +741,54 @@ class KestralScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 20.Sw,right: 20.Sw,top: 60.Sh),
+                                padding: EdgeInsets.only(
+                                    left: 20.Sw, right: 20.Sw, top: 60.Sh),
                                 child: Container(
                                   width: double.infinity,
                                   height: 333.Sh,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    shadows: const [
-                                      BoxShadow(
-                                        color: Color(0x19CDBFB2),
-                                        blurRadius: 6,
-                                        offset: Offset(0, 3),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x16CDBFB2),
-                                        blurRadius: 11,
-                                        offset: Offset(0, 11),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x0CCDBFB2),
-                                        blurRadius: 15,
-                                        offset: Offset(0, 25),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x02CDBFB2),
-                                        blurRadius: 18,
-                                        offset: Offset(0, 45),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x00CDBFB2),
-                                        blurRadius: 20,
-                                        offset: Offset(0, 71),
-                                        spreadRadius: 0,
-                                      )
-                                    ],
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 25.Sh),
-                                        child: Column( // Arrange rows vertically
-                                          crossAxisAlignment: CrossAxisAlignment.start, // Align rows to the left
-                                          children: [
-                                             SizedBox(height: 12.Sh,),
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 16.Sw),
-                                              child: Text(
-                                                viewModel.setectTask[0],
-                                                style: AppTextStyle.textStylePoppins14w600,
-                                              ),
-                                            ),
-                                             SizedBox(height: 5.Sh,),
-                                            TaskContainer(viewModel.setectTask[1]),
-                                            TaskContainer(viewModel.setectTask[2]),
-                                            TaskContainer(viewModel.setectTask[3]),
-                                            TaskContainer(viewModel.setectTask[4]),
-                                            TaskContainer(viewModel.setectTask[5]),
-                                            TaskContainer(viewModel.setectTask[6]),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  decoration: AppTextStyle.getShapeDecoration2(),
+                                  child: SubTaskListView(viewModel.taskList, viewModel)
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 20.Sw,right: 20.Sw,top: 410.Sh,bottom: 20.Sh),
-                                child: Container(
-                                    width: double.infinity,
-                                    height: 48.Sh,
-                                    decoration: ShapeDecoration(
-                                      color: const Color(0xFF1589CA),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Continue',
-                                        style: AppTextStyle.textStylePoppins16w500,
+                                padding: EdgeInsets.only(
+                                    left: 20.Sw,
+                                    right: 20.Sw,
+                                    top: 410.Sh,
+                                    bottom: 20.Sh),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    viewModel.refreshUI();
+                                  },
+                                  child: Container(
+                                      width: double.infinity,
+                                      height: 48.Sh,
+                                      decoration: ShapeDecoration(
+                                        color: const Color(0xFF1589CA),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4)),
                                       ),
-                                    )
+                                      child: Center(
+                                        child: Text(
+                                          'Continue',
+                                          style: AppTextStyle
+                                              .textStylePoppins16w500,
+                                        ),
+                                      )),
                                 ),
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(top: 23.Sh,bottom: 21.Sh),
+                                    padding: EdgeInsets.only(
+                                        top: 23.Sh, bottom: 21.Sh),
                                     child: Text(
-                                      'Project Firefly ',
-                                      style: AppTextStyle.textStylePoppins17w600,
+                                      viewModel.getSubTaskTitle(),
+                                      style:
+                                          AppTextStyle.textStylePoppins17w600,
                                     ),
                                   ),
                                 ],
@@ -818,73 +800,39 @@ class KestralScreen extends StatelessWidget {
                       child: Container(
                         width: 256.Sw,
                         height: 64.Sh,
-                        decoration: const ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4),
-                              bottomLeft: Radius.circular(4),
-                            ),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x19969696),
-                              blurRadius: 3,
-                              offset: Offset(2, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x16969696),
-                              blurRadius: 6,
-                              offset: Offset(6, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x0C969696),
-                              blurRadius: 8,
-                              offset: Offset(14, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x02969696),
-                              blurRadius: 10,
-                              offset: Offset(25, 0),
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: Color(0x00969696),
-                              blurRadius: 11,
-                              offset: Offset(39, 0),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                        child:  Column(
+                        decoration: AppTextStyle.getBoxDecoration(),
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(left: 13.Sw,top: 14.Sh),
+                              padding: EdgeInsets.only(left: 13.Sw, top: 14.Sh),
                               child: Column(
                                 children: [
                                   Row(
                                     children: [
                                       Text(
-                                        'TASK',
-                                        style: AppTextStyle.textStylePoppins12w400,
+                                        viewModel.getTaskText(),
+                                        style:
+                                            AppTextStyle.textStylePoppins12w400,
                                       ),
                                     ],
                                   ),
-                                   SizedBox(height: 10.Sh,),
+                                  SizedBox(
+                                    height: 10.Sh,
+                                  ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Dashboard Module',
-                                        style: AppTextStyle.textStylePoppins15w400,
+                                        viewModel.selectedSubTask,
+                                        style:
+                                            AppTextStyle.textStylePoppins15w400,
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 28.Sw),
-                                        child: Utils.getIcon("assets/images/dropdown.png", 18, 18),
+                                        child: Utils.getIcon(
+                                            "assets/images/dropdown.png",18,18),
                                       ),
                                     ],
                                   ),
@@ -901,217 +849,25 @@ class KestralScreen extends StatelessWidget {
                         onTap: () {
                           showModalBottomSheet(
                               context: context,
-                              isScrollControlled: true, // Allow for custom height
+                              isScrollControlled: true,
+                              // Allow for custom height
                               builder: (context) {
-                                return Stack(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height * 0.9,
-                                      decoration: const ShapeDecoration(
-                                        color: Color(0xFFF8F5F0),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(16),
-                                            topRight: Radius.circular(16),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 20.Sw,right: 20.Sw,top: 137.Sh),
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 255.Sh,
-                                        decoration: ShapeDecoration(
-                                          color: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          shadows: const [
-                                            BoxShadow(
-                                              color: Color(0x19CDBFB2),
-                                              blurRadius: 6,
-                                              offset: Offset(0, 3),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x16CDBFB2),
-                                              blurRadius: 11,
-                                              offset: Offset(0, 11),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x0CCDBFB2),
-                                              blurRadius: 15,
-                                              offset: Offset(0, 25),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x02CDBFB2),
-                                              blurRadius: 18,
-                                              offset: Offset(0, 45),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x00CDBFB2),
-                                              blurRadius: 20,
-                                              offset: Offset(0, 71),
-                                              spreadRadius: 0,
-                                            )
-                                          ],
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start, // Align rows to the left
-                                              children: [
-                                                 SizedBox(height: 12.Sh,),
-                                                CreateTask(viewModel.createTaskItems[0]),
-                                                CreateTask(viewModel.createTaskItems[1]),
-                                                CreateTask(viewModel.createTaskItems[2]),
-                                                CreateTask(viewModel.createTaskItems[3]),
-                                                CreateTask(viewModel.createTaskItems[4]),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 56.Sh),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 1,
-                                          decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
-                                        )
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 78.Sh,left: 24.Sw),
-                                        child:  Container(
-                                          child: Text(
-                                            'Kestrel pro dev',
-                                            style: AppTextStyle.textStylePoppins20w600,
-                                          ),
-                                        )
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 97.Sh),
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 1,
-                                        decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
-                                      ),
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 120.Sh,left: 24.Sw),
-                                        child:Text(
-                                          'CATEGORY',
-                                          style: AppTextStyle.textStylePoppins14w600,
-                                        )
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 410.Sh,left: 20.Sw,right: 20.Sw),
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 93.Sh,
-                                        decoration: ShapeDecoration(
-                                          color: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          shadows: const [
-                                            BoxShadow(
-                                              color: Color(0x19CDBFB2),
-                                              blurRadius: 6,
-                                              offset: Offset(0, 3),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x16CDBFB2),
-                                              blurRadius: 11,
-                                              offset: Offset(0, 11),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x0CCDBFB2),
-                                              blurRadius: 15,
-                                              offset: Offset(0, 25),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x02CDBFB2),
-                                              blurRadius: 18,
-                                              offset: Offset(0, 45),
-                                              spreadRadius: 0,
-                                            ),
-                                            BoxShadow(
-                                              color: Color(0x00CDBFB2),
-                                              blurRadius: 20,
-                                              offset: Offset(0, 71),
-                                              spreadRadius: 0,
-                                            )
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 16.Sw,left: 16.Sw,top: 20.Sh),
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                              labelText: 'Task',
-                                              labelStyle: AppTextStyle.textStylePoppins19w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 20.Sw,right: 20.Sw,top: 715.Sh,bottom: 20.Sh),
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 48.Sh,
-                                        decoration: ShapeDecoration(
-                                          color: const Color(0xFF1589CA),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Add Task',
-                                            style: AppTextStyle.textStylePoppins16w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 24.Sw,top: 14.Sh),
-                                      child: Utils.getIcon("assets/images/rong.png.png", 28, 28),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 23.Sh,bottom: 21.Sh),
-                                          child: Text(
-                                            'Create Task',
-                                            style: AppTextStyle.textStylePoppins16w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              }
-                          );
+                                return getCategoryList(context, viewModel);
+                              });
                         },
                         child: Container(
                           width: 48.Sw,
                           height: 48.Sh,
                           decoration: ShapeDecoration(
                             color: const Color(0xFF1589CA),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
                           ),
                           child: SizedBox(
                             width: 24.Sw,
                             height: 24.Sh,
-                            child: Icon(Icons.add_circle_outline, color: Colors.white),
+                            child: const Icon(Icons.add_circle_outline,
+                                color: Colors.white),
                           ),
                         ),
                       ),
@@ -1128,8 +884,232 @@ class KestralScreen extends StatelessWidget {
 
   void apiTest() async {
     //await customLoginMutation("sanyam.sharma@47billion.com", "Test@123");
-    //await getProjectList(560);
+    //await getProjectList(Utils.userInformation!.data.userAuthentication.employeeId);
     //await getMyTaskList(327,560);
     //await getTaskCategoryList();
+
+  }
+
+  getCategoryList(BuildContext context, DashboardViewModel viewModel) {
+    return Container(
+        height:
+        MediaQuery.of(context).size.height * 0.9,
+        decoration: const ShapeDecoration(
+          color: Color(0xFFF8F5F0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Added to space items
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 24, top: 14),
+                        child: Utils.getIcon("assets/images/rong.png.png", 28, 28),
+                      ),
+                    ),
+                    Text(
+                      viewModel.getCreateTask(),
+                      style: AppTextStyle.textStylePoppins16w600,
+                    ),
+                    const SizedBox(width: 50), // Added space between the image and text
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 20,),
+            Container(
+              width: double.infinity,
+              height: 1,
+              decoration: const BoxDecoration(
+                  color: Color(0xFFD9D9D9)),
+            ),
+            const SizedBox(height: 15,),
+            Container(
+              margin: const EdgeInsets.only(left: 24),
+              child: Text(
+                viewModel.getKestrelText(),
+                style: AppTextStyle
+                    .textStylePoppins20w600,
+              ),
+            ),
+            const SizedBox(height: 15,),
+            Container(
+              width: double.infinity,
+              height: 1,
+              decoration: const BoxDecoration(
+                  color: Color(0xFFD9D9D9)),
+            ),
+            const SizedBox(height: 16,),
+            Container(
+              margin: const EdgeInsets.only(left: 22),
+              child: Text(
+                'CATEGORY',
+                style: AppTextStyle
+                    .textStylePoppins14w600,
+              ),
+            ),
+            const SizedBox(height: 10,),
+            Container(
+              margin: const EdgeInsets.only(left: 20,right: 20),
+              width: double.infinity,
+              height: 255.Sh,
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(12),
+                ),
+                shadows: const [
+                  BoxShadow(
+                    color: Color(0x19CDBFB2),
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x16CDBFB2),
+                    blurRadius: 11,
+                    offset: Offset(0, 11),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x0CCDBFB2),
+                    blurRadius: 15,
+                    offset: Offset(0, 25),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x02CDBFB2),
+                    blurRadius: 18,
+                    offset: Offset(0, 45),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x00CDBFB2),
+                    blurRadius: 20,
+                    offset: Offset(0, 71),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
+              child: TaskCategoriesListView(viewModel.categoryList, viewModel),
+            ),
+            const SizedBox(height: 16,),
+            Container(
+              margin: const EdgeInsets.only(left: 20,right: 20),
+              width: double.infinity,
+              height: 93.Sh,
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(12),
+                ),
+                shadows: const [
+                  BoxShadow(
+                    color: Color(0x19CDBFB2),
+                    blurRadius: 6,
+                    offset: Offset(0, 3),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x16CDBFB2),
+                    blurRadius: 11,
+                    offset: Offset(0, 11),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x0CCDBFB2),
+                    blurRadius: 15,
+                    offset: Offset(0, 25),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x02CDBFB2),
+                    blurRadius: 18,
+                    offset: Offset(0, 45),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Color(0x00CDBFB2),
+                    blurRadius: 20,
+                    offset: Offset(0, 71),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: 16.Sw,
+                  left: 16.Sw,
+                  top: 20.Sh,
+                  bottom: 15,),
+                child: TextField(
+                  controller:
+                  viewModel.textFieldController,
+                  decoration: InputDecoration(
+                    labelText: viewModel.getTaskText(),
+                    labelStyle: AppTextStyle
+                        .textStylePoppins19w400,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 120.Sh,
+                  left: 20.Sw,
+                  right: 20.Sw,
+                  bottom: 20.Sh),
+              child: GestureDetector(
+                onTap: () async {
+                  //int projectId, int taskCategoryId, int employeeId, String taskName, String dueDate,String taskPriority
+                  await addTask(viewModel.selectedProjectId,viewModel.selectedCategoryId,Utils.userInformation!.data.userAuthentication.employeeId,viewModel.textFieldController.text,viewModel.getDueDate(),"High");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48.0,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFF1589CA),
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(4)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Add Task',
+                      style: AppTextStyle
+                          .textStylePoppins16w500,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )
+    );
+  }
+
+  void onStartButtonClicked(viewModel) {
+    viewModel.toggleState();
+    viewModel.togglePlayState();
+    viewModel.toggleColorState();
+    viewModel.handleTimer();
+    viewModel.refreshUI();
   }
 }

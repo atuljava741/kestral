@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kestral/utils/utils.dart';
 
-class KestrelProPage extends StatefulWidget {
+class NextPage extends StatefulWidget {
   @override
   KestrelProPageState createState() => KestrelProPageState();
 }
 
-class KestrelProPageState extends State<KestrelProPage> {
+class KestrelProPageState extends State<NextPage> {
   final items = ["Item 1", "Item 2", "Item 3", "Item 4"];
   String? value;
   @override

@@ -20,11 +20,13 @@ Future<void> customLoginMutation(String email, String password) async {
     variables: <String, dynamic>{
       "loginType": "CUSTOM",
       "input": {
-        "os": Platform.operatingSystem,
+        "os": Platform.isAndroid?"Android": "IOS",
         "buildType": "latest",
         "version": "4.0",
         "systemArchitecture": "",
         "osVersion": Platform.version,
+        "deviceId" : "1234567890",
+        "deviceName" : "Samsung A80",
         "data": {
           "email": email,
           "password": password,
@@ -38,9 +40,8 @@ Future<void> customLoginMutation(String email, String password) async {
   if (result.hasException) {
     print('Mutation failed: ${result.exception.toString()}');
   } else {
-    print('Post created successfully');
-    print(result.data);
     UserAuthResponse userData =  UserAuthResponse.fromJson(result.data!);
+    Utils.userInformation = userData;
     Utils.accessToken = userData.data.userAuthentication.token;
     print(userData.data.userAuthentication.token);
   }

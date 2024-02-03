@@ -10,7 +10,7 @@ final String getMyTaskQuery = """
         }
 """;
 
-Future<void> getMyTaskList(int projectId, int employeeId) async {
+Future<InCompleteTaskList> getMyTaskList(int projectId, int employeeId) async {
   final QueryOptions options = QueryOptions(
     document: gql(getMyTaskQuery),
     variables: <String, dynamic>{
@@ -24,7 +24,8 @@ Future<void> getMyTaskList(int projectId, int employeeId) async {
   if (result.hasException) {
     throw Exception(result.exception.toString());
   } else {
+    print(result.data);
     InCompleteTaskList inCompleteTasks = InCompleteTaskList.fromJson(result.data!);
-    return print(result.data);
+    return inCompleteTasks;
   }
 }

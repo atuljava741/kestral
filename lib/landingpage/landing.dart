@@ -24,7 +24,7 @@ class LandingPage extends StatelessWidget {
                     width: double.infinity,
                     height: 200,
                     decoration: ShapeDecoration(
-                      color: Color(0xFFF6F3EE),
+                      color: const Color(0xFFF6F3EE),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                     ),
@@ -37,7 +37,7 @@ class LandingPage extends StatelessWidget {
                         ),
                         Utils.getIcon("assets/images/logo.png", 72, 56),
                         const SizedBox(
-                          height: 30,
+                          height: 34,
                         ),
                         Text(
                           viewModel.getMorningText(),
@@ -66,7 +66,7 @@ class LandingPage extends StatelessWidget {
                     height: 20,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(right: 240),
+                    padding: const EdgeInsets.only(right: 240),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment
                           .center, // Center content horizontally within Row
@@ -79,7 +79,7 @@ class LandingPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Form(
                         key: viewModel.formKey,
                         child: ConstrainedBox(
@@ -116,7 +116,7 @@ class LandingPage extends StatelessWidget {
                         style: AppTextStyle.textStylePoppins12w400,
                       )),
                   Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxWidth: 320, // Set the maximum width as per your requirement
@@ -165,17 +165,16 @@ class LandingPage extends StatelessWidget {
                         viewModel.handleButtonClick(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF1589CA),
+                        primary: const Color(0xFF1589CA),
                         minimumSize: const Size(550, 50),
                       ),
                       child: Text(
                         viewModel.getButtonLogInText(),
-                        style:
-                        TextStyle(fontSize: 26, color: Color(0XFFFFFFFF)),
+                        style: AppTextStyle.textStylePoppins26,
                       ),
                     ),
                   ),
-                  SizedBox(height: 32,),
+                  const SizedBox(height: 32,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -224,7 +223,7 @@ class LandingPage extends StatelessWidget {
                           width: 64,
                           height: 64,
                           decoration: ShapeDecoration(
-                            color: Color(0xFFF6F3EE),
+                            color: const Color(0xFFF6F3EE),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                           ),
@@ -241,7 +240,7 @@ class LandingPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: Utils.getIcon("assets/images/google (2).png", 35, 35),
+                        child: Utils.getIcon("assets/images/image 7.png", 35, 35),
                       ),
                     ],
                   ),

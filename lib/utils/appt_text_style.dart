@@ -136,4 +136,135 @@ class AppTextStyle {
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w500,
    );
+
+   static TextStyle textStylePoppins26 = const TextStyle(
+     color: Color(0XFFFFFFFF),
+     fontSize: 26,
+   );
+
+  static getBoxDecoration() {
+    return const ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(4),
+          bottomLeft: Radius.circular(4),
+        ),
+      ),
+      shadows: [
+        BoxShadow(
+          color: Color(0x19969696),
+          blurRadius: 3,
+          offset: Offset(2, 0),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x16969696),
+          blurRadius: 6,
+          offset: Offset(6, 0),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x0C969696),
+          blurRadius: 8,
+          offset: Offset(14, 0),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x02969696),
+          blurRadius: 10,
+          offset: Offset(25, 0),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x00969696),
+          blurRadius: 11,
+          offset: Offset(39, 0),
+          spreadRadius: 0,
+        )
+      ],
+    );
+  }
+
+  static getShapeDecoration2() {
+    return ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      shadows: const [
+        BoxShadow(
+          color: Color(0x19CDBFB2),
+          blurRadius: 6,
+          offset: Offset(0, 3),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x16CDBFB2),
+          blurRadius: 11,
+          offset: Offset(0, 11),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x0CCDBFB2),
+          blurRadius: 15,
+          offset: Offset(0, 25),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x02CDBFB2),
+          blurRadius: 18,
+          offset: Offset(0, 45),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x00CDBFB2),
+          blurRadius: 20,
+          offset: Offset(0, 71),
+          spreadRadius: 0,
+        )
+      ],
+    );
+  }
+
+  static getShapeDecoration3() {
+    return ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      shadows: const [
+        BoxShadow(
+          color: Color(0x19CDBFB2),
+          blurRadius: 6,
+          offset: Offset(0, 3),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x16CDBFB2),
+          blurRadius: 11,
+          offset: Offset(0, 11),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x0CCDBFB2),
+          blurRadius: 15,
+          offset: Offset(0, 25),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x02CDBFB2),
+          blurRadius: 18,
+          offset: Offset(0, 45),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x00CDBFB2),
+          blurRadius: 20,
+          offset: Offset(0, 71),
+          spreadRadius: 0,
+        )
+      ],
+    );
+  }
 }

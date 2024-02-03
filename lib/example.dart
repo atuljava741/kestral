@@ -1,63 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:kestral/utils/utils.dart';
 
 
-class kestralPagePro extends StatefulWidget {
+
+class MyHomePage extends StatefulWidget {
   @override
-  State<kestralPagePro> createState() => kestralPageProState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class kestralPageProState extends State<kestralPagePro> {
-  String selectedText = '';
+class _MyHomePageState extends State<MyHomePage> {
+  List<String> texts = ["Text 1", "Text 2", "Text 3", "Text 4", "Text 5"];
+  TextEditingController textFieldController = TextEditingController();
 
-  List<String> texts = ['Text 1', 'Text 2', 'Text 3', 'Text 4', 'Text 5'];
+  String selectedText = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Text Selection and TextField"),
+      ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ContainerButton(texts[0]),
-              ContainerButton(texts[1]),
-              ContainerButton(texts[2]),
-              ContainerButton(texts[3]),
-              ContainerButton(texts[4]),
+              for (String text in texts)
+                ContainerButton(
+                  text,
+                  onTap: () {
+                    setState(() {
+                      selectedText = text;
+                    });
+                  },
+                ),
             ],
           ),
           SizedBox(height: 20),
           Text(
             'Selected Text: $selectedText',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: TextField(
+              controller: textFieldController,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
           ElevatedButton(
             onPressed: () {
-              // Handle button click, update the selectedText state
-              setState(() {
-                // Do any additional processing if needed
-              });
+              // Handle button click, print the selected text and the text in the TextField
+              print('Selected Text: $selectedText');
+              print('Entered Text: ${textFieldController.text}');
             },
-            child: Text('Show Selected Text'),
+            child: Text('Print Texts'),
           ),
         ],
       ),
     );
   }
 
-  // Custom container button widget
-  Widget ContainerButton(String text) {
+  Widget ContainerButton(String text, {VoidCallback? onTap}) {
     return GestureDetector(
-      onTap: () {
-        // Handle container selection, update the selectedText state
-        setState(() {
-          selectedText = text;
-        });
-      },
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(

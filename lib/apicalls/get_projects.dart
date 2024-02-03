@@ -9,7 +9,7 @@ final String getProjectQuery = """
 } 
 """;
 
-Future<void> getProjectList(int employeeId) async {
+Future<ProjectList> getProjectList(int employeeId) async {
   final QueryOptions options = QueryOptions(
     document: gql(getProjectQuery),
     variables: <String, dynamic>{
@@ -24,6 +24,6 @@ Future<void> getProjectList(int employeeId) async {
   } else {
     print(result.data);
     ProjectList projectList = ProjectList.fromJson(result.data!);
-    return print(projectList.getActiveProjectDetailsByEmployeeId.length);
+    return projectList;
   }
 }

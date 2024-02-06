@@ -1,20 +1,18 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:kestral/component/category_list_view.dart';
+import 'package:kestral/task_queue/task_queue.dart';
 import 'package:kestral/utils/appt_text_style.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:kestral/utils/utils.dart';
 import 'package:stacked/stacked.dart';
 import '../apicalls/add_task.dart';
-import '../apicalls/get_projects.dart';
 import '../apicalls/get_task.dart';
-import '../apicalls/get_task_categories.dart';
-import '../apicalls/login_mutation.dart';
 import '../component/project_list_view.dart';
 import '../component/task_list_view.dart';
 import '../datamodal/incomplete_task.dart';
 import 'dashboard_viewmodel.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 class KestralScreen extends StatelessWidget {
   @override
@@ -104,166 +102,205 @@ class KestralScreen extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    height: 64.Sw,
-                    decoration: const BoxDecoration(
-                      color: Color(0XFFFFFFFF),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15.0),
-                        topRight: Radius.circular(15.0),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          spreadRadius: 0,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          // Nested Row to group left-side elements
-                          children: [
-                            Utils.getIcon(
-                                "assets/images/contact.png", 24, 24),
-                            SizedBox(width: 8.Sw), // Adjust spacing as needed
-                            Text(
-                              viewModel.getAdamLongText(),
-                              style: AppTextStyle.textStylePoppins21w600,
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => Container(
-                                    // Background container
-                                    width: double.infinity,
-                                    height: 200,
-                                    decoration: const ShapeDecoration(
-                                      color: Color(0xFFF8F5F0),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(16),
-                                          topRight: Radius.circular(16),
-                                        ),
-                                      ),
-                                    ),
-                                child: Stack(
-                                  children: [
-                                    SizedBox(height: 20,),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 20,right: 20),
-                                  width: 320,
-                                  height: 167,
-                                  decoration: ShapeDecoration(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(12),
-                                    ),
-                                    shadows: const [
-                                      BoxShadow(
-                                        color: Color(0x19CDBFB2),
-                                        blurRadius: 6,
-                                        offset: Offset(0, 3),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x16CDBFB2),
-                                        blurRadius: 11,
-                                        offset: Offset(0, 11),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x0CCDBFB2),
-                                        blurRadius: 15,
-                                        offset: Offset(0, 25),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x02CDBFB2),
-                                        blurRadius: 18,
-                                        offset: Offset(0, 45),
-                                        spreadRadius: 0,
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0x00CDBFB2),
-                                        blurRadius: 20,
-                                        offset: Offset(0, 71),
-                                        spreadRadius: 0,
-                                      )
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                      // Arrange rows vertically
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      // Align rows to the left
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Utils.getIcon(
-                                                "assets/images/watch.png",24,24),
-                                            const SizedBox(width: 11),
-                                            Text(
-                                              viewModel.getSyncTimeText(),
-                                              style: AppTextStyle
-                                                  .textStylePoppins22w400,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 24),
-                                        // Add spacing between rows
-                                        Row(
-                                          children: [
-                                            // Add widgets for the second row here
-                                            Utils.getIcon(
-                                                "assets/images/delete.png",24,24),
-                                            const SizedBox(width: 11),
-                                            Text(
-                                              viewModel.getClearCacheText(),
-                                              style: AppTextStyle
-                                                  .textStylePoppins22w400,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 24),
-                                        // Add spacing between rows
-                                        Row(
-                                          children: [
-                                            // Add widgets for the second row here
-                                            Utils.getIcon(
-                                                "assets/images/logout.png",
-                                                24,
-                                                24),
-                                            const SizedBox(width: 11),
-                                            Text(
-                                              viewModel.getLogOutText(),
-                                              style: AppTextStyle
-                                                  .textStylePoppins22w400,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => IntrinsicHeight(
+                            child: Container(
+                              // Background container
+                              width: double.infinity,
+                              decoration: const ShapeDecoration(
+                                color: Color(0xFFF8F5F0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16),
                                   ),
                                 ),
-                                ],
+                              ),
+                              child: Container(
+                                decoration: ShapeDecoration(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(12),
                                   ),
-                            ));
-                          },
-                          child: Utils.getIcon(
-                              "assets/images/threepoints.png", 24, 24),
-                        ), // Right-side icon
-                      ],
+                                  shadows: const [
+                                    BoxShadow(
+                                      color: Color(0x19CDBFB2),
+                                      blurRadius: 6,
+                                      offset: Offset(0, 3),
+                                      spreadRadius: 0,
+                                    ),
+                                    BoxShadow(
+                                      color: Color(0x16CDBFB2),
+                                      blurRadius: 11,
+                                      offset: Offset(0, 11),
+                                      spreadRadius: 0,
+                                    ),
+                                    BoxShadow(
+                                      color: Color(0x0CCDBFB2),
+                                      blurRadius: 15,
+                                      offset: Offset(0, 25),
+                                      spreadRadius: 0,
+                                    ),
+                                    BoxShadow(
+                                      color: Color(0x02CDBFB2),
+                                      blurRadius: 18,
+                                      offset: Offset(0, 45),
+                                      spreadRadius: 0,
+                                    ),
+                                    BoxShadow(
+                                      color: Color(0x00CDBFB2),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 71),
+                                      spreadRadius: 0,
+                                    )
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    // Arrange rows vertically
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    // Align rows to the left
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          TaskQueue
+                                              .sinkQueueToServer();
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          padding:
+                                          EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Row(
+                                            children: [
+                                              Utils.getIcon(
+                                                  "assets/images/watch.png",
+                                                  24,
+                                                  24),
+                                              const SizedBox(
+                                                  width: 11),
+                                              Text(
+                                                viewModel
+                                                    .getSyncTimeText(),
+                                                style: AppTextStyle
+                                                    .textStylePoppins22w400,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      // Add spacing between rows
+                                      GestureDetector(
+                                        onTap: () {
+                                          TaskQueue.clearQueue();
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          padding:
+                                          EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Row(
+                                            children: [
+                                              // Add widgets for the second row here
+                                              Utils.getIcon(
+                                                  "assets/images/delete.png",
+                                                  24,
+                                                  24),
+                                              const SizedBox(
+                                                  width: 11),
+                                              Text(
+                                                viewModel
+                                                    .getClearCacheText(),
+                                                style: AppTextStyle
+                                                    .textStylePoppins22w400,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      // Add spacing between rows
+                                      GestureDetector(
+                                        onTap: () {
+                                          print("logout");
+                                          viewModel.logout(context);
+                                        },
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          padding:
+                                          EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Row(
+                                            children: [
+                                              // Add widgets for the second row here
+                                              Utils.getIcon(
+                                                  "assets/images/logout.png",
+                                                  24,
+                                                  24),
+                                              const SizedBox(
+                                                  width: 11),
+                                              Text(
+                                                viewModel
+                                                    .getLogOutText(),
+                                                style: AppTextStyle
+                                                    .textStylePoppins22w400,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      height: 64.Sw,
+                      decoration: const BoxDecoration(
+                        color: Color(0XFFFFFFFF),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15.0),
+                          topRight: Radius.circular(15.0),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            spreadRadius: 0,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            // Nested Row to group left-side elements
+                            children: [
+                              Utils.getIcon("assets/images/contact.png", 24, 24),
+                              SizedBox(width: 8.Sw), // Adjust spacing as needed
+                              Text(
+                                viewModel.getUserNameText(),
+                                style: AppTextStyle.textStylePoppins21w600,
+                              ),
+                            ],
+                          ),
+                          Utils.getIcon(
+                              "assets/images/threepoints.png", 24, 24), // Right-side icon
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -276,7 +313,7 @@ class KestralScreen extends StatelessWidget {
   /*List<Widget> projectContainer(DashboardViewModel viewModel) {
     List<Widget> list = [];
     for (var i = 0; i < viewModel.projectList.length; i++) {
-      Widget w = GestureDetector(
+      Widget w = GestureDetector(s
         onTap: () {
           // view model me jo selectProject varaible me uska naam likhna hai jisko tap kiya
           viewModel.seletedProject = viewModel.projectList.elementAt(i).projectName;
@@ -339,7 +376,8 @@ class KestralScreen extends StatelessWidget {
     return list;
   }*/
 
-  Widget CreateTask(DashboardViewModel viewModel,String text, {VoidCallback? onTap}) {
+  Widget CreateTask(DashboardViewModel viewModel, String text,
+      {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: () {
         // Call onTap callback if it is not null
@@ -383,7 +421,7 @@ class KestralScreen extends StatelessWidget {
           Utils.getIcon("assets/images/logo.png", 72, 64),
           SizedBox(height: 50.Sh),
           Text(
-            viewModel.getCurrentTime(),
+            viewModel.currentDuration,
             textAlign: TextAlign.right,
             style: AppTextStyle.textStylePoppins72w600,
           ),
@@ -469,54 +507,61 @@ class KestralScreen extends StatelessWidget {
                                     padding: EdgeInsets.only(
                                         left: 20.Sw, right: 20.Sw, top: 60.Sh),
                                     child: Container(
-                                      width: double.infinity,
-                                      height: 312.Sh,
-                                      decoration: ShapeDecoration(
-                                        color: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                        width: double.infinity,
+                                        height: 312.Sh,
+                                        decoration: ShapeDecoration(
+                                          color: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          shadows: const [
+                                            BoxShadow(
+                                              color: Color(0x19CDBFB2),
+                                              blurRadius: 6,
+                                              offset: Offset(0, 3),
+                                              spreadRadius: 0,
+                                            ),
+                                            BoxShadow(
+                                              color: Color(0x16CDBFB2),
+                                              blurRadius: 11,
+                                              offset: Offset(0, 11),
+                                              spreadRadius: 0,
+                                            ),
+                                            BoxShadow(
+                                              color: Color(0x0CCDBFB2),
+                                              blurRadius: 15,
+                                              offset: Offset(0, 25),
+                                              spreadRadius: 0,
+                                            ),
+                                            BoxShadow(
+                                              color: Color(0x02CDBFB2),
+                                              blurRadius: 18,
+                                              offset: Offset(0, 45),
+                                              spreadRadius: 0,
+                                            ),
+                                            BoxShadow(
+                                              color: Color(0x00CDBFB2),
+                                              blurRadius: 20,
+                                              offset: Offset(0, 71),
+                                              spreadRadius: 0,
+                                            )
+                                          ],
                                         ),
-                                        shadows: const [
-                                          BoxShadow(
-                                            color: Color(0x19CDBFB2),
-                                            blurRadius: 6,
-                                            offset: Offset(0, 3),
-                                            spreadRadius: 0,
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0x16CDBFB2),
-                                            blurRadius: 11,
-                                            offset: Offset(0, 11),
-                                            spreadRadius: 0,
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0x0CCDBFB2),
-                                            blurRadius: 15,
-                                            offset: Offset(0, 25),
-                                            spreadRadius: 0,
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0x02CDBFB2),
-                                            blurRadius: 18,
-                                            offset: Offset(0, 45),
-                                            spreadRadius: 0,
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0x00CDBFB2),
-                                            blurRadius: 20,
-                                            offset: Offset(0, 71),
-                                            spreadRadius: 0,
-                                          )
-                                        ],
-                                      ),
-                                      child: ProjectsListView(viewModel.projectList, viewModel, (index) {
-                                        viewModel.selectedProjectId = viewModel.projectList.elementAt(index).projectId;
-                                        viewModel.selectProjectText = viewModel.projectList.elementAt(index).projectName;
-                                        print(viewModel.selectProjectText);
-
-                                      })
-                                    ),
+                                        child: ProjectsListView(
+                                            viewModel.projectList, viewModel,
+                                            (index) async {
+                                          Utils.selectedProjectId =
+                                              viewModel.projectList
+                                                  .elementAt(index)
+                                                  .projectId;
+                                          Utils.selectProjectText =
+                                              viewModel.projectList
+                                                  .elementAt(index)
+                                                  .projectName;
+                                          await Utils.getPreference().setString(Utils.projectName,Utils.selectProjectText);
+                                          print(Utils.selectProjectText);
+                                        })),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -526,8 +571,16 @@ class KestralScreen extends StatelessWidget {
                                         bottom: 20.Sh),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        InCompleteTaskList incompleteTashList = await getMyTaskList(viewModel.selectedProjectId,Utils.userInformation!.data.userAuthentication.employeeId);
-                                        viewModel.taskList = incompleteTashList.data.getInCompleteTasks;
+                                        InCompleteTaskList incompleteTashList =
+                                            await getMyTaskList(
+                                                Utils.selectedProjectId,
+                                                Utils
+                                                    .userInformation!
+                                                    .data
+                                                    .userAuthentication
+                                                    .employeeId);
+                                        viewModel.taskList = incompleteTashList
+                                            .data.getInCompleteTasks;
                                         Navigator.pop(context);
                                         viewModel.refreshUI();
                                       },
@@ -556,7 +609,7 @@ class KestralScreen extends StatelessWidget {
                                         padding: EdgeInsets.only(
                                             top: 23.Sh, bottom: 21.Sh),
                                         child: Text(
-                                          viewModel.selectProjectText,
+                                          Utils.selectProjectText,
                                           style: AppTextStyle
                                               .textStylePoppins16w600,
                                         ),
@@ -595,7 +648,7 @@ class KestralScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        viewModel.selectProjectText,
+                                        Utils.selectProjectText,
                                         style:
                                             AppTextStyle.textStylePoppins18w600,
                                       ),
@@ -744,11 +797,12 @@ class KestralScreen extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                     left: 20.Sw, right: 20.Sw, top: 60.Sh),
                                 child: Container(
-                                  width: double.infinity,
-                                  height: 333.Sh,
-                                  decoration: AppTextStyle.getShapeDecoration2(),
-                                  child: SubTaskListView(viewModel.taskList, viewModel)
-                                ),
+                                    width: double.infinity,
+                                    height: 333.Sh,
+                                    decoration:
+                                        AppTextStyle.getShapeDecoration2(),
+                                    child: SubTaskListView(
+                                        viewModel.taskList, viewModel)),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
@@ -811,7 +865,7 @@ class KestralScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        viewModel.getTaskText(),
+                                        "Task",
                                         style:
                                             AppTextStyle.textStylePoppins12w400,
                                       ),
@@ -825,14 +879,16 @@ class KestralScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        viewModel.selectedSubTask,
+                                        Utils.selectedSubTask,
                                         style:
                                             AppTextStyle.textStylePoppins15w400,
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 28.Sw),
                                         child: Utils.getIcon(
-                                            "assets/images/dropdown.png",18,18),
+                                            "assets/images/dropdown.png",
+                                            18,
+                                            18),
                                       ),
                                     ],
                                   ),
@@ -887,13 +943,11 @@ class KestralScreen extends StatelessWidget {
     //await getProjectList(Utils.userInformation!.data.userAuthentication.employeeId);
     //await getMyTaskList(327,560);
     //await getTaskCategoryList();
-
   }
 
   getCategoryList(BuildContext context, DashboardViewModel viewModel) {
     return Container(
-        height:
-        MediaQuery.of(context).size.height * 0.9,
+        height: MediaQuery.of(context).size.height * 0.9,
         decoration: const ShapeDecoration(
           color: Color(0xFFF8F5F0),
           shape: RoundedRectangleBorder(
@@ -910,7 +964,8 @@ class KestralScreen extends StatelessWidget {
             Stack(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Added to space items
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // Added to space items
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -918,60 +973,67 @@ class KestralScreen extends StatelessWidget {
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 24, top: 14),
-                        child: Utils.getIcon("assets/images/rong.png.png", 28, 28),
+                        child:
+                            Utils.getIcon("assets/images/rong.png.png", 28, 28),
                       ),
                     ),
                     Text(
                       viewModel.getCreateTask(),
                       style: AppTextStyle.textStylePoppins16w600,
                     ),
-                    const SizedBox(width: 50), // Added space between the image and text
+                    const SizedBox(width: 50),
+                    // Added space between the image and text
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             Container(
               width: double.infinity,
               height: 1,
-              decoration: const BoxDecoration(
-                  color: Color(0xFFD9D9D9)),
+              decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 15,
+            ),
             Container(
               margin: const EdgeInsets.only(left: 24),
               child: Text(
                 viewModel.getKestrelText(),
-                style: AppTextStyle
-                    .textStylePoppins20w600,
+                style: AppTextStyle.textStylePoppins20w600,
               ),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 15,
+            ),
             Container(
               width: double.infinity,
               height: 1,
-              decoration: const BoxDecoration(
-                  color: Color(0xFFD9D9D9)),
+              decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
             ),
-            const SizedBox(height: 16,),
+            const SizedBox(
+              height: 16,
+            ),
             Container(
               margin: const EdgeInsets.only(left: 22),
               child: Text(
                 'CATEGORY',
-                style: AppTextStyle
-                    .textStylePoppins14w600,
+                style: AppTextStyle.textStylePoppins14w600,
               ),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Container(
-              margin: const EdgeInsets.only(left: 20,right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               width: double.infinity,
               height: 255.Sh,
               decoration: ShapeDecoration(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 shadows: const [
                   BoxShadow(
@@ -1008,16 +1070,17 @@ class KestralScreen extends StatelessWidget {
               ),
               child: TaskCategoriesListView(viewModel.categoryList, viewModel),
             ),
-            const SizedBox(height: 16,),
+            const SizedBox(
+              height: 16,
+            ),
             Container(
-              margin: const EdgeInsets.only(left: 20,right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               width: double.infinity,
               height: 93.Sh,
               decoration: ShapeDecoration(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 shadows: const [
                   BoxShadow(
@@ -1057,28 +1120,30 @@ class KestralScreen extends StatelessWidget {
                   right: 16.Sw,
                   left: 16.Sw,
                   top: 20.Sh,
-                  bottom: 15,),
+                  bottom: 15,
+                ),
                 child: TextField(
-                  controller:
-                  viewModel.textFieldController,
+                  controller: viewModel.textFieldController,
                   decoration: InputDecoration(
                     labelText: viewModel.getTaskText(),
-                    labelStyle: AppTextStyle
-                        .textStylePoppins19w400,
+                    labelStyle: AppTextStyle.textStylePoppins19w400,
                   ),
                 ),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
-                  top: 120.Sh,
-                  left: 20.Sw,
-                  right: 20.Sw,
-                  bottom: 20.Sh),
+                  top: 120.Sh, left: 20.Sw, right: 20.Sw, bottom: 20.Sh),
               child: GestureDetector(
                 onTap: () async {
                   //int projectId, int taskCategoryId, int employeeId, String taskName, String dueDate,String taskPriority
-                  await addTask(viewModel.selectedProjectId,viewModel.selectedCategoryId,Utils.userInformation!.data.userAuthentication.employeeId,viewModel.textFieldController.text,viewModel.getDueDate(),"High");
+                  await addTask(
+                      Utils.selectedProjectId,
+                      Utils.selectedCategoryId,
+                      Utils.userInformation!.data.userAuthentication.employeeId,
+                      viewModel.textFieldController.text,
+                      viewModel.getDueDate(),
+                      "High");
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -1087,29 +1152,40 @@ class KestralScreen extends StatelessWidget {
                   decoration: ShapeDecoration(
                     color: const Color(0xFF1589CA),
                     shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(4)),
+                        borderRadius: BorderRadius.circular(4)),
                   ),
                   child: Center(
                     child: Text(
                       'Add Task',
-                      style: AppTextStyle
-                          .textStylePoppins16w500,
+                      style: AppTextStyle.textStylePoppins16w500,
                     ),
                   ),
                 ),
               ),
             ),
           ],
-        )
-    );
+        ));
   }
 
-  void onStartButtonClicked(viewModel) {
-    viewModel.toggleState();
-    viewModel.togglePlayState();
-    viewModel.toggleColorState();
+  // void getTimezone() async {
+  //   // Initialize the timezone database
+  //   await tz.initializeTimeZone();
+  //
+  //   // Get the current location
+  //   tz.Location location = tz.getLocation('Your_Timezone_Name_Here');
+  //
+  //   // Get the timezone name
+  //   String timezoneName = location.name;
+  //
+  //   print('Timezone: $timezoneName');
+  // }
+
+  Future<void> onStartButtonClicked(DashboardViewModel viewModel) async {
+    // viewModel.toggleState();
     viewModel.handleTimer();
     viewModel.refreshUI();
+    // getTimezone();
+    // final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+// print("currentTimeZone $currentTimeZone");
   }
 }

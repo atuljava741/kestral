@@ -1,55 +1,63 @@
 import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kestral/apicalls/add_time_to_kestral.dart';
 
 import '../utils/utils.dart';
 
-class TaskQueue{
-  List<Map<String, dynamic>> queue = [];
+class TaskQueue {
+  static List<Map<String, dynamic>> get queue => getQueue();
 
-  Future<void> _initQueue() async {
-    _loadQueue();
-  }
-
-  void _loadQueue() {
-    // Load the queue from SharedPreferences
+  static List<Map<String, dynamic>> getQueue() {
     final jsonString = Utils.getPreference().getString('queue');
     if (jsonString != null) {
       final List<dynamic> decodedList = json.decode(jsonString);
-      queue = decodedList.cast<Map<String, dynamic>>();
+      return decodedList.cast<Map<String, dynamic>>();
+    } else {
+      return [];
     }
   }
 
-  void _saveQueue() {
-    // Save the queue to SharedPreferences
-    final jsonString = json.encode(queue);
-    Utils.getPreference().setString('queue', jsonString);
+  static Future<void> addToQueue(Map<String, dynamic> element) async {
+    List<Map<String, dynamic>> newQueue = [...queue, element];
+    await Utils.getPreference().setString('queue', jsonEncode(newQueue));
   }
 
-  void _addToQueue(Map<String, dynamic> element) {
-    queue.add(element);
-    _saveQueue();
-    _loadQueue(); // Refresh the UI
-  }
-
-  Map<String, dynamic>? _getFromQueue() {
-    if (queue.isNotEmpty) {
-      final element = queue.removeAt(0);
-      _saveQueue();
-      _loadQueue(); // Refresh the UI
-      return element;
+  static Future<void> sinkQueueToServer() async {
+    List<int> indicesToRemove = [];
+    for (int i = 0; i < queue.length; i++) {
+      Map<String, dynamic> data = queue.elementAt(i);
+      print("inkQueueToServer   :" +
+          data["durationFrom"] +
+          " - " +
+          data["durationTo"]);
+      bool b = await addTimeToKestral(data);
+      if (b) indicesToRemove.add(i);
     }
-    return null;
+    await removeElementsAtIndex(indicesToRemove);
   }
 
-  int _getQueueSize() {
-    return queue.length;
+  static Future<void> removeElementsAtIndex(List<int> indicesToRemove) async {
+    indicesToRemove.sort((a, b) => b.compareTo(a));
+
+    for (var index in indicesToRemove) {
+      if (index >= 0 && index < queue.length) {
+        await _removeElement(index);
+      }
+    }
   }
 
-  void _clearQueue() {
-    queue.clear();
-    _saveQueue();
-    _loadQueue(); // Refresh the UI
+
+  static Future<void> _removeElement(int index) async {
+    List<Map<String, dynamic>> newQueue = [...queue];
+    newQueue.removeAt(index);
+    await Utils.getPreference().setString('queue', jsonEncode(newQueue));
   }
 
+  static Future<void> clearQueue() async {
+    await Utils.getPreference().remove('queue');
+    print("Queue Cleared ${queue}");
+  }
+
+  static Future<void> _setQueue(List<Map<String, dynamic>> newQueue) async {
+    await Utils.getPreference().setString('queue', jsonEncode(newQueue));
+  }
 }

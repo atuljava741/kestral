@@ -27,7 +27,7 @@ class _MyListViewState extends State<TaskCategoriesListView> {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            widget.viewModel.selectedCategoryId = widget.categoryList.elementAt(index).id;
+            Utils.selectedCategoryId = widget.categoryList.elementAt(index).id;
             widget.viewModel.selectCategory(widget.categoryList.elementAt(index).taskCategoryTitle);
             setState(() {
               selectedIndex = index;

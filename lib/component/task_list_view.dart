@@ -27,9 +27,11 @@ class CategoriesListViewState extends State<SubTaskListView> {
       itemCount: widget.subTaskList.length, // Replace with your actual item count
       itemBuilder: (context, index) {
         return InkWell(
-          onTap: () {
-            widget.viewModel.selectedSubTaskId = widget.subTaskList.elementAt(index).id;
-            widget.viewModel.selectedSubTask = widget.subTaskList.elementAt(index).taskName;
+          onTap: () async {
+            Utils.selectedSubTaskId = widget.subTaskList.elementAt(index).id;
+            Utils.selectedSubTask = widget.subTaskList.elementAt(index).taskName;
+            Utils.selectedCategoryId = widget.subTaskList.elementAt(index).taskCategoryId;
+            await Utils.getPreference().setString(Utils.taskName,Utils.selectedSubTask);
             setState(() {
               selectedIndex = index;
             });

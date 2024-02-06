@@ -7,6 +7,7 @@ import 'landing_viewmodel.dart';
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Utils.getDeviceInfo(context);
     Utils.deviceHeight = MediaQuery.of(context).size.height;
     Utils.deviceWidth = MediaQuery.of(context).size.width;
     return ViewModelBuilder<LandingPageViewModel>.reactive(

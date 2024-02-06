@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kestral/utils/size_ext.dart';
 
 import '../apicalls/login_mutation.dart';
 import '../dashboard/dashboard.dart';
@@ -13,6 +14,7 @@ class LandingPageViewModel extends ChangeNotifier {
    TextEditingController emailController = TextEditingController();
    GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
    TextEditingController passwordController = TextEditingController();
+   String? responseMessage ="Please provide correct Email Address and Password";
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -39,19 +41,16 @@ class LandingPageViewModel extends ChangeNotifier {
      bool isEmailValid = formKey.currentState?.validate() ?? false;
      bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;
 
-     //if (isEmailValid && isPasswordValid) {
-     if(true) {
-       password = "Test@123";
-       email = "sanyam.sharma@47billion.com";
-       // Fields are valid, perform login action
-       await customLoginMutation(email, password);
-
-       // Navigate to the new page
-       Navigator.push(
-         context,
-         MaterialPageRoute(builder: (context) => KestralScreen()),
-       );
-     } else {
+     if (isEmailValid && isPasswordValid) {
+       responseMessage = await customLoginMutation(email, password);
+     }
+     if(responseMessage == "true") {
+         Navigator.push(
+           context,
+           MaterialPageRoute(builder: (context) => KestralScreen()),
+         );
+     }
+     else {
        // Fields are not valid, show a modal bottom sheet with an error message
        showModalBottomSheet(
          context: context,
@@ -63,21 +62,32 @@ class LandingPageViewModel extends ChangeNotifier {
                mainAxisSize: MainAxisSize.min,
                children: [
                  const Text(
-                   'Please enter the correct information.',
+                   'Error',
+                   style: TextStyle(
+                     fontSize: 22,
+                   ),
+                 ),
+                 SizedBox(height: 20.Sh),
+                 Text(
+                   responseMessage ?? "",
                    style: TextStyle(
                      fontSize: 18,
                    ),
                  ),
                  const SizedBox(height: 20),
-                 ElevatedButton(
-                   onPressed: () {
-                     // Close the bottom sheet
-                     Navigator.pop(context);
-                   },
-                   style: ElevatedButton.styleFrom(
-                     primary: Colors.blue, // Set the background color to blue
+                 Container(
+                   width: double.infinity,
+                   padding: EdgeInsets.only(top: 5.Sh, bottom: 5, left: 50.Sw, right: 50.Sw),
+                   child: ElevatedButton(
+                     onPressed: () {
+                       // Close the bottom sheet
+                       Navigator.pop(context);
+                     },
+                     style: ElevatedButton.styleFrom(
+                       primary: Colors.blue, // Set the background color to blue
+                     ),
+                     child: Text('OK', style: TextStyle(color: Colors.white)),
                    ),
-                   child: Text('OK', style: TextStyle(color: Colors.white)),
                  ),
                ],
              ),

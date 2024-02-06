@@ -14,7 +14,8 @@ final String createPostMutation = """
     } 
 """;
 
-Future<void> customLoginMutation(String email, String password) async {
+Future<String?> customLoginMutation(String email, String password) async {
+  print(Utils.deviceId);
   final MutationOptions options = MutationOptions(
     document: gql(createPostMutation),
     variables: <String, dynamic>{
@@ -22,11 +23,11 @@ Future<void> customLoginMutation(String email, String password) async {
       "input": {
         "os": Platform.isAndroid?"Android": "IOS",
         "buildType": "latest",
-        "version": "4.0",
+        "version": Platform.version,
         "systemArchitecture": "",
         "osVersion": Platform.version,
-        "deviceId" : "1234567890",
-        "deviceName" : "Samsung A80",
+        "deviceId" : Utils.deviceId,
+        "deviceName" : Utils.deviceName,
         "data": {
           "email": email,
           "password": password,
@@ -38,11 +39,15 @@ Future<void> customLoginMutation(String email, String password) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
-    print('Mutation failed: ${result.exception.toString()}');
+    print("Exception" + result.exception!.graphqlErrors.first.message);
+    return result.exception!.graphqlErrors.first.message;
   } else {
+    print(result.data!);
     UserAuthResponse userData =  UserAuthResponse.fromJson(result.data!);
     Utils.userInformation = userData;
     Utils.accessToken = userData.data.userAuthentication.token;
     print(userData.data.userAuthentication.token);
+    print("true");
+    return "true";
   }
 }

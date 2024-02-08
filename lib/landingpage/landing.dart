@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kestral/utils/size_ext.dart';
 import 'package:stacked/stacked.dart';
 import '../utils/appt_text_style.dart';
 import '../utils/utils.dart';
@@ -23,7 +24,7 @@ class LandingPage extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 200,
+                    height: 298.Sh,
                     decoration: ShapeDecoration(
                       color: const Color(0xFFF6F3EE),
                       shape: RoundedRectangleBorder(
@@ -128,6 +129,9 @@ class LandingPage extends StatelessWidget {
                           obscureText: viewModel.obscureText,
                           controller: viewModel.passwordController,
                           validator: viewModel.validatePassword,
+                          onChanged: (value) {
+                            viewModel.validatePassword(value);
+                          },
                           decoration: InputDecoration(
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
@@ -171,7 +175,13 @@ class LandingPage extends StatelessWidget {
                       ),
                       child: Text(
                         viewModel.getButtonLogInText(),
-                        style: AppTextStyle.textStylePoppins26,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          height: 0,
+                        ),
                       ),
                     ),
                   ),
@@ -221,27 +231,27 @@ class LandingPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: 64,
-                          height: 64,
+                          width: 64.Sh,
+                          height: 64.Sh,
                           decoration: ShapeDecoration(
                             color: const Color(0xFFF6F3EE),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                           ),
-                          child: Utils.getIcon("assets/images/image 6.png", 35, 35)
+                          child: Utils.getIcon("assets/images/image 6.png", 35.Sh, 35.Sh)
                       ),
-                      const SizedBox(
-                        width: 15,
+                      SizedBox(
+                        width: 16.Sw,
                       ),
                       Container(
-                        width: 64,
-                        height: 64,
+                        width: 64.Sh,
+                        height: 64.Sh,
                         decoration: ShapeDecoration(
                           color: const Color(0xFFF6F3EE),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: Utils.getIcon("assets/images/image 7.png", 35, 35),
+                        child: Utils.getIcon("assets/images/image 7.png", 35.Sh, 35.Sh),
                       ),
                     ],
                   ),

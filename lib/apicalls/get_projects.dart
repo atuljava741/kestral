@@ -2,6 +2,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kestral/apicalls/graphql_client.dart';
 import 'package:kestral/datamodal/project_detail.dart';
 
+import '../utils/utils.dart';
+
 
 final String getProjectQuery = """
   query Query(\$employeeId: Int!) { 
@@ -9,7 +11,7 @@ final String getProjectQuery = """
 } 
 """;
 
-Future<ProjectList> getProjectList(int employeeId) async {
+Future<bool> getProjectList(int employeeId) async {
   final QueryOptions options = QueryOptions(
     document: gql(getProjectQuery),
     variables: <String, dynamic>{
@@ -20,10 +22,13 @@ Future<ProjectList> getProjectList(int employeeId) async {
   final QueryResult result = await client.query(options);
 
   if (result.hasException) {
-    throw Exception(result.exception.toString());
+    print("In Error getProjectList");
+    return false;
   } else {
+    print("In Success getProjectList");
     print(result.data);
-    ProjectList projectList = ProjectList.fromJson(result.data!);
-    return projectList;
+    ProjectList allprojects = ProjectList.fromJson(result.data!);
+    Utils.projectList = allprojects.getActiveProjectDetailsByEmployeeId;
+    return true;
   }
 }

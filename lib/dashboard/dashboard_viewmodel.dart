@@ -42,15 +42,12 @@ class DashboardViewModel extends ChangeNotifier {
   var projectColor2 = Colors.grey;
   bool selectedText2 = false;
   TimeTracker timeTracker = TimeTracker();
+
+  bool bottomNavVisible = false;
   bool get obscureText => selectedText2;
   bool get timerState => getTimerState();
   bool isTaskColor = false;
   String get currentDuration => getCurrentDuration();
-
-
-  List<Projects> projectList = [];
-  List<GetInCompleteTasks> taskList = [];
-  List<TaskCategories> categoryList = [];
 
   void toggleSelectedText() {
     selectedText2 = !selectedText2;
@@ -110,23 +107,25 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   getProjects() async {
-    ProjectList allprojects = await getProjectList(
-        Utils.userInformation!.data.userAuthentication.employeeId);
-    projectList = allprojects.getActiveProjectDetailsByEmployeeId;
+    bool success = await getProjectList(
+       Utils.userInformation!.data.userAuthentication.employeeId);
     refreshUI();
+    return success;
   }
+
+
 
   Future<void> getSubTask(int projectId) async {
     Utils.selectedProjectId = projectId;
     InCompleteTaskList inCompleteTaskList = await getMyTaskList(
         projectId, Utils.userInformation!.data.userAuthentication.employeeId);
-    taskList = inCompleteTaskList.data.getInCompleteTasks;
+    Utils.taskList = inCompleteTaskList.data.getInCompleteTasks;
     refreshUI();
   }
 
   void getCategories() async {
     TaskCategory taskCategories = await getTaskCategoryList();
-    categoryList = taskCategories.taskCategories;
+    Utils.categoryList = taskCategories.taskCategories;
   }
 
   String getDueDate() {
@@ -332,6 +331,7 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   String getUserNameText() {
+    if(Utils.userInformation == null) return "";
     return Utils.userInformation!.data.userAuthentication.employeeName ?? "-";
   }
 

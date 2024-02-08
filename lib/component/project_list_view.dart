@@ -41,24 +41,30 @@ class ProjectsListViewState extends State<ProjectsListView> {
             color: index == selectedIndex
                 ? Utils.highlightColor
                 : Colors.white, // Highlight selected item
-            padding: EdgeInsets.all(16.0),
-            child: Row(
+                        child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 5,
-                  child: Align(
-                      alignment: Alignment.centerLeft,
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: 10.0,top: 12.0, left : 16, right : 25),
                       child: Text(
                         widget.projectList.elementAt(index).projectName,
                         style: AppTextStyle.textStylePoppins15w400,
-                      )),
-                ),
+                      ),
+                    )),
                 Expanded(
-                  flex: 1,
-                  child: Visibility(
-                    visible: index == selectedIndex,
-                    child: SvgPicture.asset(
-                      'assets/images/select_icon.svg', // Replace 'my_icon.svg' with your SVG file path
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.0, right: 20.Sw,bottom: 10.0,),
+                    alignment: Alignment.centerRight,
+                    child: Visibility(
+                      visible: index == selectedIndex,
+                      child: SvgPicture.asset(
+                        'assets/images/select_icon.svg',
+                        height: 28.Sw,
+                        width:
+                        28.Sw, // Replace 'my_icon.svg' with your SVG file path
+                      ),
                     ),
                   ),
                 ),

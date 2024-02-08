@@ -31,6 +31,8 @@ class CategoriesListViewState extends State<SubTaskListView> {
         return InkWell(
           onTap: () async {
             Utils.selectedSubTaskId = widget.subTaskList.elementAt(index).id;
+            Utils.taskPriority = widget.subTaskList.elementAt(index).taskPriority;
+            Utils.dueDate = widget.subTaskList.elementAt(index).dueDate;
             Utils.selectedSubTask =
                 widget.subTaskList.elementAt(index).taskName;
             Utils.selectedCategoryId =
@@ -42,6 +44,7 @@ class CategoriesListViewState extends State<SubTaskListView> {
             });
           },
           child: Container(
+            margin: EdgeInsets.only(top: 10.Sh,bottom: 10.Sh),
             color: index == selectedIndex
                 ? Utils.highlightColor
                 : Colors.white, // Highlight selected item
@@ -50,11 +53,12 @@ class CategoriesListViewState extends State<SubTaskListView> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
-                          padding: EdgeInsets.only(top: 12.0, left : 16, right : 25),
+                          padding: EdgeInsets.only( left : 16),
                           child: Text(
                             widget.subTaskList.elementAt(index).taskName,
                             style: AppTextStyle.textStylePoppins15w400,
@@ -62,15 +66,15 @@ class CategoriesListViewState extends State<SubTaskListView> {
                         )),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(top: 10.0, right: 20.Sw),
+                        margin: EdgeInsets.only(top: 5.Sh, right: 20.Sw),
                         alignment: Alignment.centerRight,
                         child: Visibility(
                           visible: index == selectedIndex,
                           child: SvgPicture.asset(
                             'assets/images/select_icon.svg',
-                            height: 28.Sw,
+                            height: 25.Sw,
                             width:
-                                28.Sw, // Replace 'my_icon.svg' with your SVG file path
+                                25.Sw, // Replace 'my_icon.svg' with your SVG file path
                           ),
                         ),
                       ),
@@ -83,7 +87,7 @@ class CategoriesListViewState extends State<SubTaskListView> {
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
-                          padding: EdgeInsets.only(top: 5.0, left : 16, right : 10, bottom : 15),
+                          padding: EdgeInsets.only(top: 5.0, left : 16, right : 10, bottom : 10),
                           child: Text(
                             "Due on: "+ (widget.subTaskList.elementAt(index).dueDate ?? ""),
                             style: const TextStyle(
@@ -91,11 +95,10 @@ class CategoriesListViewState extends State<SubTaskListView> {
                           fontSize: 12,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
-                          height: 0.14,
                         ),
                           ),
                         )),
-                    getChip(widget.subTaskList.elementAt(index).taskPriority)
+                    Utils.getChip(widget.subTaskList.elementAt(index).taskPriority)
                   ],
                 ),
               ],
@@ -106,34 +109,5 @@ class CategoriesListViewState extends State<SubTaskListView> {
     );
   }
 
-  getChip(String priority) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius:
-        BorderRadius.circular(20), // Set border radius here
-        color: getColorOfPriority(priority), // Set background color
-      ),
-      margin: EdgeInsets.only(bottom: 10, left: 5),
-      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-      child: Text(
-        priority,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 12,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
 
-  getColorOfPriority(String priority) {
-    if(priority.toLowerCase() == "high"){
-      return Color(0xFFF72828);
-    }
-    if(priority.toLowerCase() == "medium"){
-      return Color(0xffF7A428);
-    }
-    return Color(0xFF27CE38);
-  }
 }

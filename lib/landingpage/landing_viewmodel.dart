@@ -7,6 +7,7 @@ import 'package:kestral/utils/size_ext.dart';
 import '../apicalls/login_mutation.dart';
 import '../dashboard/dashboard.dart';
 import '../kestrel_pro_page.dart';
+import '../utils/utils.dart';
 
 class LandingPageViewModel extends ChangeNotifier {
 
@@ -18,9 +19,11 @@ class LandingPageViewModel extends ChangeNotifier {
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
+      responseMessage ='Please enter a valid email address';
       return 'Please enter your email address';
     } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
         .hasMatch(value)) {
+      responseMessage ='Please enter a valid email address';
       return 'Please enter a valid email address';
     }
     return null;
@@ -28,18 +31,26 @@ class LandingPageViewModel extends ChangeNotifier {
 
    String? validatePassword(String? value) {
      if (value == null || value.isEmpty || value.length < 8) {
-       return "Password must be at least 8 characters";
+       responseMessage ='Please enter a valid password';
+       return "Please enter a valid password";
      }
      return null;
    }
 
    Future<void> handleButtonClick(BuildContext context) async {
-     String email = "anshul.upadhyay@47billion.com";//emailController.text;
+     String email = "atul.sharma@47billion.com";//"anshul.upadhyay@47billion.com";//emailController.text;
      String password = "Test@123";////passwordController.text;
 
      // Validate email and password
      bool isEmailValid = true;//formKey.currentState?.validate() ?? false;
      bool isPasswordValid = true;//passwordFormKey.currentState?.validate() ?? false;
+
+     /*String email = emailController.text;
+     String password = passwordController.text;
+
+     // Validate email and password
+     bool isEmailValid = formKey.currentState?.validate() ?? false;
+     bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;*/
 
      if (isEmailValid && isPasswordValid) {
        responseMessage = await customLoginMutation(email, password);
@@ -51,54 +62,13 @@ class LandingPageViewModel extends ChangeNotifier {
          );
      }
      else {
-       // Fields are not valid, show a modal bottom sheet with an error message
-       showModalBottomSheet(
-         context: context,
-         builder: (BuildContext context) {
-           return Container(
-             width: double.infinity,
-             padding: EdgeInsets.all(16),
-             child: Column(
-               mainAxisSize: MainAxisSize.min,
-               children: [
-                 const Text(
-                   'Error',
-                   style: TextStyle(
-                     fontSize: 22,
-                   ),
-                 ),
-                 SizedBox(height: 20.Sh),
-                 Text(
-                   responseMessage ?? "",
-                   style: TextStyle(
-                     fontSize: 18,
-                   ),
-                 ),
-                 const SizedBox(height: 20),
-                 Container(
-                   width: double.infinity,
-                   padding: EdgeInsets.only(top: 5.Sh, bottom: 5, left: 50.Sw, right: 50.Sw),
-                   child: ElevatedButton(
-                     onPressed: () {
-                       // Close the bottom sheet
-                       Navigator.pop(context);
-                     },
-                     style: ElevatedButton.styleFrom(
-                       primary: Colors.blue, // Set the background color to blue
-                     ),
-                     child: Text('OK', style: TextStyle(color: Colors.white)),
-                   ),
-                 ),
-               ],
-             ),
-           );
-         },
-       );
+       String errorMessage = getErrorMessage();
+       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
      }
    }
 
 
-   String morningText = "Hey! Good Morning";
+  String morningText = "Hey! Good Morning";
   var emailAddressText = "Email Address";
   var passwordText = "Password";
   var buttonLogInText = "Login";
@@ -140,6 +110,21 @@ class LandingPageViewModel extends ChangeNotifier {
 
   String getLogInText() {
     return "Login";
+  }
+
+  String getErrorMessage() {
+    bool isEmailValid = formKey.currentState?.validate() ?? false;
+    bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;
+    if(!isEmailValid && !isPasswordValid) {
+      return "Please Enter a valid Email and Password";
+    } else {
+      if(!isEmailValid) {
+        return "Please enter a valid Email Address";
+      } else if(!isPasswordValid){
+        return "Please enter a valid Password";
+      }
+    }
+    return responseMessage ?? "";
   }
 
 

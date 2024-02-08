@@ -4,8 +4,13 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
+import 'package:kestral/utils/size_ext.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+
+import '../datamodal/incomplete_task.dart';
+import '../datamodal/project_detail.dart';
+import 'appt_text_style.dart';
 
 class Utils {
   static var mockupHeight = 800;
@@ -32,6 +37,10 @@ class Utils {
 
   static String projectName ="projectName";
   static String taskName = "taskName";
+
+  static String taskPriority= "Low";
+
+  static var dueDate= "";
 
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
@@ -68,6 +77,10 @@ class Utils {
   static var selectProjectText = "Select Project";
   static String deviceId = "";
   static String deviceName = "";
+
+  static List<Projects> projectList = [];
+  static List<GetInCompleteTasks> taskList = [];
+  static List<TaskCategories> categoryList = [];
 
   static void loadSavedProjectData() {
     Map<String, dynamic> projectData = jsonDecode(
@@ -132,5 +145,119 @@ class Utils {
       await getPreference().setString("deviceId", deviceId);
     }
     print("Device id " + deviceId);
+  }
+
+  static void showBottomSheet(BuildContext context, IconData error, Color iconColor, String message) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 96.Sh,
+          width: double.infinity,
+          padding: EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                error,
+                size: 30.Sh,
+                color: iconColor,
+              ),
+              SizedBox(width : 10.Sh),
+              Flexible(
+                child: Text(
+                    message,
+                    maxLines: 2,
+                    style: AppTextStyle
+                  .textStylePoppins16w600,
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static void showProgressBottomSheet(BuildContext context,String message) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder:
+            (BuildContext context, StateSetter setState) {
+          return Container(
+            width: double.infinity,
+            height: 96.Sh,
+            decoration: const ShapeDecoration(
+              color: Color(0xFFF8F5F0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10.Sh,
+                ),
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                    const SizedBox(
+                      width: 13,
+                    ),
+                    Text(
+                      message,
+                      style: AppTextStyle
+                          .textStylePoppins16w600,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+
+  static getChip(String priority) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius:
+        BorderRadius.circular(20), // Set border radius here
+        color: getColorOfPriority(priority), // Set background color
+      ),
+      margin: EdgeInsets.only(bottom: 3, left: 5),
+      padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+      child: Text(
+        priority,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  static getColorOfPriority(String priority) {
+    if(priority.toLowerCase() == "high"){
+      return Color(0xFFF72828);
+    }
+    if(priority.toLowerCase() == "medium"){
+      return Color(0xffF7A428);
+    }
+    return Color(0xFF27CE38);
   }
 }

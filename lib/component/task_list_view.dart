@@ -39,6 +39,10 @@ class CategoriesListViewState extends State<SubTaskListView> {
                 widget.subTaskList.elementAt(index).taskCategoryId;
             await Utils.getPreference()
                 .setString(Utils.taskName, Utils.selectedSubTask);
+            await Utils.getPreference()
+                .setString("dueDate",Utils.dueDate) ;
+                await Utils.getPreference()
+                .setString("taskPriority",Utils.taskPriority) ;
             setState(() {
               selectedIndex = index;
             });

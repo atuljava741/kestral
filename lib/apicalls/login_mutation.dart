@@ -5,6 +5,7 @@ import 'dart:io' show Platform;
 import 'package:kestral/datamodal/user_aunthentication.dart';
 
 import '../utils/utils.dart';
+import 'logout_mutation.dart';
 
 final String createPostMutation = """
   mutation UserAuthentication(
@@ -40,12 +41,18 @@ Future<String?> customLoginMutation(String email, String password) async {
 
   if (result.hasException) {
     print("Exception" + result.exception!.graphqlErrors.first.message);
+    print ("Access Token");
+    Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
+    print(Utils.getPreference().getString("access_token"));
+    logoutUserMutation();
     return result.exception!.graphqlErrors.first.message;
+
   } else {
     print(result.data!);
     UserAuthResponse userData =  UserAuthResponse.fromJson(result.data!);
     Utils.userInformation = userData;
     Utils.accessToken = userData.data.userAuthentication.token;
+    await Utils.getPreference().setString("access_token", Utils.accessToken);
     print(userData.data.userAuthentication.token);
     print("true");
     return "true";

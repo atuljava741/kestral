@@ -11,6 +11,7 @@ import '../apicalls/add_time_to_kestral.dart';
 import '../apicalls/get_projects.dart';
 import '../apicalls/get_task.dart';
 import '../apicalls/get_task_categories.dart';
+import '../apicalls/logout_mutation.dart';
 import '../datamodal/incomplete_task.dart';
 import '../datamodal/project_detail.dart';
 import '../timer/timer_task.dart';
@@ -70,6 +71,8 @@ class DashboardViewModel extends ChangeNotifier {
       // Calculate hours and minutes
       int hours = difference.inHours;
       int minutes = difference.inMinutes.remainder(60);
+      minutes = ((minutes) / 10).round() * 10;
+      if(minutes<0) minutes =0 ;
       return "${formatWithLeadingZero(hours)}:${formatWithLeadingZero(minutes)}";
     } else {
       return "00:00";
@@ -156,8 +159,9 @@ class DashboardViewModel extends ChangeNotifier {
     }
     await Utils.saveCurrentProjectjsonBodyInPreference();
     DateTime currentTime = DateTime.now();
+    DateTime nearestTenMinutes = roundToNearestTenMinutes(currentTime);
     await Utils.getPreference()
-        .setInt(Utils.startTimestamp, currentTime.millisecondsSinceEpoch);
+        .setInt(Utils.startTimestamp, nearestTenMinutes.millisecondsSinceEpoch);
     await saveLastStateOfButton(true);
     timeTracker.startTimer(() {
       checkAndSyncPendingData();
@@ -211,6 +215,7 @@ class DashboardViewModel extends ChangeNotifier {
     print("checkAndSyncPendingData $numberOfIntervals");
     for (int i = 1; i <= numberOfIntervals; i++) {
       lastdatetime = getLastSentDateTime();
+      lastdatetime = roundToNearestTenMinutes(lastdatetime);
       DateTime scheduledTime =
           lastdatetime.add(Duration(minutes: Utils.intervalMinutes));
       DateTime roundedTime = scheduledTime;
@@ -290,6 +295,7 @@ class DashboardViewModel extends ChangeNotifier {
   Future<void> logout(context) async {
     var queue = Utils.getPreference().getString('queue');
     Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+    await logoutUserMutation();
     await Utils.getPreference().clear();
     if (queue != null) {
       await Utils.getPreference().setString('queue', queue);
@@ -365,6 +371,18 @@ class DashboardViewModel extends ChangeNotifier {
 
   String getCreateTask() {
     return createTaskText ?? "";
+  }
+
+  DateTime roundToNearestTenMinutes(DateTime time) {
+    int minutes = time.minute;
+    int remainder = minutes % 10;
+    if (remainder >= 5) {
+      // Round up to the next 10 minutes
+      return time.add(Duration(minutes: 10 - remainder));
+    } else {
+      // Round down to the previous 10 minutes
+      return time.subtract(Duration(minutes: remainder));
+    }
   }
 
 }

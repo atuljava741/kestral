@@ -35,12 +35,12 @@ class Utils {
   static var startTimestamp = "start_time_stamp";
   static String projectDetailsSP = "projectDetailsSP";
 
-  static String projectName ="projectName";
+  static String projectName = "projectName";
   static String taskName = "taskName";
 
-  static String taskPriority= "Low";
+  static String taskPriority = "Low";
 
-  static var dueDate= "";
+  static var dueDate = "";
 
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
@@ -89,8 +89,11 @@ class Utils {
     selectedSubTask = projectData["taskDescription"] ?? "";
     selectedCategoryId = projectData["taskCategoryId"] ?? 0;
     selectedSubTaskId = projectData["taskId"] ?? 0;
-    selectProjectText = Utils.getPreference().getString(Utils.projectName) ?? "";
+    selectProjectText =
+        Utils.getPreference().getString(Utils.projectName) ?? "";
     selectedSubTask = Utils.getPreference().getString(Utils.taskName) ?? "";
+    dueDate = Utils.getPreference().getString("dueDate") ?? "";
+    taskPriority = Utils.getPreference().getString("taskPriority") ?? "";
   }
 
   static Future<void> saveCurrentProjectjsonBodyInPreference() async {
@@ -122,11 +125,15 @@ class Utils {
   static Future<void> getDeviceInfo(BuildContext context) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     try {
-      if (Theme.of(context).platform == TargetPlatform.android) {
+      if (Theme
+          .of(context)
+          .platform == TargetPlatform.android) {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
         getDeviceId();
         deviceName = androidInfo.model;
-       } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+      } else if (Theme
+          .of(context)
+          .platform == TargetPlatform.iOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
         getDeviceId();
         deviceName = iosInfo.name;
@@ -138,7 +145,7 @@ class Utils {
 
   static Future<void> getDeviceId() async {
     deviceId = getPreference().getString("deviceId") ?? "";
-    if(deviceId == "") {
+    if (deviceId == "") {
       var uuid = Uuid();
       String id = uuid.v4();
       deviceId = id;
@@ -147,12 +154,12 @@ class Utils {
     print("Device id " + deviceId);
   }
 
-  static void showBottomSheet(BuildContext context, IconData error, Color iconColor, String message) {
+  static void showBottomSheet(BuildContext context, IconData error,
+      Color iconColor, String message) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 96.Sh,
           width: double.infinity,
           padding: EdgeInsets.all(10),
           child: Row(
@@ -163,16 +170,15 @@ class Utils {
                 size: 30.Sh,
                 color: iconColor,
               ),
-              SizedBox(width : 10.Sh),
+              SizedBox(width: 10.Sh),
               Flexible(
                 child: Text(
-                    message,
-                    maxLines: 2,
-                    style: AppTextStyle
-                  .textStylePoppins16w600,
+                  message,
+                  style: AppTextStyle
+                      .textStylePoppins12w400,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 60.Sh),
             ],
           ),
         );
@@ -180,15 +186,41 @@ class Utils {
     );
   }
 
-  static void showProgressBottomSheet(BuildContext context,String message) {
+  static void showProgressBottomSheet(BuildContext context, String message) {
     showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+                SizedBox(width: 10.Sh),
+                Flexible(
+                  child: Text(
+                    message,
+                    style: AppTextStyle
+                        .textStylePoppins12w400,
+                  ),
+                ),
+                SizedBox(height: 60.Sh),
+              ],
+            ),
+          );
+        });
+  }
+
+    /*showModalBottomSheet(
       context: context,
       builder: (context) => StatefulBuilder(
         builder:
             (BuildContext context, StateSetter setState) {
           return Container(
             width: double.infinity,
-            height: 96.Sh,
             decoration: const ShapeDecoration(
               color: Color(0xFFF8F5F0),
               shape: RoundedRectangleBorder(
@@ -217,18 +249,21 @@ class Utils {
                     Text(
                       message,
                       style: AppTextStyle
-                          .textStylePoppins16w600,
+                          .textStylePoppins12w400,
                     )
                   ],
                 ),
+                SizedBox(
+                  height: 60.Sh,
+                ),
               ],
             ),
-          );
+          )
         },
       ),
     );
   }
-
+*/
 
   static getChip(String priority) {
     return Container(

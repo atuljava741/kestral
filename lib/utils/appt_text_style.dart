@@ -38,7 +38,6 @@ class AppTextStyle {
      fontSize: 16,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
-     height: 0.06,
    );
 
    static TextStyle textStylePoppins12w400 = const TextStyle(

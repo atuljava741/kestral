@@ -26,6 +26,7 @@ Future<String?> logoutUserMutation() async {
     print("Exception" + result.exception!.graphqlErrors.first.message);
     return result.exception!.graphqlErrors.first.message;
   } else {
+    print("Logout data");
     print(result.data!);
     return "true";
   }

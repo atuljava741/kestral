@@ -34,12 +34,12 @@ class LandingPageViewModel extends ChangeNotifier {
    }
 
    Future<void> handleButtonClick(BuildContext context) async {
-     String email = emailController.text;
-     String password = passwordController.text;
+     String email = "anshul.upadhyay@47billion.com";//emailController.text;
+     String password = "Test@123";////passwordController.text;
 
      // Validate email and password
-     bool isEmailValid = formKey.currentState?.validate() ?? false;
-     bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;
+     bool isEmailValid = true;//formKey.currentState?.validate() ?? false;
+     bool isPasswordValid = true;//passwordFormKey.currentState?.validate() ?? false;
 
      if (isEmailValid && isPasswordValid) {
        responseMessage = await customLoginMutation(email, password);
@@ -127,7 +127,9 @@ class LandingPageViewModel extends ChangeNotifier {
     return orText ?? "";
   }
 
-  init()  {}
+  init()  {
+
+  }
 
 
   void onBackPress() {}

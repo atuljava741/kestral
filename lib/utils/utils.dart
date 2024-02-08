@@ -19,7 +19,7 @@ class Utils {
 
   static TaskCategory? taskCategory;
 
-  static var highlightColor = Colors.blue;
+  static var highlightColor = Color(0XFFDDF3FF);
 
   static SharedPreferences? _pref;
 
@@ -59,7 +59,7 @@ class Utils {
     print("dialog displayed $s");
   }
 
-  static String selectedProject = "";
+  //static String selectedProject = "";
   static int selectedProjectId = 0;
   static int selectedSubTaskId = 0;
   static var selectedSubTask = "";
@@ -131,6 +131,6 @@ class Utils {
       deviceId = id;
       await getPreference().setString("deviceId", deviceId);
     }
-
+    print("Device id " + deviceId);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
 import 'package:kestral/utils/size_ext.dart';
@@ -26,7 +27,7 @@ class Utils {
 
   static var highlightColor = Color(0XFFDDF3FF);
 
-  static SharedPreferences? _pref;
+  static  SharedPreferences? pref;
 
   static int intervalMinutes = 10;
 
@@ -57,11 +58,11 @@ class Utils {
   }
 
   static init() async {
-    _pref = await SharedPreferences.getInstance();
+    pref = await SharedPreferences.getInstance();
   }
 
   static SharedPreferences getPreference() {
-    return _pref!;
+   return pref!;
   }
 
   static void showDialog(String s) {
@@ -294,5 +295,17 @@ class Utils {
       return Color(0xffF7A428);
     }
     return Color(0xFF27CE38);
+  }
+
+  static displayToast(String message){
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
   }
 }

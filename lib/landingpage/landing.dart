@@ -8,11 +8,11 @@ import 'landing_viewmodel.dart';
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Utils.getDeviceInfo(context);
+    loadInitialData(context);
     Utils.deviceHeight = MediaQuery.of(context).size.height;
     Utils.deviceWidth = MediaQuery.of(context).size.width;
     return ViewModelBuilder<LandingPageViewModel>.reactive(
-        viewModelBuilder: () => LandingPageViewModel(),
+        viewModelBuilder: () => LandingPageViewModel(context),
         onViewModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -260,5 +260,10 @@ class LandingPage extends StatelessWidget {
             ),
           );
         });
+  }
+
+  Future<void> loadInitialData(context) async {
+    await Utils.init();
+    await Utils.getDeviceInfo(context);
   }
 }

@@ -40,10 +40,10 @@ Future<String?> customLoginMutation(String email, String password) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
-    print("Exception" + result.exception!.graphqlErrors.first.message);
+    print("Exception" + result.exception!.graphqlErrors.first.extensions!["cacheToken"]);
     print ("Access Token");
-    Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
-    print(Utils.getPreference().getString("access_token"));
+    Utils.accessToken = result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
+    print(Utils.accessToken);
     logoutUserMutation();
     return result.exception!.graphqlErrors.first.message;
 
@@ -53,6 +53,8 @@ Future<String?> customLoginMutation(String email, String password) async {
     Utils.userInformation = userData;
     Utils.accessToken = userData.data.userAuthentication.token;
     await Utils.getPreference().setString("access_token", Utils.accessToken);
+    await Utils.getPreference().setString("email", email);
+    await Utils.getPreference().setString("password", password);
     print(userData.data.userAuthentication.token);
     print("true");
     return "true";

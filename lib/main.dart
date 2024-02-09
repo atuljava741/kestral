@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Utils.init();
     return MaterialApp(
       title: 'Kestral',
       theme: ThemeData(

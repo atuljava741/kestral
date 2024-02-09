@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kestral/utils/size_ext.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apicalls/login_mutation.dart';
 import '../apicalls/logout_mutation.dart';
@@ -11,6 +13,10 @@ import '../kestrel_pro_page.dart';
 import '../utils/utils.dart';
 
 class LandingPageViewModel extends ChangeNotifier {
+
+   final BuildContext context;
+
+   LandingPageViewModel(this.context);
 
    GlobalKey<FormState> formKey = GlobalKey<FormState>();
    TextEditingController emailController = TextEditingController();
@@ -69,6 +75,22 @@ class LandingPageViewModel extends ChangeNotifier {
      }
    }
 
+   Future<void> handleAutoLogin(BuildContext context, String email, String password) async {
+     responseMessage = await customLoginMutation(email, password);
+
+     if(responseMessage == "true") {
+       Navigator.push(
+         context,
+         MaterialPageRoute(builder: (context) => KestralScreen()),
+       );
+     }
+     else {
+       String errorMessage = getErrorMessage();
+       print(Utils.getPreference().get("access_token"));
+       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
+     }
+   }
+
 
   String morningText = "Hey! Good Morning";
   var emailAddressText = "Email Address";
@@ -100,7 +122,10 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   init() {
-
+    SharedPreferences.getInstance().then((value) {
+      Utils.pref = value;
+      autoLogin(context);
+    });
   }
 
 
@@ -129,5 +154,17 @@ class LandingPageViewModel extends ChangeNotifier {
     return responseMessage ?? "";
   }
 
-
+   autoLogin(context) async {
+     String email = Utils.getPreference().getString("email") ?? "";
+     String password = Utils.getPreference().getString("password") ?? "";
+     if (email != "" && password != "") {
+       String? responseMes = await customLoginMutation(email, password);
+       if (responseMes == "true") {
+         Navigator.push(
+           context,
+           MaterialPageRoute(builder: (context) => KestralScreen()),
+         );
+       }
+     }
+   }
 }

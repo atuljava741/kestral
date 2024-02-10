@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
 import 'package:kestral/utils/size_ext.dart';
@@ -43,6 +43,11 @@ class Utils {
 
   static var dueDate = "";
 
+  static String hours = "hours";
+  static String minutes = "minutes";
+
+  static String currentTimeZone = "Asia/Kolkata";
+
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
   }
@@ -65,9 +70,6 @@ class Utils {
    return pref!;
   }
 
-  static void showDialog(String s) {
-    print("dialog displayed $s");
-  }
 
   //static String selectedProject = "";
   static int selectedProjectId = 0;
@@ -116,7 +118,7 @@ class Utils {
       "idealFlag": 0,
       "screenshotImageUrl": "",
       "comment": null,
-      "timeZone": "Asia/Kolkata",
+      "timeZone": Utils.currentTimeZone,
     };
     await Utils.getPreference()
         .setString(Utils.projectDetailsSP, jsonEncode(projectDetails));
@@ -124,19 +126,35 @@ class Utils {
 
 
   static Future<void> getDeviceInfo(BuildContext context) async {
+    Utils.currentTimeZone = DateTime.now().timeZoneName;
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     try {
       if (Theme
           .of(context)
           .platform == TargetPlatform.android) {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        getDeviceId();
+        deviceId = getPreference().getString("deviceId") ?? "";
+        String androidId = androidInfo.androidId ?? "";
+        if (deviceId == "" && androidId != "") {
+          deviceId = androidId;
+          await getPreference().setString("deviceId", deviceId);
+        } else {
+          getDeviceId();
+        }
+        print(deviceId);
         deviceName = androidInfo.model;
       } else if (Theme
           .of(context)
           .platform == TargetPlatform.iOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        getDeviceId();
+        deviceId = getPreference().getString("deviceId") ?? "";
+        String iosId = iosInfo.identifierForVendor ?? "";
+        if (deviceId == "" && iosId != "") {
+          deviceId = iosId;
+          await getPreference().setString("deviceId", deviceId);
+        } else {
+          getDeviceId();
+        }
         deviceName = iosInfo.name;
       }
     } catch (e) {
@@ -297,15 +315,170 @@ class Utils {
     return Color(0xFF27CE38);
   }
 
-  static displayToast(String message){
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
+
+  static void showCustomDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Setting to min to take only the required space
+              children: [
+                SizedBox(height: 56.Sh),
+                SvgPicture.asset(
+                  'assets/images/alert.svg', // Path to your SVG file
+                  width: 64.Sw,
+                  height: 64.Sh,
+                ),
+                SizedBox(height: 20.Sh),
+                Text(
+                  title,
+                  style: AppTextStyle.textStylePoppins18,
+                ),
+                SizedBox(height: 28.Sh),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.textStylePoppins15,
+                ),
+                SizedBox(height: 72),
+                Container(
+                  width: double.infinity,
+                  height: 48.Sh,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xff1589CA),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                      ),
+
+                    ),
+                    child: Text(
+                      'OK',
+                      style: AppTextStyle.textStylePoppins16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
+
   }
+
+  static void showLogoutDialog(BuildContext context, String title, String message, Function() callback) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Setting to min to take only the required space
+              children: [
+                SizedBox(height: 56.Sh),
+                SvgPicture.asset(
+                  'assets/images/alert.svg', // Path to your SVG file
+                  width: 64.Sw,
+                  height: 64.Sh,
+                ),
+                SizedBox(height: 20.Sh),
+                Text(
+                  title,
+                  style: AppTextStyle.textStylePoppins18,
+                ),
+                SizedBox(height: 28.Sh),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.textStylePoppins15,
+                ),
+                SizedBox(height: 72),
+                Row(
+                  children: [
+                    Expanded(
+                      flex : 1,
+                      child: Container(
+                        height: 48.Sh,
+                        margin: EdgeInsets.only(right:10.Sw),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFD5D5D5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                            ),
+
+                          ),
+                          child: const Text(
+                            'LATER',
+                            style: TextStyle(
+                              color: Color(0xFF252525),
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex : 1,
+                      child: Container(
+                        margin: EdgeInsets.only(left:10.Sw),
+                        height: 48.Sh,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            callback.call();
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFecc7c7),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                            ),
+
+                          ),
+                          child: const Text(
+                            'LOG OUT',
+                            style: TextStyle(
+                              color: Color(0xFFF72727),
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+  }
+
+
 }

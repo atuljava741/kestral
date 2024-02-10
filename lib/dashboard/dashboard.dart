@@ -21,7 +21,7 @@ class KestralScreen extends StatelessWidget {
     Utils.deviceHeight = MediaQuery.of(context).size.height;
     Utils.deviceWidth = MediaQuery.of(context).size.width;
     return ViewModelBuilder<DashboardViewModel>.reactive(
-        viewModelBuilder: () => DashboardViewModel(),
+        viewModelBuilder: () => DashboardViewModel(context),
         onViewModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -1085,7 +1085,7 @@ class KestralScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Utils.showProgressBottomSheet(context, "Syncing Time to Server");
-                        TaskQueue.sinkQueueToServer();
+                        TaskQueue.sinkQueueToServer(context);
                         Future.delayed(Duration(seconds: 3), () {
                           // Call your function after delay
                           Navigator.pop(context);

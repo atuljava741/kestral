@@ -45,6 +45,10 @@ class DashboardViewModel extends ChangeNotifier {
   TimeTracker timeTracker = TimeTracker();
 
   bool bottomNavVisible = false;
+
+  final BuildContext context;
+  DashboardViewModel(this.context);
+
   bool get obscureText => selectedText2;
   bool get timerState => getTimerState();
   bool isTaskColor = false;
@@ -60,7 +64,7 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   String getCurrentDuration() {
-    if (timerState) {
+    /*if (timerState) {
       int initialTimeStamp =
           Utils.getPreference().getInt(Utils.startTimestamp) ?? 0;
       DateTime startTime =
@@ -73,10 +77,19 @@ class DashboardViewModel extends ChangeNotifier {
       int minutes = difference.inMinutes.remainder(60);
       minutes = ((minutes) / 10).round() * 10;
       if(minutes<0) minutes =0 ;
+      Utils.getPreference().setInt(Utils.minutes, minutes);
       return "${formatWithLeadingZero(hours)}:${formatWithLeadingZero(minutes)}";
     } else {
       return "00:00";
-    }
+    }*/
+    int minutes = Utils.getPreference().getInt(Utils.minutes) ?? 0;
+    print(minutes);
+    int hours = (minutes / 60).toInt(); // Get the integer division for hours
+    int remainingMinutes = (minutes % 60).toInt(); // Get the remaining minutes
+    // Format the hours and minutes into a string
+    String hourMinuteString = "${formatWithLeadingZero(hours)}:${formatWithLeadingZero(remainingMinutes)}";
+    return hourMinuteString;
+
   }
 
   init() {
@@ -154,7 +167,7 @@ class DashboardViewModel extends ChangeNotifier {
         Utils.selectedSubTask == "" ||
         Utils.selectedCategoryId == 0 ||
         Utils.selectedSubTaskId == 0) {
-      Utils.showDialog("Please Select Project and Task");
+      Utils.showCustomDialog(context, "Alert", "Please Select Project and Task");
       return;
     }
     await Utils.saveCurrentProjectjsonBodyInPreference();
@@ -178,7 +191,7 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> onlaunchOfScreen() async {
-    await TaskQueue.sinkQueueToServer();
+    await TaskQueue.sinkQueueToServer(context);
     timeTracker.loadTimerFromSharedPreference();
     if (timerState) {
       checkAndSyncPendingData();
@@ -242,6 +255,13 @@ class DashboardViewModel extends ChangeNotifier {
 
   Future<void> sendTimeToKeastral(String durationFrom, String durationTo,
       String dateOfTask, DateTime scheduledTime) async {
+    int minutes = Utils.getPreference().getInt(Utils.minutes) ?? 0;
+    bool timeToReset = isBetweenMidnightAndQuarterPastMidnight(scheduledTime);
+    if(timeToReset) {
+      minutes = 0;
+    }
+    minutes = minutes + 10;
+    await Utils.getPreference().setInt(Utils.minutes,minutes);
     print("Adding to queue");
     print("From $durationFrom - $durationTo");
 
@@ -257,33 +277,10 @@ class DashboardViewModel extends ChangeNotifier {
       ...durationData
     };
 
-    // Map<String, dynamic> apiBody = <String, dynamic>{
-    //   "projectId": selectedProjectId,
-    //   "employeeId": Utils.userInformation!.data.userAuthentication.employeeId,
-    //   "taskDescription": selectedSubTask,
-    //   "effortInHrsMin": "00:00",
-    //   "totalTimeSpent": "00:00",
-    //   "completion": 0,
-    //   "taskStatusId": 2,
-    //   "taskCategoryId": selectedCategoryId,
-    //   "taskId": selectedSubTaskId,
-    //   "date": dateOfTask,
-    //   "durationFrom": durationFrom,
-    //   "durationTo": durationTo,
-    //   "imageCaptureTime": "",
-    //   "isManual": false,
-    //   "mousePressCount": 0,
-    //   "keyPressCount": 0,
-    //   "organizationId": Utils.userInformation!.data.userAuthentication.orgId,
-    //   "idealFlag": 0,
-    //   "screenshotImageUrl": null,
-    //   "comment": null
-    // };
-
     await TaskQueue.addToQueue(apiBody);
     await Utils.getPreference()
         .setInt(Utils.lastSentTime, scheduledTime.millisecondsSinceEpoch);
-    await TaskQueue.sinkQueueToServer();
+    await TaskQueue.sinkQueueToServer(context);
   }
 
   DateTime roundToNearestInterval(DateTime dateTime, int intervalMinutes) {
@@ -293,19 +290,21 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> logout(context) async {
-    var queue = Utils.getPreference().getString('queue');
-    Utils.deviceId = Utils.getPreference().getString('deviceId')!;
-    await logoutUserMutation();
-    await Utils.getPreference().clear();
-    if (queue != null) {
-      await Utils.getPreference().setString('queue', queue);
-      await Utils.getPreference().setString('deviceId', Utils.deviceId);
-    }
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LandingPage()),
-      (route) => false,
-    );
+    Utils.showLogoutDialog(context, "Alert", "Do you want to logout from the Kestral tool?", () async {
+      var queue = Utils.getPreference().getString('queue');
+      Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+      await logoutUserMutation();
+      await Utils.getPreference().clear();
+      if (queue != null) {
+        await Utils.getPreference().setString('queue', queue);
+        await Utils.getPreference().setString('deviceId', Utils.deviceId);
+      }
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LandingPage()),
+            (route) => false,
+      );
+    });
   }
 
   refreshUI() {
@@ -385,4 +384,9 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
+  bool isBetweenMidnightAndQuarterPastMidnight(DateTime inputTime) {
+    DateTime midnight = DateTime(inputTime.year, inputTime.month, inputTime.day, 0, 0); // 12:00 AM
+    DateTime quarterPastMidnight = DateTime(inputTime.year, inputTime.month, inputTime.day, 0, 15); // 12:15 AM
+    return inputTime.isAfter(midnight) && inputTime.isBefore(quarterPastMidnight);
+  }
 }

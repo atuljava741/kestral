@@ -11,6 +11,7 @@ import '../apicalls/logout_mutation.dart';
 import '../dashboard/dashboard.dart';
 import '../kestrel_pro_page.dart';
 import '../utils/utils.dart';
+import 'landing.dart';
 
 class LandingPageViewModel extends ChangeNotifier {
 
@@ -61,17 +62,35 @@ class LandingPageViewModel extends ChangeNotifier {
 
      if (isEmailValid && isPasswordValid) {
        responseMessage = await customLoginMutation(email, password);
+     } else {
+       String errorMessage = getErrorMessage();
+       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
+       return;
      }
-     if(responseMessage == "true") {
-         Navigator.push(
-           context,
-           MaterialPageRoute(builder: (context) => KestralScreen()),
-         );
+     if (responseMessage == "true") {
+       Navigator.push(
+         context,
+         MaterialPageRoute(builder: (context) => KestralScreen()),
+       );
      }
      else {
-       String errorMessage = getErrorMessage();
+       responseMessage = responseMessage?? "Unable to login. Please contact your Adminstrator";
        print(Utils.getPreference().get("access_token"));
-       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
+       if (responseMessage!.contains("You are currently logged")) {
+         Utils.showLogoutDialog(
+             context, "Kestral Updates", responseMessage!, () async {
+           var queue = Utils.getPreference().getString('queue');
+           Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+           await logoutUserMutation();
+           await Utils.getPreference().clear();
+           if (queue != null) {
+             await Utils.getPreference().setString('queue', queue);
+             await Utils.getPreference().setString('deviceId', Utils.deviceId);
+           }
+         });
+       } else {
+         Utils.showCustomDialog(context, "Kestral Updates", responseMessage!);
+       }
      }
    }
 
@@ -122,8 +141,10 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   init() {
+    print("INIT landing page");
     SharedPreferences.getInstance().then((value) {
       Utils.pref = value;
+      print("Trying Auto login");
       autoLogin(context);
     });
   }
@@ -157,6 +178,8 @@ class LandingPageViewModel extends ChangeNotifier {
    autoLogin(context) async {
      String email = Utils.getPreference().getString("email") ?? "";
      String password = Utils.getPreference().getString("password") ?? "";
+     Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
+     print(email +"  "+ password+ " "+ Utils.accessToken);
      if (email != "" && password != "") {
        String? responseMes = await customLoginMutation(email, password);
        if (responseMes == "true") {

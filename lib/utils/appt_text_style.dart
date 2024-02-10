@@ -137,6 +137,30 @@ class AppTextStyle {
      fontSize: 26,
    );
 
+   static TextStyle textStylePoppins18 = const TextStyle(
+       color: Color(0xFF252525),
+       fontSize: 18,
+       fontFamily: 'Poppins',
+       fontWeight: FontWeight.w600,
+
+   );
+
+   static TextStyle textStylePoppins15 = const TextStyle(
+     color: Color(0xFF252525),
+     fontSize: 15,
+     fontFamily: 'Poppins',
+     fontWeight: FontWeight.w400,
+
+   );
+
+   static TextStyle textStylePoppins16 = const TextStyle(
+     color: Colors.white,
+     fontSize: 16,
+     fontFamily: 'Poppins',
+     fontWeight: FontWeight.w500,
+
+   );
+
   static getBoxDecoration() {
     return const ShapeDecoration(
       color: Colors.white,

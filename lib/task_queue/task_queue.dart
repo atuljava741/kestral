@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:kestral/apicalls/add_time_to_kestral.dart';
 
 import '../utils/utils.dart';
@@ -21,7 +22,7 @@ class TaskQueue {
     await Utils.getPreference().setString('queue', jsonEncode(newQueue));
   }
 
-  static Future<void> sinkQueueToServer() async {
+  static Future<void> sinkQueueToServer(BuildContext context) async {
     List<int> indicesToRemove = [];
     for (int i = 0; i < queue.length; i++) {
       Map<String, dynamic> data = queue.elementAt(i);
@@ -29,8 +30,14 @@ class TaskQueue {
           data["durationFrom"] +
           " - " +
           data["durationTo"]);
-      bool b = await addTimeToKestral(data);
-      if (b) indicesToRemove.add(i);
+      String  b = await addTimeToKestral(data);
+      if (b == "true") {
+        indicesToRemove.add(i);
+      }
+      else {
+        Utils.showCustomDialog(context, "Alert", b);
+        break;
+      }
     }
     await removeElementsAtIndex(indicesToRemove);
   }

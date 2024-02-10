@@ -40,13 +40,8 @@ Future<String?> customLoginMutation(String email, String password) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
-    print("Exception" + result.exception!.graphqlErrors.first.extensions!["cacheToken"]);
-    print ("Access Token");
     Utils.accessToken = result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
-    print(Utils.accessToken);
-    logoutUserMutation();
     return result.exception!.graphqlErrors.first.message;
-
   } else {
     print(result.data!);
     UserAuthResponse userData =  UserAuthResponse.fromJson(result.data!);

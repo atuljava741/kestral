@@ -53,7 +53,7 @@ timeZone: \$timeZone\
 } 
 """;
 
-Future<bool> addTimeToKestral(body) async {
+Future<String> addTimeToKestral(body) async {
   try {
     final MutationOptions options = MutationOptions(
       document: gql(addTimeMutation),
@@ -63,13 +63,13 @@ Future<bool> addTimeToKestral(body) async {
     final QueryResult result = await client.mutate(options);
 
     if (result.hasException) {
-      throw Exception(result.exception.toString());
+      return result.exception!.graphqlErrors.first.message;
     } else {
       print(result.data);
-      return true;
+      return "true";
     }
   } catch (e) {
     print(e);
   }
-  return false;
+  return "false";
 }

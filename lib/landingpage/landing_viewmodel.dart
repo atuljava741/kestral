@@ -17,6 +17,8 @@ class LandingPageViewModel extends ChangeNotifier {
 
    final BuildContext context;
 
+  var showProgressBar = false;
+
    LandingPageViewModel(this.context);
 
    GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -141,11 +143,15 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   init() {
+
     print("INIT landing page");
     SharedPreferences.getInstance().then((value) {
       Utils.pref = value;
       print("Trying Auto login");
+      showProgressBar = true;
       autoLogin(context);
+      showProgressBar = false;
+      notifyListeners();
     });
   }
 
@@ -179,9 +185,14 @@ class LandingPageViewModel extends ChangeNotifier {
      String email = Utils.getPreference().getString("email") ?? "";
      String password = Utils.getPreference().getString("password") ?? "";
      Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
-     print(email +"  "+ password+ " "+ Utils.accessToken);
+     Utils.deviceId = Utils.getPreference().getString("deviceId") ?? "";
+
      if (email != "" && password != "") {
+
+       notifyListeners();
        String? responseMes = await customLoginMutation(email, password);
+
+       notifyListeners();
        if (responseMes == "true") {
          Navigator.push(
            context,

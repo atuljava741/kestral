@@ -59,16 +59,22 @@ class CategoriesListViewState extends State<SubTaskListView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          padding: EdgeInsets.only( left : 16),
-                          child: Text(
-                            widget.subTaskList.elementAt(index).taskName,
-                            style: AppTextStyle.textStylePoppins15w400,
-                          ),
-                        )),
                     Expanded(
+                      flex: 4,
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            padding: EdgeInsets.only( left : 16),
+                            child: Text(
+                              widget.subTaskList.elementAt(index).taskName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyle.textStylePoppins15w400,
+                            ),
+                          )),
+                    ),
+                    Expanded(
+                      flex:1,
                       child: Container(
                         margin: EdgeInsets.only(top: 5.Sh, right: 20.Sw),
                         alignment: Alignment.centerRight,

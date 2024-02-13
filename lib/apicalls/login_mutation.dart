@@ -16,7 +16,7 @@ final String createPostMutation = """
 """;
 
 Future<String?> customLoginMutation(String email, String password) async {
-  print(Utils.deviceId);
+
   final MutationOptions options = MutationOptions(
     document: gql(createPostMutation),
     variables: <String, dynamic>{
@@ -40,7 +40,10 @@ Future<String?> customLoginMutation(String email, String password) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
-    Utils.accessToken = result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
+    try {
+      Utils.accessToken =
+          result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
+    }catch(e){}
     return result.exception!.graphqlErrors.first.message;
   } else {
     print(result.data!);

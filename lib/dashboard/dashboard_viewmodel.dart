@@ -182,7 +182,7 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> handleStopTimer() async {
-    await checkAndSyncPendingData();
+    //await checkAndSyncPendingData();
     timeTracker.stopTimer();
     await saveLastStateOfButton(false);
     await Utils.getPreference().remove(Utils.lastSentTime);

@@ -52,7 +52,7 @@ class AppTextStyle {
      fontSize: 18,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
-     height: 0.05,
+
    );
 
    static TextStyle textStylePoppins14w600 = const TextStyle(
@@ -60,7 +60,7 @@ class AppTextStyle {
      fontSize: 14,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
-     height: 0.08,
+
    );
 
    static TextStyle textStylePoppins19w400 = const TextStyle(
@@ -68,7 +68,7 @@ class AppTextStyle {
      fontSize: 14,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w400,
-     height: 0.08,
+
    );
 
    static TextStyle textStylePoppins17w600 = const TextStyle(
@@ -76,7 +76,7 @@ class AppTextStyle {
      fontSize: 16,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
-     height: 0.08,
+
    );
 
    static TextStyle textStylePoppins20w600 = const TextStyle(
@@ -84,7 +84,7 @@ class AppTextStyle {
      fontSize: 14,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
-     height: 0.08,
+
    );
 
    static TextStyle textStylePoppins21w600 = const TextStyle(
@@ -92,7 +92,7 @@ class AppTextStyle {
      fontSize: 16,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w400,
-     height: 0.06,
+
    );
 
    static TextStyle textStylePoppins22w400 = const TextStyle(
@@ -107,7 +107,7 @@ class AppTextStyle {
      fontSize: 72,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
-     height: 0.02,
+
    );
 
    static TextStyle textStylePoppins13w400 = const TextStyle(
@@ -115,7 +115,7 @@ class AppTextStyle {
      fontSize: 14,
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w400,
-     height: 0.08,
+
    );
 
    static TextStyle textStylePoppins24w600 = const TextStyle(

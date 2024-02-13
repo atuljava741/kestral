@@ -259,15 +259,15 @@ class KestralScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(height: 41.Sh),
+          SizedBox(height: 20.Sh),
           Utils.getIcon("assets/images/logo.png", 72, 64),
-          SizedBox(height: 50.Sh),
+          SizedBox(height: 25.Sh),
           Text(
             viewModel.currentDuration,
             textAlign: TextAlign.right,
             style: AppTextStyle.textStylePoppins72w600,
           ),
-          SizedBox(height: 60.Sh),
+          SizedBox(height: 25.Sh),
           Text(
             viewModel.getcurrentText(),
             textAlign: TextAlign.center,
@@ -358,10 +358,14 @@ class KestralScreen extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        Utils.selectProjectText,
-                                        style:
-                                            AppTextStyle.textStylePoppins18w600,
+                                      Flexible(
+                                        child: Text(
+                                          Utils.selectProjectText,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style:
+                                              AppTextStyle.textStylePoppins18w600,
+                                        ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 10.Sw),
@@ -476,10 +480,14 @@ class KestralScreen extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        Utils.selectedSubTask,
-                                        style:
-                                            AppTextStyle.textStylePoppins15w400,
+                                      Flexible(
+                                        child: Text(
+                                          Utils.selectedSubTask,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style:
+                                              AppTextStyle.textStylePoppins15w400,
+                                        ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 10.Sw),
@@ -937,9 +945,13 @@ class KestralScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 23.Sh),
-                Text(
-                  Utils.selectProjectText,
-                  style: AppTextStyle.textStylePoppins16w600,
+                Flexible(
+                  child: Text(
+                    Utils.selectProjectText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.textStylePoppins16w600,
+                  ),
                 ),
                 SizedBox(height: 10.Sh),
                 Container(

@@ -232,7 +232,29 @@ class LandingPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
+                          InkWell(
+                            child: Container(
+                                width: 64.Sh,
+                                height: 64.Sh,
+                                decoration: ShapeDecoration(
+                                  color: const Color(0xFFF6F3EE),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                ),
+                                child: Utils.getIcon("assets/images/image 6.png", 35.Sh, 35.Sh)
+                            ),
+                            onTap: (){
+                              viewModel.onBtnClick_Microsoft();
+                            },
+                          ),
+                          SizedBox(
+                            width: 16.Sw,
+                          ),
+                          InkWell(
+                            onTap: (){
+                              viewModel.onBtnClick_Google();
+                            },
+                            child: Container(
                               width: 64.Sh,
                               height: 64.Sh,
                               decoration: ShapeDecoration(
@@ -240,20 +262,8 @@ class LandingPage extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                               ),
-                              child: Utils.getIcon("assets/images/image 6.png", 35.Sh, 35.Sh)
-                          ),
-                          SizedBox(
-                            width: 16.Sw,
-                          ),
-                          Container(
-                            width: 64.Sh,
-                            height: 64.Sh,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFF6F3EE),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                              child: Utils.getIcon("assets/images/image 7.png", 35.Sh, 35.Sh),
                             ),
-                            child: Utils.getIcon("assets/images/image 7.png", 35.Sh, 35.Sh),
                           ),
                         ],
                       ),

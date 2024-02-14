@@ -14,6 +14,7 @@ import '../datamodal/project_detail.dart';
 import 'appt_text_style.dart';
 
 class Utils {
+  static var navigatorKey = GlobalKey<NavigatorState>();
   static var mockupHeight = 800;
   static var mockupWidth = 360;
   static var deviceHeight;

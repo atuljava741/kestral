@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>843133522975-k3rvr8ot4a8oedp40c8p7vg14nlm9d83.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.843133522975-k3rvr8ot4a8oedp40c8p7vg14nlm9d83</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAxgvkamxWAEjc7gsBc6q9X0IFit-E97FI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>843133522975</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kestrelpro.ai</string>
+	<key>PROJECT_ID</key>
+	<string>kestral-a4c72</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kestral-a4c72.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:843133522975:ios:749ee7944fe8476f1b312a</string>
+</dict>
+</plist>

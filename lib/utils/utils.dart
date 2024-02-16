@@ -9,8 +9,10 @@ import 'package:kestral/utils/size_ext.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../apicalls/logout_mutation.dart';
 import '../datamodal/incomplete_task.dart';
 import '../datamodal/project_detail.dart';
+import '../landingpage/landing.dart';
 import 'appt_text_style.dart';
 
 class Utils {
@@ -49,7 +51,7 @@ class Utils {
 
   static String currentTimeZone = "Asia/Kolkata";
 
-  static var showAddButton = true;
+  static var showAddButton = false;
 
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
@@ -451,9 +453,21 @@ class Utils {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             callback.call();
-                            Navigator.of(context).pop(); // Close the dialog
+                            var queue = Utils.getPreference().getString('queue');
+                            Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+                            await logoutUserMutation();
+                            await Utils.getPreference().clear();
+                            if (queue != null) {
+                              await Utils.getPreference().setString('queue', queue);
+                              await Utils.getPreference().setString('deviceId', Utils.deviceId);
+                            }
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => LandingPage()),
+                                  (route) => false,
+                            ); // Close the dialog
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFecc7c7),

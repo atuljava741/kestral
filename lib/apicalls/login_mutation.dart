@@ -26,7 +26,7 @@ Future<String?> customLoginMutation(String email, String password) async {
         "buildType": "latest",
         "version": Platform.version,
         "systemArchitecture": "",
-        "osVersion": Platform.version,
+        "osVersion": Platform.operatingSystemVersion,
         "deviceId" : Utils.deviceId,
         "deviceName" : Utils.deviceName,
         "data": {

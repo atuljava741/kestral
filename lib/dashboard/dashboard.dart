@@ -10,11 +10,13 @@ import '../apicalls/add_task.dart';
 import '../apicalls/get_task.dart';
 import '../component/project_list_view.dart';
 import '../component/task_list_view.dart';
+import '../component/toggle_button.dart';
 import '../datamodal/incomplete_task.dart';
 import 'dashboard_viewmodel.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 class KestralScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     apiTest();
@@ -389,10 +391,7 @@ class KestralScreen extends StatelessWidget {
                           viewModel.getProjects().then((value){
                             if(viewModel.bottomNavVisible) {
                               viewModel.bottomNavVisible = false;
-                              Future.delayed(Duration(seconds: 3), () {
-                                // Call your function after delay
-                                Navigator.pop(context);
-                              });
+                              //viewModel.refreshUI();
                             }
                           });
                           viewModel.bottomNavVisible = true;
@@ -422,156 +421,156 @@ class KestralScreen extends StatelessWidget {
             SizedBox(
               height: 18.Sh,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    /*Container(
-                      width: 320.Sw,
-                      height: 64.Sh,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFFBFAFA),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(0x1E343330),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                    ),*/
-                    GestureDetector(
-                      // Wrap the Container with a GestureDetector
-                      onTap: () {
-                        if(viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
-                        showTaskBottomSheet(context, viewModel);
-                        } else {
-                          Utils.showBottomSheet(context, Icons.error, Colors.red, "Please Select A Project First");
-                        }
-                      },
-                      child: Container(
-                        width: 320.Sw,
-                        //height: 64.Sh,
-                        decoration: AppTextStyle.getBoxDecoration(),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 13.Sw, top: 10.Sh),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Task",
-                                        style:
-                                            AppTextStyle.textStylePoppins12w400,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3.Sh,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          Utils.selectedSubTask,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style:
-                                              AppTextStyle.textStylePoppins15w400,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(right: 10.Sw),
-                                        child: const Icon(Icons.arrow_drop_down,
-                                            size: 35,
-                                            color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height : 12.Sh),
-                            Visibility(
-                              visible: Utils.selectedSubTaskId != 0,
-                              child: Container(
-                                width: 298.Sw,
-                                height: 37.Sh,
-                                padding: EdgeInsets.only(left:10.Sw),
-                                decoration: ShapeDecoration(
-                                  color: Color(0xFFF1F1F1),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                ),
-                                child : Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+        Container(
+          width: 320.Sw,
+          decoration: ShapeDecoration(
+            color: const Color(0xFFFBFAFA),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4)),
+            shadows: const [
+              BoxShadow(
+                color: Color(0x1E343330),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      GestureDetector(
+                        // Wrap the Container with a GestureDetector
+                        onTap: () {
+                          if(viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
+                          showTaskBottomSheet(context, viewModel);
+                          } else {
+                            Utils.showBottomSheet(context, Icons.error, Colors.red, "Please Select A Project First");
+                          }
+                        },
+                        child: Container(
+                          width: Utils.showAddButton ? 256.Sw : 320.Sw,
+                          //height: 64.Sh,
+                          decoration: AppTextStyle.getBoxDecoration(),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 13.Sw, top: 10.Sh),
+                                child: Column(
                                   children: [
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Container(
-                                          padding: EdgeInsets.only(top: 5.0, left : 16, right : 10, bottom : 15),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Task",
+                                          style:
+                                              AppTextStyle.textStylePoppins12w400,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3.Sh,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
                                           child: Text(
-                                            "Due on: "+ (Utils.dueDate),
-                                            style: const TextStyle(
-                                              color: Color(0xFF252525),
-                                              fontSize: 12,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w400,
-                                              height: 0.14,
-                                            ),
+                                            Utils.selectedSubTask,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                AppTextStyle.textStylePoppins15w400,
                                           ),
-                                        )),
-                                    Utils.getChip(Utils.taskPriority)
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 10.Sw),
+                                          child: const Icon(Icons.arrow_drop_down,
+                                              size: 35,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                            SizedBox(height : 12.Sh)
+                              SizedBox(height : 12.Sh),
+                              Visibility(
+                                visible: Utils.selectedSubTaskId != 0,
+                                child: Container(
+                                  width: Utils.showAddButton ? 245.Sw : 305.Sw,
+                                  height: 37.Sh,
+                                  padding: EdgeInsets.only(left:5.Sw, right: 10.Sw),
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFFF1F1F1),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                  ),
+                                  child : Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Container(
+                                            padding: EdgeInsets.only(top: 5.0, left : 16, right : 16, bottom : 15),
+                                            child: Text(
+                                              "Due on: "+ (Utils.dueDate),
+                                              style: const TextStyle(
+                                                color: Color(0xFF252525),
+                                                fontSize: 12,
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w400,
+                                                height: 0.14,
+                                              ),
+                                            ),
+                                          )),
+                                      Utils.getChip(Utils.taskPriority)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height : 12.Sh)
 
-                          ],
-                        ),
-                      ),
-                    ),
-                    /*Padding(
-                      padding: EdgeInsets.only(left: 265.Sw, top: 10.Sh),
-                      child: GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              // Allow for custom height
-                              builder: (context) {
-                                return getCategoryList(context, viewModel);
-                              });
-                        },
-                        child: Container(
-                          width: 48.Sw,
-                          height: 48.Sh,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFF1589CA),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                          ),
-                          child: SizedBox(
-                            width: 24.Sw,
-                            height: 24.Sh,
-                            child: const Icon(Icons.add_circle_outline,
-                                color: Colors.white),
+                            ],
                           ),
                         ),
                       ),
-                    ),*/
-                  ],
-                ),
-              ],
+                      Utils.showAddButton ? Padding(
+                        padding: EdgeInsets.only(left: 265.Sw, top: 10.Sh),
+                        child: GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                // Allow for custom height
+                                builder: (context) {
+                                  return getCategoryList(context, viewModel);
+                                });
+                          },
+                          child: Container(
+                            width: 48.Sw,
+                            height: 48.Sh,
+                            decoration: ShapeDecoration(
+                              color: const Color(0xFF1589CA),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4)),
+                            ),
+                            child: SizedBox(
+                              width: 24.Sw,
+                              height: 24.Sh,
+                              child: const Icon(Icons.add_circle_outline,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ) : Container(),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -587,8 +586,11 @@ class KestralScreen extends StatelessWidget {
   }
 
   getCategoryList(BuildContext context, DashboardViewModel viewModel) {
-    return Container(
-        height: MediaQuery.of(context).size.height * 0.9,
+    return SingleChildScrollView(
+          child: Container(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+        //height: MediaQuery.of(context).size.height * 0.9,
         decoration: const ShapeDecoration(
           color: Color(0xFFF8F5F0),
           shape: RoundedRectangleBorder(
@@ -599,37 +601,34 @@ class KestralScreen extends StatelessWidget {
           ),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // Added to space items
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 24, top: 14),
-                        child:
-                            Utils.getIcon("assets/images/rong.png.png", 28, 28),
+            Container(
+              child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // Added to space items
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 24, top: 14, bottom: 14),
+                          child:
+                              Utils.getIcon("assets/images/rong.png.png", 30, 30),
+                        ),
                       ),
-                    ),
-                    Text(
-                      viewModel.getCreateTask(),
-                      style: AppTextStyle.textStylePoppins16w600,
-                    ),
-                    const SizedBox(width: 50),
-                    // Added space between the image and text
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
+                      Text(
+                        viewModel.getCreateTask(),
+                        style: AppTextStyle.textStylePoppins16w600,
+                      ),
+                      const SizedBox(width: 54),
+                      // Added space between the image and text
+                    ],
+                  ),
             ),
             Container(
               width: double.infinity,
@@ -717,7 +716,7 @@ class KestralScreen extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
               width: double.infinity,
-              height: 93.Sh,
+              //height: 93.Sh,
               decoration: ShapeDecoration(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -760,7 +759,7 @@ class KestralScreen extends StatelessWidget {
                 padding: EdgeInsets.only(
                   right: 16.Sw,
                   left: 16.Sw,
-                  top: 20.Sh,
+                  top: 5.Sh,
                   bottom: 15,
                 ),
                 child: TextField(
@@ -772,6 +771,10 @@ class KestralScreen extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 10),
+            TButtons((index) {
+              viewModel.newTaskPriority = index;
+            }),
             Padding(
               padding: EdgeInsets.only(
                   top: 120.Sh, left: 20.Sw, right: 20.Sw, bottom: 20.Sh),
@@ -784,7 +787,7 @@ class KestralScreen extends StatelessWidget {
                       Utils.userInformation!.data.userAuthentication.employeeId,
                       viewModel.textFieldController.text,
                       viewModel.getDueDate(),
-                      "High");
+                      viewModel.newTaskPriority);
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -805,7 +808,7 @@ class KestralScreen extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        ))));
   }
 
   Future<void> onStartButtonClicked(DashboardViewModel viewModel) async {
@@ -1096,6 +1099,7 @@ class KestralScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        Navigator.pop(context);
                         Utils.showProgressBottomSheet(context, "Syncing Time to Server");
                         TaskQueue.sinkQueueToServer(context);
                         Future.delayed(Duration(seconds: 3), () {
@@ -1127,6 +1131,7 @@ class KestralScreen extends StatelessWidget {
                     // Add spacing between rows
                     GestureDetector(
                       onTap: () {
+                        Navigator.pop(context);
                         Utils.showBottomSheet(context, Icons.done, Colors.green, "Cleared Task Queue");
                         TaskQueue.clearQueue();
                       },
@@ -1157,6 +1162,7 @@ class KestralScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         print("logout");
+                        Navigator.pop(context);
                         viewModel.logout(context);
                       },
                       child: Container(

@@ -21,7 +21,7 @@ class DashboardViewModel extends ChangeNotifier {
 
   TextEditingController textFieldController = TextEditingController();
 
-
+  String newTaskPriority = "Low";
   String? value;
   String? selectValue;
   bool showCheckIcon = false;

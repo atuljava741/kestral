@@ -49,6 +49,8 @@ class Utils {
 
   static String currentTimeZone = "Asia/Kolkata";
 
+  static var showAddButton = true;
+
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
   }
@@ -426,17 +428,15 @@ class Utils {
                             ),
 
                           ),
-                          child: Flexible(
-                            child: const Text(
-                              'LATER',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Color(0xFF252525),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                              ),
+                          child: const Text(
+                            'LATER',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Color(0xFF252525),
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -462,17 +462,15 @@ class Utils {
                             ),
 
                           ),
-                          child: Flexible(
-                            child: const Text(
-                              'LOG OUT',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Color(0xFFF72727),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                              ),
+                          child: const Text(
+                            'LOG OUT',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Color(0xFFF72727),
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),

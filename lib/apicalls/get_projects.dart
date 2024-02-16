@@ -22,7 +22,7 @@ Future<bool> getProjectList(int employeeId) async {
   final QueryResult result = await client.query(options);
 
   if (result.hasException) {
-    print("In Error getProjectList");
+    print("In Error getProjectList : "+result.exception!.graphqlErrors.first.message);
     return false;
   } else {
     print("In Success getProjectList");

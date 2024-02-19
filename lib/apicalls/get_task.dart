@@ -11,12 +11,15 @@ final String getMyTaskQuery = """
 """;
 
 Future<InCompleteTaskList> getMyTaskList(int projectId, int employeeId) async {
+  var objPost = {
+    'projectId': projectId, // Replace with your actual project ID
+    'employeeId': employeeId, // Replace with your actual employee ID
+  };
+  print(objPost);
   final QueryOptions options = QueryOptions(
     document: gql(getMyTaskQuery),
-    variables: <String, dynamic>{
-      'projectId': projectId, // Replace with your actual project ID
-      'employeeId': employeeId, // Replace with your actual employee ID
-    },
+    variables:objPost,
+    fetchPolicy: FetchPolicy.noCache,
   );
 
   final QueryResult result = await client.query(options);

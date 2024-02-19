@@ -444,8 +444,15 @@ class KestralScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         // Wrap the Container with a GestureDetector
-                        onTap: () {
+                        onTap: () async{
                           if(viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
+                           print("callll");
+                            InCompleteTaskList incompleteTashList = await getMyTaskList(
+                                Utils.selectedProjectId,
+                                Utils.userInformation!.data.userAuthentication
+                                    .employeeId);
+                            Utils.taskList =
+                                incompleteTashList.data.getInCompleteTasks;
                           showTaskBottomSheet(context, viewModel);
                           } else {
                             Utils.showBottomSheet(context, Icons.error, Colors.red, "Please Select A Project First");
@@ -773,7 +780,10 @@ class KestralScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             TButtons((index) {
+              print(index);
               viewModel.newTaskPriority = index;
+
+
             }),
             Padding(
               padding: EdgeInsets.only(
@@ -896,7 +906,9 @@ class KestralScreen extends StatelessWidget {
                       await Utils.getPreference().setString(
                           Utils.projectName, Utils.selectProjectText);
                       print(Utils.selectProjectText);
-                    })),
+                      Utils.selectedSubTask = "";
+                      Utils.selectedSubTaskId = 0;
+                        })),
                 GestureDetector(
                   onTap: () async {
                     InCompleteTaskList incompleteTashList = await getMyTaskList(

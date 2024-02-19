@@ -69,6 +69,7 @@ class UserAuthentication {
   late var appRoleId;
   late var employeeStatus;
   late final bool isShowScreenshotPreview;
+  late final bool acceptToolTasks;
   late final bool isShowScreenshotThumbnail;
   late final bool isCaptureScreenshot;
   late final String appRoleTitle;
@@ -93,6 +94,7 @@ class UserAuthentication {
     appRoleId = json['appRoleId'];
     employeeStatus = json['employeeStatus'];
     isShowScreenshotPreview = json['isShowScreenshotPreview'];
+    acceptToolTasks =  json['acceptToolTasks'] != null ? json['acceptToolTasks'] : true;
     isShowScreenshotThumbnail = json['isShowScreenshotThumbnail'];
     isCaptureScreenshot = json['isCaptureScreenshot'];
     appRoleTitle = json['appRoleTitle'];
@@ -119,6 +121,7 @@ class UserAuthentication {
     _data['appRoleId'] = appRoleId;
     _data['employeeStatus'] = employeeStatus;
     _data['isShowScreenshotPreview'] = isShowScreenshotPreview;
+    _data['acceptToolTasks'] = acceptToolTasks;
     _data['isShowScreenshotThumbnail'] = isShowScreenshotThumbnail;
     _data['isCaptureScreenshot'] = isCaptureScreenshot;
     _data['appRoleTitle'] = appRoleTitle;

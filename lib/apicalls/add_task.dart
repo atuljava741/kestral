@@ -27,17 +27,19 @@ addTasks(
 """;
 
  addTask(int projectId, int taskCategoryId, int employeeId, String taskName, String dueDate,String taskPriority) async {
+   var objPost =  {
+   "projectId": projectId,
+   "taskCategoryId": taskCategoryId,
+   "employeeId": employeeId,
+   "taskName": taskName,
+   "isCompleted": false,
+   "dueDate": dueDate,
+   "taskPriority": taskPriority,
+   };
+   print(objPost);
   final MutationOptions options = MutationOptions(
   document: gql(addTaskMutation),
-    variables: <String, dynamic>{
-      "projectId": projectId,
-      "taskCategoryId": taskCategoryId,
-      "employeeId": employeeId,
-      "taskName": taskName,
-      "isCompleted": false,
-      "dueDate": dueDate,
-      "taskPriority": taskPriority,
-    } ,
+    variables:objPost ,
   );
 
   final QueryResult result = await client.mutate(options);
@@ -46,6 +48,8 @@ addTasks(
     throw Exception(result.exception.toString());
   } else {
     print(result.data);
+    print("response add task ${result.data}");
+
     AddTaskResponse taskResponse = AddTaskResponse.fromJson(result.data!);
     //ProjectList projectList = ProjectList.fromJson(result.data!);
     //return projectList;

@@ -75,9 +75,10 @@ class LandingPageViewModel extends ChangeNotifier {
       return;
     }
     if (responseMessage == "true") {
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => KestralScreen()),
+            (route) => false,
       );
     } else {
       responseMessage = responseMessage ??
@@ -106,9 +107,10 @@ class LandingPageViewModel extends ChangeNotifier {
     responseMessage = await customLoginMutation(email, password);
 
     if (responseMessage == "true") {
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => KestralScreen()),
+            (route) => false,
       );
     } else {
       String errorMessage = getErrorMessage();
@@ -201,9 +203,10 @@ class LandingPageViewModel extends ChangeNotifier {
 
       notifyListeners();
       if (responseMes == "true") {
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => KestralScreen()),
+              (route) => false,
         );
       }
     }

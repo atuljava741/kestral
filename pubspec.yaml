@@ -47,6 +47,7 @@ dependencies:
   flutter_svg:
   aad_oauth:
   google_sign_in: ^6.1.6
+  flutter_keychain: ^2.4.0
 
 dev_dependencies:
   flutter_test:

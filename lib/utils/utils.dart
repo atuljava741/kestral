@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keychain/flutter_keychain.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
@@ -51,7 +52,7 @@ class Utils {
 
   static String currentTimeZone = "Asia/Kolkata";
 
-  static var showAddButton = false;
+  static var showAddButton = true;
 
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
@@ -133,32 +134,46 @@ class Utils {
   static Future<void> getDeviceInfo(BuildContext context) async {
     Utils.currentTimeZone = getCurrentTimeZone();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
     try {
       if (Theme
           .of(context)
           .platform == TargetPlatform.android) {
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        deviceId = getPreference().getString("deviceId") ?? "";
-        String androidId = androidInfo.androidId ?? "";
-        if (deviceId == "" && androidId != "") {
+        String strDeviceID = await FlutterKeychain.get(key: "device_unique_id_kestral") ?? "";
+        AndroidDeviceInfo androidObj = await deviceInfo.androidInfo;
+        if (strDeviceID.isEmpty) {
+          String androidId = androidObj.androidId ?? "";
           deviceId = androidId;
           await getPreference().setString("deviceId", deviceId);
-        } else {
-          getDeviceId();
+          await FlutterKeychain.put(key: "device_unique_id_kestral", value: deviceId);
+        }else{
+          deviceId = strDeviceID;
+          await getPreference().setString("deviceId", strDeviceID);
         }
-        print(deviceId);
-        deviceName = androidInfo.model;
+        // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        // deviceId = getPreference().getString("deviceId") ?? "";
+        // String androidId = androidInfo.androidId ?? "";
+        // if (deviceId == "" && androidId != "") {
+        //   deviceId = androidId;
+        //   await getPreference().setString("deviceId", deviceId);
+        // } else {
+        //   getDeviceId();
+        // }
+        // print(deviceId);
+        deviceName = androidObj.model;
       } else if (Theme
           .of(context)
           .platform == TargetPlatform.iOS) {
+        String strDeviceID = await FlutterKeychain.get(key: "device_unique_id_kestral") ?? "";
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        deviceId = getPreference().getString("deviceId") ?? "";
-        String iosId = iosInfo.identifierForVendor ?? "";
-        if (deviceId == "" && iosId != "") {
+        if (strDeviceID.isEmpty) {
+          String iosId = iosInfo.identifierForVendor ?? "";
           deviceId = iosId;
           await getPreference().setString("deviceId", deviceId);
-        } else {
-          getDeviceId();
+          await FlutterKeychain.put(key: "device_unique_id_kestral", value: deviceId);
+        }else{
+          deviceId = strDeviceID;
+          await getPreference().setString("deviceId", strDeviceID);
         }
         deviceName = iosInfo.name;
       }

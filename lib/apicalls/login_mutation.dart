@@ -40,27 +40,33 @@ Future<String?> customLoginMutation(String email, String password) async {
 
   final QueryResult result = await client.mutate(options);
   print("login  result ${result.data}");
-  if (result.hasException) {
-    try {
-      Utils.accessToken =
-          result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
-    }catch(e){}
-    return result.exception!.graphqlErrors.first.message;
-  } else {
-    print("login response");
-    print(result.data!);
+  if (result.data == null) {
 
-    UserAuthResponse userData =  UserAuthResponse.fromJson(result.data!);
-    Utils.userInformation = userData;
-    Utils.accessToken = userData.data.userAuthentication.token;
-    Utils.showAddButton = userData.data.userAuthentication.acceptToolTasks;
-    await Utils.getPreference().setString("access_token", Utils.accessToken);
-    await Utils.getPreference().setString("email", email);
-    await Utils.getPreference().setString("password", password);
-    print(userData.data.userAuthentication.token);
-    print("acceptToolTasks${userData.data.userAuthentication.acceptToolTasks}");
-    print("true");
+  }else {
+    if (result.hasException) {
+      try {
+        Utils.accessToken =
+            result.exception!.graphqlErrors.first.extensions!["cacheToken"] ??
+                "";
+      } catch (e) {}
+      return result.exception!.graphqlErrors.first.message;
+    } else {
+      print("login response");
+      print(result.data!);
 
-    return "true";
+      UserAuthResponse userData = UserAuthResponse.fromJson(result.data!);
+      Utils.userInformation = userData;
+      Utils.accessToken = userData.data.userAuthentication.token;
+      Utils.showAddButton = userData.data.userAuthentication.acceptToolTasks;
+      await Utils.getPreference().setString("access_token", Utils.accessToken);
+      await Utils.getPreference().setString("email", email);
+      await Utils.getPreference().setString("password", password);
+      print(userData.data.userAuthentication.token);
+      print(
+          "acceptToolTasks${userData.data.userAuthentication.acceptToolTasks}");
+      print("true");
+
+      return "true";
+    }
   }
 }

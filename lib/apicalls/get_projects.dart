@@ -17,6 +17,8 @@ Future<bool> getProjectList(int employeeId) async {
     variables: <String, dynamic>{
       'employeeId': employeeId, // Replace with your actual employee ID
     },
+    fetchPolicy: FetchPolicy.noCache,
+
   );
 
   final QueryResult result = await client.query(options);

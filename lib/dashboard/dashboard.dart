@@ -1116,7 +1116,7 @@ class KestralScreen extends StatelessWidget {
                         TaskQueue.sinkQueueToServer(context);
                         Future.delayed(Duration(seconds: 3), () {
                           // Call your function after delay
-                          Navigator.pop(context);
+                         // Navigator.pop(context);
                         });
                       },
                       child: Container(

@@ -17,7 +17,9 @@ final String getTaskCategoryQuery = """
 Future<TaskCategory> getTaskCategoryList() async {
   final QueryOptions options = QueryOptions(
     document: gql(getTaskCategoryQuery),
-      );
+    fetchPolicy: FetchPolicy.noCache,
+
+  );
 
   final QueryResult result = await client.query(options);
 

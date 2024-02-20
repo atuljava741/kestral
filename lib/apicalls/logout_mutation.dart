@@ -13,8 +13,11 @@ final String logoutMutation = """
 """;
 
 Future<String?> logoutUserMutation(data) async {
-  print("Sending data");
+  print("Sending data ${Utils.accessToken}");
   print(data);
+  if (data == null){
+    data = [];
+  }
   final MutationOptions options = MutationOptions(
     document: gql(logoutMutation),
     variables: <String, dynamic>{

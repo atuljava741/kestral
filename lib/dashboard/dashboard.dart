@@ -388,14 +388,22 @@ class KestralScreen extends StatelessWidget {
                       padding: EdgeInsets.only(left: 265.Sw, top: 10.Sh),
                       child: GestureDetector(
                         onTap: () {
-                          viewModel.getProjects().then((value){
-                            if(viewModel.bottomNavVisible) {
-                              viewModel.bottomNavVisible = false;
-                              //viewModel.refreshUI();
-                            }
-                          });
-                          viewModel.bottomNavVisible = true;
-                          Utils.showProgressBottomSheet(context, "Refreshing Project List");
+                          if(!viewModel.refreshButtonClicked) {
+                            viewModel.refreshButtonClicked = true;
+                            viewModel.getProjects().then((value) {
+                              if (viewModel.bottomNavVisible) {
+                                viewModel.bottomNavVisible = false;
+                                Future.delayed(Duration(seconds: 2), () {
+                                  viewModel.refreshButtonClicked = false;
+                                  Navigator.pop(context);
+                                });
+                              }
+                            });
+                            viewModel.bottomNavVisible = true;
+                            Utils.showProgressBottomSheet(
+                                context, "Refreshing Project List", false);
+                          }
+
                         },
                         child: Container(
                           width: 48.Sw,
@@ -1112,7 +1120,7 @@ class KestralScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
-                        Utils.showProgressBottomSheet(context, "Syncing Time to Server");
+                        Utils.showProgressBottomSheet(context, "Syncing Time to Server", true);
                         TaskQueue.sinkQueueToServer(context);
                         Future.delayed(Duration(seconds: 3), () {
                           // Call your function after delay

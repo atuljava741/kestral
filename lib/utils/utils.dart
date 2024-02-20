@@ -225,9 +225,10 @@ class Utils {
     );
   }
 
-  static void showProgressBottomSheet(BuildContext context, String message) {
+  static void showProgressBottomSheet(BuildContext context, String message, bool dismissable) {
     showModalBottomSheet(
         context: context,
+        isDismissible : dismissable,
         builder: (BuildContext context) {
           return Container(
             width: double.infinity,

@@ -47,6 +47,8 @@ class DashboardViewModel extends ChangeNotifier {
   bool bottomNavVisible = false;
 
   final BuildContext context;
+
+  bool refreshButtonClicked = false;
   DashboardViewModel(this.context);
 
   bool get obscureText => selectedText2;

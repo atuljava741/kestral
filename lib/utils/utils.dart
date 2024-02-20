@@ -452,7 +452,7 @@ class Utils {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Color(0xFF252525),
-                              fontSize: 16,
+                              fontSize: 14,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w500,
                             ),
@@ -498,7 +498,7 @@ class Utils {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Color(0xFFF72727),
-                              fontSize: 16,
+                              fontSize: 14,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w500,
                             ),

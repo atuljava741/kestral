@@ -925,6 +925,7 @@ class KestralScreen extends StatelessWidget {
                             .employeeId);
                     Utils.taskList =
                         incompleteTashList.data.getInCompleteTasks;
+                    if(viewModel.timerState) viewModel.handleStopTimer();
                     Navigator.pop(context);
                     viewModel.refreshUI();
                   },

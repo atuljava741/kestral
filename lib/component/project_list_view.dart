@@ -44,18 +44,21 @@ class ProjectsListViewState extends State<ProjectsListView> {
                         child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 10.0,top: 12.0, left : 16, right : 25),
+                          Expanded(
+                          flex: 4,
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                padding: EdgeInsets.only( left : 16),
                       child: Text(
                         widget.projectList.elementAt(index).projectName,
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyle.textStylePoppins15w400,
                       ),
-                    )),
+                    ))),
                 Expanded(
+                  flex:1,
                   child: Container(
                     margin: EdgeInsets.only(top: 10.0, right: 20.Sw,bottom: 10.0,),
                     alignment: Alignment.centerRight,

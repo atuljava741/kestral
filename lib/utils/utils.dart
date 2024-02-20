@@ -494,7 +494,7 @@ class Utils {
 
                           ),
                           child: const Text(
-                            'LOG OUT',
+                            'LOGOUT',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

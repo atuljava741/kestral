@@ -134,7 +134,7 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   String getMorningText() {
-    return morningText ?? "";
+    return getGreetingMessage();
   }
 
   String getEmailAddressText() {
@@ -257,6 +257,18 @@ class LandingPageViewModel extends ChangeNotifier {
     } catch (error) {
       print(error);
       print(" error response google ${error}");
+    }
+  }
+
+  String getGreetingMessage() {
+    final hour = DateTime.now().hour;
+
+    if (hour < 12) {
+      return 'Hey! Good Morning';
+    } else if (hour < 17) {
+      return 'Hey! Good Afternoon';
+    } else {
+      return 'Hey! Good Evening';
     }
   }
 }

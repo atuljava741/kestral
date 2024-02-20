@@ -17,7 +17,7 @@ import '../datamodal/project_detail.dart';
 import '../timer/timer_task.dart';
 import '../utils/utils.dart';
 
-class DashboardViewModel extends ChangeNotifier {
+class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   TextEditingController textFieldController = TextEditingController();
 
@@ -49,7 +49,9 @@ class DashboardViewModel extends ChangeNotifier {
   final BuildContext context;
 
   bool refreshButtonClicked = false;
-  DashboardViewModel(this.context);
+  DashboardViewModel(this.context){
+          WidgetsBinding.instance?.addObserver(this);
+      }
 
   bool get obscureText => selectedText2;
   bool get timerState => getTimerState();
@@ -377,4 +379,28 @@ class DashboardViewModel extends ChangeNotifier {
     DateTime quarterPastMidnight = DateTime(inputTime.year, inputTime.month, inputTime.day, 0, 15); // 12:15 AM
     return inputTime.isAfter(midnight) && inputTime.isBefore(quarterPastMidnight);
   }
+
+  ValueNotifier<bool> _isForeground = ValueNotifier<bool>(true);
+
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Utils.loadSavedProjectData();
+      getProjects();
+      getCategories();
+      onlaunchOfScreen();
+      _isForeground.value = true;
+    } else if (state == AppLifecycleState.paused) {
+      _isForeground.value = false;
+    }
+  }
+
+  ValueNotifier<bool> get isForeground => _isForeground;
+
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+  }
+
 }

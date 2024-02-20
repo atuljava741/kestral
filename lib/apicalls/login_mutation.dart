@@ -39,10 +39,6 @@ Future<String?> customLoginMutation(String email, String password) async {
   );
 
   final QueryResult result = await client.mutate(options);
-  print("login  result ${result.data}");
-  if (result.data == null) {
-
-  }else {
     if (result.hasException) {
       try {
         Utils.accessToken =
@@ -68,5 +64,4 @@ Future<String?> customLoginMutation(String email, String password) async {
 
       return "true";
     }
-  }
 }

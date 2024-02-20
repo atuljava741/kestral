@@ -33,7 +33,7 @@ class TaskQueue {
           data["durationTo"]);
       String  b = await addTimeToKestral(data);
       if (b == "true") {
-        //indicesToRemove.add(i);
+        indicesToRemove.add(i);
       }
       else {
         errorMessage = b;

@@ -120,12 +120,13 @@ class Utils {
       "isManual": false,
       "mousePressCount": 0,
       "keyPressCount": 0,
-      "organizationId": Utils.userInformation!.data.userAuthentication.orgId,
+      "organizationId": Utils.userInformation!.data.userAuthentication.organizationId,
       "idealFlag": 0,
       "screenshotImageUrl": "",
       "comment": null,
       "timeZone": Utils.currentTimeZone,
     };
+    print(projectDetails);
     await Utils.getPreference()
         .setString(Utils.projectDetailsSP, jsonEncode(projectDetails));
   }

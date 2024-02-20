@@ -46,10 +46,17 @@ Future<String?> customLoginMutation(String email, String password) async {
                 "";
 
       } catch (e) {}
+      print(result.data);
       return result.exception!.graphqlErrors.first.message;
     } else {
       print("login response");
       print(result.data!);
+
+      // lines added for clear every thing on coming back
+      Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+      await Utils.getPreference().clear();
+      await Utils.getPreference().setString('deviceId', Utils.deviceId);
+
 
       UserAuthResponse userData = UserAuthResponse.fromJson(result.data!);
       Utils.userInformation = userData;

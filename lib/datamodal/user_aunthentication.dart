@@ -38,7 +38,7 @@ class UserAuthentication {
     required this.id,
     required this.employeeId,
     required this.employeeName,
-    required this.orgId,
+    required this.organizationId,
     required this.email,
     required this.employeeCode,
     required this.empRoleId,
@@ -61,7 +61,7 @@ class UserAuthentication {
   late var id;
   late var employeeId;
   late final String employeeName;
-  late var orgId;
+  late var organizationId;
   late final String email;
   late final String employeeCode;
   late var empRoleId;
@@ -86,7 +86,7 @@ class UserAuthentication {
     id = json['id'];
     employeeId = json['employeeId'];
     employeeName = json['employeeName'];
-    orgId = json['orgId'];
+    organizationId = json['organizationId'];
     email = json['email'];
     employeeCode = json['employeeCode'];
     empRoleId = json['empRoleId'];
@@ -113,7 +113,7 @@ class UserAuthentication {
     _data['id'] = id;
     _data['employeeId'] = employeeId;
     _data['employeeName'] = employeeName;
-    _data['orgId'] = orgId;
+    _data['orgId'] = organizationId;
     _data['email'] = email;
     _data['employeeCode'] = employeeCode;
     _data['empRoleId'] = empRoleId;

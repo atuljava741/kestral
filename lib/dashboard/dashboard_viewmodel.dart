@@ -225,9 +225,9 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> checkAndSyncPendingData() async {
     DateTime lastdatetime = getLastSentDateTime();
     Duration difference = DateTime.now().difference(lastdatetime);
-
+    print("difference $difference");
     int numberOfIntervals =
-        (difference.inMinutes / Utils.intervalMinutes).ceil();
+        (difference.inMinutes / Utils.intervalMinutes).floor();
 
     print("checkAndSyncPendingData $numberOfIntervals");
     for (int i = 1; i <= numberOfIntervals; i++) {

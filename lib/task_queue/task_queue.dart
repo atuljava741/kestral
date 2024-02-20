@@ -24,6 +24,7 @@ class TaskQueue {
 
   static Future<void> sinkQueueToServer(BuildContext context) async {
     List<int> indicesToRemove = [];
+    String errorMessage = "";
     for (int i = 0; i < queue.length; i++) {
       Map<String, dynamic> data = queue.elementAt(i);
       print("inkQueueToServer   :" +
@@ -35,11 +36,14 @@ class TaskQueue {
         indicesToRemove.add(i);
       }
       else {
-        Utils.showCustomDialog(context, "Alert", b);
+        errorMessage = b;
         break;
       }
     }
     await removeElementsAtIndex(indicesToRemove);
+    if(errorMessage.length > 5) {
+      Utils.showCustomDialog(context, "Alert", errorMessage);
+    }
   }
 
   static Future<void> removeElementsAtIndex(List<int> indicesToRemove) async {

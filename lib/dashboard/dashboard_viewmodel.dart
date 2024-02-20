@@ -243,6 +243,7 @@ class DashboardViewModel extends ChangeNotifier {
       await sendTimeToKeastral(
           lastUpdatedTime, formattedTime, formattedDate, roundedTime);
     }
+    await TaskQueue.sinkQueueToServer(context);
     refreshUI();
   }
 
@@ -280,7 +281,6 @@ class DashboardViewModel extends ChangeNotifier {
     await TaskQueue.addToQueue(apiBody);
     await Utils.getPreference()
         .setInt(Utils.lastSentTime, scheduledTime.millisecondsSinceEpoch);
-    await TaskQueue.sinkQueueToServer(context);
   }
 
   DateTime roundToNearestInterval(DateTime dateTime, int intervalMinutes) {

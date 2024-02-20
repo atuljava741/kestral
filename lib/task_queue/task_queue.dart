@@ -20,7 +20,7 @@ class TaskQueue {
   static Future<void> addToQueue(Map<String, dynamic> element) async {
     List<Map<String, dynamic>> newQueue = [...queue, element];
     await Utils.getPreference().setString('queue', jsonEncode(newQueue));
-  }
+    }
 
   static Future<void> sinkQueueToServer(BuildContext context) async {
     List<int> indicesToRemove = [];
@@ -33,7 +33,7 @@ class TaskQueue {
           data["durationTo"]);
       String  b = await addTimeToKestral(data);
       if (b == "true") {
-        indicesToRemove.add(i);
+        //indicesToRemove.add(i);
       }
       else {
         errorMessage = b;

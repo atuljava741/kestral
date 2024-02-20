@@ -1,0 +1,3 @@
+class ServerTime {
+  int? serverTime;
+}

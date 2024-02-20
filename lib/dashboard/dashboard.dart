@@ -1120,13 +1120,12 @@ class KestralScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
-                        Utils.showProgressBottomSheet(context, "Syncing Time to Server", true);
-                        TaskQueue.sinkQueueToServer(context);
+                        //Navigator.pop(context);
+                        Utils.showProgressBottomSheet(context, "Syncing Time to Server", false);
                         Future.delayed(Duration(seconds: 3), () {
-                          // Call your function after delay
-                         // Navigator.pop(context);
+                          Navigator.pop(context);
                         });
+                        TaskQueue.sinkQueueToServer(context);
                       },
                       child: Container(
                         color: Colors.transparent,

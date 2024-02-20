@@ -2,6 +2,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kestral/apicalls/graphql_client.dart';
 
 import '../utils/utils.dart';
+import 'logout_mutation.dart';
 
 final String addTimeMutation = """
   mutation Mutation( 
@@ -61,10 +62,24 @@ Future<String> addTimeToKestral(body) async {
     );
 
     final QueryResult result = await client.mutate(options);
-
     if (result.hasException) {
+      try {
+        Utils.accessToken =
+            result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
+        if(Utils.accessToken.length > 5) {
+          var queue = Utils.getPreference().getString('queue');
+          print(queue);
+          Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+          await logoutUserMutation(queue);
+          await Utils.getPreference().clear();
+          if (queue != null) {
+            await Utils.getPreference().setString('deviceId', Utils.deviceId);
+          }
+        }
+      } catch (e) {}
       return result.exception!.graphqlErrors.first.message;
-    } else {
+    }
+    else {
       print(result.data);
       return "true";
     }

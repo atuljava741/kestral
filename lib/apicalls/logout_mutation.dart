@@ -12,11 +12,13 @@ final String logoutMutation = """
     } 
 """;
 
-Future<String?> logoutUserMutation() async {
+Future<String?> logoutUserMutation(data) async {
+  print("Sending data");
+  print(data);
   final MutationOptions options = MutationOptions(
     document: gql(logoutMutation),
     variables: <String, dynamic>{
-       "data": []
+       "data": data
     },
   );
 

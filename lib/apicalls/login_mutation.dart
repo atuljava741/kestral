@@ -44,6 +44,7 @@ Future<String?> customLoginMutation(String email, String password) async {
         Utils.accessToken =
             result.exception!.graphqlErrors.first.extensions!["cacheToken"] ??
                 "";
+
       } catch (e) {}
       return result.exception!.graphqlErrors.first.message;
     } else {

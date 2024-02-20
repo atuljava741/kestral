@@ -89,10 +89,9 @@ class LandingPageViewModel extends ChangeNotifier {
             () async {
           var queue = Utils.getPreference().getString('queue');
           Utils.deviceId = Utils.getPreference().getString('deviceId')!;
-          await logoutUserMutation();
+          await logoutUserMutation(queue);
           await Utils.getPreference().clear();
           if (queue != null) {
-            await Utils.getPreference().setString('queue', queue);
             await Utils.getPreference().setString('deviceId', Utils.deviceId);
           }
         });

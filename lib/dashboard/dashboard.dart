@@ -396,6 +396,8 @@ class KestralScreen extends StatelessWidget {
                                 Future.delayed(Duration(seconds: 2), () {
                                   viewModel.refreshButtonClicked = false;
                                   Navigator.pop(context);
+                                  Utils.showBottomSheet(context, Icons.done, Colors.green, "Project list refreshed");
+
                                 });
                               }
                             });
@@ -844,109 +846,116 @@ class KestralScreen extends StatelessWidget {
         context: context,
         isScrollControlled: true, // Allow for custom height
         builder: (context) {
-          return Container(
-            decoration: const ShapeDecoration(
-                color: Color(0xFFF8F5F0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
-                )),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 23.Sh),
-                Text(
-                  "Select Project",
-                  style: AppTextStyle.textStylePoppins16w600,
-                ),
-                SizedBox(height: 10.Sh),
-                Container(
-                    margin: EdgeInsets.all(20),
-                    width: double.infinity,
-                    height:
-                        300.Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+          return StatefulBuilder(
+              builder: (BuildContext context, setState) {
+              return Container(
+                decoration: const ShapeDecoration(
+                    color: Color(0xFFF8F5F0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
                       ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x19CDBFB2),
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x16CDBFB2),
-                          blurRadius: 11,
-                          offset: Offset(0, 11),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x0CCDBFB2),
-                          blurRadius: 15,
-                          offset: Offset(0, 25),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x02CDBFB2),
-                          blurRadius: 18,
-                          offset: Offset(0, 45),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x00CDBFB2),
-                          blurRadius: 20,
-                          offset: Offset(0, 71),
-                          spreadRadius: 0,
-                        )
-                      ],
+                    )),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 23.Sh),
+                    Text(
+                      "Select Project",
+                      style: AppTextStyle.textStylePoppins16w600,
                     ),
-                    child: ProjectsListView(Utils.projectList, viewModel,
-                        (index) async {
-                      Utils.selectedProjectId =
-                          Utils.projectList.elementAt(index).projectId;
-                      Utils.selectProjectText =
-                          Utils.projectList.elementAt(index).projectName;
-                      await Utils.getPreference().setString(
-                          Utils.projectName, Utils.selectProjectText);
-                      print(Utils.selectProjectText);
-                      Utils.selectedSubTask = "";
-                      Utils.selectedSubTaskId = 0;
-                        })),
-                GestureDetector(
-                  onTap: () async {
-                    InCompleteTaskList incompleteTashList = await getMyTaskList(
-                        Utils.selectedProjectId,
-                        Utils.userInformation!.data.userAuthentication
-                            .employeeId);
-                    Utils.taskList =
-                        incompleteTashList.data.getInCompleteTasks;
-                    if(viewModel.timerState) viewModel.handleStopTimer();
-                    Navigator.pop(context);
-                    viewModel.refreshUI();
-                  },
-                  child: Container(
-                      margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                      width: double.infinity,
-                      height: 48.Sh,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFF1589CA),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Continue',
-                          style: AppTextStyle.textStylePoppins16w500,
+                    SizedBox(height: 10.Sh),
+                    Container(
+                        margin: EdgeInsets.all(20),
+                        width: double.infinity,
+                        height:
+                            300.Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x19CDBFB2),
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x16CDBFB2),
+                              blurRadius: 11,
+                              offset: Offset(0, 11),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x0CCDBFB2),
+                              blurRadius: 15,
+                              offset: Offset(0, 25),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x02CDBFB2),
+                              blurRadius: 18,
+                              offset: Offset(0, 45),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x00CDBFB2),
+                              blurRadius: 20,
+                              offset: Offset(0, 71),
+                              spreadRadius: 0,
+                            )
+                          ],
                         ),
-                      )),
+                        child: ProjectsListView(Utils.projectList, viewModel,
+                            (index) async {
+                          Utils.selectedProjectId =
+                              Utils.projectList.elementAt(index).projectId;
+                          Utils.selectProjectText =
+                              Utils.projectList.elementAt(index).projectName;
+                          await Utils.getPreference().setString(
+                              Utils.projectName, Utils.selectProjectText);
+                          print(Utils.selectProjectText);
+                          Utils.selectedSubTask = "";
+                          Utils.selectedSubTaskId = 0;
+                          setState(() {});
+                            })),
+                    GestureDetector(
+                      onTap: () async {
+                       // if (Utils.selectedProjectId == 0) {
+                          InCompleteTaskList incompleteTashList = await getMyTaskList(
+                              Utils.selectedProjectId,
+                              Utils.userInformation!.data.userAuthentication
+                                  .employeeId);
+                          Utils.taskList =
+                              incompleteTashList.data.getInCompleteTasks;
+                          if (viewModel.timerState) viewModel.handleStopTimer();
+                          Navigator.pop(context);
+                          viewModel.refreshUI();
+                       // }
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                          width: double.infinity,
+                          height: 48.Sh,
+                          decoration: ShapeDecoration(
+                            color: Utils.selectedProjectId != 0 ? Color(0xFF1589CA) : Colors.grey,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Continue',
+                              style: AppTextStyle.textStylePoppins16w500,
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            }
           );
         });
   }
@@ -956,101 +965,110 @@ class KestralScreen extends StatelessWidget {
         context: context,
         isScrollControlled: true, // Allow for custom height
         builder: (context) {
-          return Container(
-            decoration: const ShapeDecoration(
-                color: Color(0xFFF8F5F0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
-                )),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 23.Sh),
-                Flexible(
-                  child: Text(
-                    Utils.selectProjectText,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyle.textStylePoppins16w600,
-                  ),
-                ),
-                SizedBox(height: 10.Sh),
-                Container(
-                    margin: EdgeInsets.all(20),
-                    width: double.infinity,
-                    height:
-                        300.Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+          return StatefulBuilder(
+              builder: (BuildContext context, setState) {
+              return Container(
+                decoration: const ShapeDecoration(
+                    color: Color(0xFFF8F5F0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
                       ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(0x19CDBFB2),
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x16CDBFB2),
-                          blurRadius: 11,
-                          offset: Offset(0, 11),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x0CCDBFB2),
-                          blurRadius: 15,
-                          offset: Offset(0, 25),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x02CDBFB2),
-                          blurRadius: 18,
-                          offset: Offset(0, 45),
-                          spreadRadius: 0,
-                        ),
-                        BoxShadow(
-                          color: Color(0x00CDBFB2),
-                          blurRadius: 20,
-                          offset: Offset(0, 71),
-                          spreadRadius: 0,
-                        )
-                      ],
+                    )),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 23.Sh),
+                    Flexible(
+                      child: Text(
+                        Utils.selectProjectText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.textStylePoppins16w600,
+                      ),
                     ),
-                    child: SubTaskListView(Utils.taskList, viewModel)),
-                GestureDetector(
-                  onTap: () async {
-                    InCompleteTaskList incompleteTashList = await getMyTaskList(
-                        Utils.selectedProjectId,
-                        Utils.userInformation!.data.userAuthentication
-                            .employeeId);
-                    Utils.taskList =
-                        incompleteTashList.data.getInCompleteTasks;
-                    Navigator.pop(context);
-                    viewModel.refreshUI();
-                  },
-                  child: Container(
-                      margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                      width: double.infinity,
-                      height: 48.Sh,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFF1589CA),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Continue',
-                          style: AppTextStyle.textStylePoppins16w500,
+                    SizedBox(height: 10.Sh),
+                    Container(
+                        margin: EdgeInsets.all(20),
+                        width: double.infinity,
+                        height:
+                            300.Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x19CDBFB2),
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x16CDBFB2),
+                              blurRadius: 11,
+                              offset: Offset(0, 11),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x0CCDBFB2),
+                              blurRadius: 15,
+                              offset: Offset(0, 25),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x02CDBFB2),
+                              blurRadius: 18,
+                              offset: Offset(0, 45),
+                              spreadRadius: 0,
+                            ),
+                            BoxShadow(
+                              color: Color(0x00CDBFB2),
+                              blurRadius: 20,
+                              offset: Offset(0, 71),
+                              spreadRadius: 0,
+                            )
+                          ],
                         ),
-                      )),
+                        child: SubTaskListView(Utils.taskList, viewModel,(index) async {
+                          setState(() {});
+                        })),
+                    GestureDetector(
+                      onTap: () async {
+                       // if(Utils.selectedSubTaskId != 0 ) {
+                          print("Utils.selectedSubTaskId  ${Utils
+                              .selectedSubTaskId }");
+                          InCompleteTaskList incompleteTashList = await getMyTaskList(
+                              Utils.selectedProjectId,
+                              Utils.userInformation!.data.userAuthentication
+                                  .employeeId);
+                          Utils.taskList =
+                              incompleteTashList.data.getInCompleteTasks;
+                          Navigator.pop(context);
+                          viewModel.refreshUI();
+                       // }
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                          width: double.infinity,
+                          height: 48.Sh,
+                          decoration: ShapeDecoration(
+                            color: Utils.selectedSubTaskId != 0 ? Color(0xFF1589CA) : Colors.grey,                        shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Continue',
+                              style: AppTextStyle.textStylePoppins16w500,
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            }
           );
         });
   }
@@ -1120,11 +1138,14 @@ class KestralScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        //Navigator.pop(context);
+                        // Navigator.pop(context);
                         Utils.showProgressBottomSheet(context, "Syncing Time to Server", false);
                         Future.delayed(Duration(seconds: 3), () {
                           Navigator.pop(context);
+                          Utils.showBottomSheet(context, Icons.done, Colors.green, "Sync time");
+
                         });
+
                         TaskQueue.sinkQueueToServer(context);
                       },
                       child: Container(

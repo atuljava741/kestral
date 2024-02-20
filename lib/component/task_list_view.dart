@@ -12,8 +12,9 @@ import '../utils/utils.dart';
 class SubTaskListView extends StatefulWidget {
   List<GetInCompleteTasks> subTaskList;
   DashboardViewModel viewModel;
+  Function callback;
 
-  SubTaskListView(this.subTaskList, this.viewModel);
+  SubTaskListView(this.subTaskList, this.viewModel,this.callback);
 
   @override
   CategoriesListViewState createState() => CategoriesListViewState();
@@ -46,6 +47,8 @@ class CategoriesListViewState extends State<SubTaskListView> {
             setState(() {
               selectedIndex = index;
             });
+            widget.callback.call(index);
+
           },
           child: Container(
             margin: EdgeInsets.only(top: 10.Sh,bottom: 10.Sh),

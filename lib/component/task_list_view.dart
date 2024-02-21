@@ -44,6 +44,7 @@ class CategoriesListViewState extends State<SubTaskListView> {
                 .setString("dueDate",Utils.dueDate) ;
                 await Utils.getPreference()
                 .setString("taskPriority",Utils.taskPriority) ;
+            await Utils.saveCurrentProjectjsonBodyInPreference();
             setState(() {
               selectedIndex = index;
             });

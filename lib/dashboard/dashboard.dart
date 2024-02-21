@@ -920,6 +920,7 @@ class KestralScreen extends StatelessWidget {
                           await Utils.getPreference().setString(
                               Utils.projectName, Utils.selectProjectText);
                           print(Utils.selectProjectText);
+                          await Utils.saveCurrentProjectjsonBodyInPreference();
                           Utils.selectedSubTask = "";
                           Utils.selectedSubTaskId = 0;
                           setState(() {});
@@ -933,7 +934,6 @@ class KestralScreen extends StatelessWidget {
                                   .employeeId);
                           Utils.taskList =
                               incompleteTashList.data.getInCompleteTasks;
-                          if (viewModel.timerState) viewModel.handleStopTimer();
                           Navigator.pop(context);
                           viewModel.refreshUI();
                        // }

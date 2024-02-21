@@ -57,6 +57,8 @@ class Utils {
 
   static var logger =  Logger();
 
+  static var errorCode = "";
+
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
   }
@@ -401,7 +403,7 @@ class Utils {
 
   }
 
-  static void showLogoutDialog(BuildContext context, String title, String message, Function() callback) {
+  static void showLogoutDialog(BuildContext context, String title, String message,  Function() callback, {hideLaterButton = false}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -433,32 +435,35 @@ class Utils {
                   children: [
                     Expanded(
                       flex : 1,
-                      child: Container(
-                        height: 48.Sh,
-                        margin: EdgeInsets.only(right:10.Sw),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFD5D5D5),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0), // Set border radius here
-                            ),
-
+                      child: Visibility(
+                        visible: !hideLaterButton,
+                        child: Container(
+                          height: 48.Sh,
+                          margin: EdgeInsets.only(right:10.Sw),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                          child: const Text(
-                            'LATER',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Color(0xFF252525),
-                              fontSize: 14,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w500,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFD5D5D5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                              ),
+
+                            ),
+                            child: const Text(
+                              'LATER',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Color(0xFF252525),
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
@@ -480,7 +485,6 @@ class Utils {
                             await logoutUserMutation(queue);
                             await Utils.getPreference().clear();
                             if (queue != null) {
-                              await Utils.getPreference().setString('queue', queue);
                               await Utils.getPreference().setString('deviceId', Utils.deviceId);
                             }
                             Navigator.pushAndRemoveUntil(

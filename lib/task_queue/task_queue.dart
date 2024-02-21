@@ -41,7 +41,10 @@ class TaskQueue {
       }
     }
     await removeElementsAtIndex(indicesToRemove);
-    if(errorMessage.length > 5) {
+    if(Utils.errorCode == "PROCESS_CACHE_AND_LOGOUT") {
+      Utils.showLogoutDialog(context, "Alert", errorMessage,  () => {},  hideLaterButton: true);
+    }
+    if(errorMessage.length > 5){
       Utils.showCustomDialog(context, "Alert", errorMessage);
     }
   }

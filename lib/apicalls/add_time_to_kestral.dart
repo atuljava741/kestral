@@ -66,7 +66,8 @@ Future<String> addTimeToKestral(body) async {
       try {
         Utils.accessToken =
             result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
-        if(Utils.accessToken.length > 5) {
+        Utils.errorCode = result.exception!.graphqlErrors.first.extensions!["code"] ?? "";
+        /*if(Utils.accessToken.length > 5) {
           var queue = Utils.getPreference().getString('queue');
           print(queue);
           Utils.deviceId = Utils.getPreference().getString('deviceId')!;
@@ -75,7 +76,8 @@ Future<String> addTimeToKestral(body) async {
           if (queue != null) {
             await Utils.getPreference().setString('deviceId', Utils.deviceId);
           }
-        }
+        }*/
+        print(result.exception!.graphqlErrors.toString());
       } catch (e) {}
       return result.exception!.graphqlErrors.first.message;
     }

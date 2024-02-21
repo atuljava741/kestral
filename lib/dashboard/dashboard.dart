@@ -26,129 +26,135 @@ class KestralScreen extends StatelessWidget {
         viewModelBuilder: () => DashboardViewModel(context),
         onViewModelReady: (viewModel) => viewModel.init(),
         builder: (context, viewModel, child) {
-          return Scaffold(
-            backgroundColor: const Color(0xFFF8F5F0),
-            body: Stack(
-              children: [
-                getTopLogoAndText(context, viewModel),
-                getProjectAndTaskUI(context, viewModel),
-                Positioned(
-                  top: (MediaQuery.of(context).size.height - 100) / 2,
-                  left: (MediaQuery.of(context).size.width - 100) / 2,
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blue, // Change color as needed
-                    ),
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          onStartButtonClicked(viewModel);
-                        },
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          child: Stack(
-                            children: [
-                              Center(
-                                  child: Utils.getIcon(
-                                      "assets/images/bottom_layer.png",
-                                      120,
-                                      120)),
-                              Center(
-                                child: Opacity(
-                                  opacity: 1,
-                                  child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Container(
-                                          width: 85,
-                                          height: 85,
-                                          decoration: ShapeDecoration(
-                                            color: viewModel.getColor(),
-                                            shape: const OvalBorder(
-                                              side: BorderSide(
-                                                  width: 8,
-                                                  color: Color(0XFFFFFFFF)),
+          return WillPopScope(
+              onWillPop: () async {
+                Utils.showLogoutDialog(context, "Alert", "Are you sure you want to log out? Logging out will end your current session. If you're ready to log out, just tap 'Logout' below.", () => null);
+                return false; // Return true to allow the back press
+              },
+              child: Scaffold(
+              backgroundColor: const Color(0xFFF8F5F0),
+              body: Stack(
+                children: [
+                  getTopLogoAndText(context, viewModel),
+                  getProjectAndTaskUI(context, viewModel),
+                  Positioned(
+                    top: (MediaQuery.of(context).size.height - 100) / 2,
+                    left: (MediaQuery.of(context).size.width - 100) / 2,
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue, // Change color as needed
+                      ),
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            onStartButtonClicked(viewModel);
+                          },
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                            child: Stack(
+                              children: [
+                                Center(
+                                    child: Utils.getIcon(
+                                        "assets/images/bottom_layer.png",
+                                        120,
+                                        120)),
+                                Center(
+                                  child: Opacity(
+                                    opacity: 1,
+                                    child: Container(
+                                      width: 100,
+                                      height: 100,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: 85,
+                                            height: 85,
+                                            decoration: ShapeDecoration(
+                                              color: viewModel.getColor(),
+                                              shape: const OvalBorder(
+                                                side: BorderSide(
+                                                    width: 8,
+                                                    color: Color(0XFFFFFFFF)),
+                                              ),
+                                              shadows: const [
+                                                BoxShadow(
+                                                  color: Color(0x3F000000),
+                                                  blurRadius: 50,
+                                                  offset: Offset(0, 8),
+                                                  spreadRadius: 3,
+                                                )
+                                              ],
                                             ),
-                                            shadows: const [
-                                              BoxShadow(
-                                                color: Color(0x3F000000),
-                                                blurRadius: 50,
-                                                offset: Offset(0, 8),
-                                                spreadRadius: 3,
-                                              )
-                                            ],
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Center(
-                                child:
-                                    Utils.getIcon(viewModel.getImage(), 60, 60),
-                              ),
-                            ],
+                                Center(
+                                  child:
+                                      Utils.getIcon(viewModel.getImage(), 60, 60),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    height: 64.Sw,
-                    decoration: const BoxDecoration(
-                      color: Color(0XFFFFFFFF),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15.0),
-                        topRight: Radius.circular(15.0),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      height: 64.Sw,
+                      decoration: const BoxDecoration(
+                        color: Color(0XFFFFFFFF),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15.0),
+                          topRight: Radius.circular(15.0),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            spreadRadius: 0,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          spreadRadius: 0,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          // Nested Row to group left-side elements
-                          children: [
-                            Utils.getIcon(
-                                "assets/images/contact.png", 24, 24),
-                            SizedBox(width: 8.Sw), // Adjust spacing as needed
-                            Text(
-                              viewModel.getUserNameText(),
-                              style: AppTextStyle.textStylePoppins21w600,
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              openBottomOptions(context,viewModel);
-                            },
-                            child: Utils.getIcon(
-                                "assets/images/threepoints.png", 24, 24))
-                        // Right-side icon
-                      ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            // Nested Row to group left-side elements
+                            children: [
+                              Utils.getIcon(
+                                  "assets/images/contact.png", 24, 24),
+                              SizedBox(width: 8.Sw), // Adjust spacing as needed
+                              Text(
+                                viewModel.getUserNameText(),
+                                style: AppTextStyle.textStylePoppins21w600,
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                openBottomOptions(context,viewModel);
+                              },
+                              child: Utils.getIcon(
+                                  "assets/images/threepoints.png", 24, 24))
+                          // Right-side icon
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });

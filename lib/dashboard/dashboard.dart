@@ -262,7 +262,9 @@ class KestralScreen extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 20.Sh),
-          Utils.getIcon("assets/images/logo.png", 72, 64),
+          GestureDetector(child : Utils.getIcon("assets/images/logo.png", 72, 64), onTap: (){
+            viewModel.displayLogs();
+          }),
           SizedBox(height: 25.Sh),
           Text(
             viewModel.currentDuration,

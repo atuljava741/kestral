@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/landingpage/landing.dart';
 import 'package:kestral/task_queue/task_queue.dart';
+import 'package:logger_plus/logger_plus.dart';
 
 import '../apicalls/add_time_to_kestral.dart';
 import '../apicalls/get_projects.dart';
@@ -58,9 +59,18 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   bool isTaskColor = false;
   String get currentDuration => getCurrentDuration();
 
+
   void toggleSelectedText() {
     selectedText2 = !selectedText2;
     notifyListeners();
+  }
+
+  displayLogs(){
+    LogConsole.init();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LogConsole(showCloseButton: true)),
+    );
   }
 
   bool getTimerState() {
@@ -87,13 +97,13 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
       return "00:00";
     }*/
     int minutes = Utils.getPreference().getInt(Utils.minutes) ?? 0;
+    Utils.logger.i("Minutes "+ minutes.toString() );
     print(minutes);
     int hours = (minutes / 60).toInt(); // Get the integer division for hours
     int remainingMinutes = (minutes % 60).toInt(); // Get the remaining minutes
     // Format the hours and minutes into a string
     String hourMinuteString = "${formatWithLeadingZero(hours)}:${formatWithLeadingZero(remainingMinutes)}";
     return hourMinuteString;
-
   }
 
   init() {
@@ -226,10 +236,12 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     DateTime lastdatetime = getLastSentDateTime();
     Duration difference = DateTime.now().difference(lastdatetime);
     print("difference $difference");
+    Utils.logger.i("Difference Sync last sync $difference");
     int numberOfIntervals =
         (difference.inMinutes / Utils.intervalMinutes).floor();
 
     print("checkAndSyncPendingData $numberOfIntervals");
+    Utils.logger.i("Number of Intervals Detected to sync "+ numberOfIntervals.toString());
     for (int i = 1; i <= numberOfIntervals; i++) {
       lastdatetime = getLastSentDateTime();
       lastdatetime = roundToNearestTenMinutes(lastdatetime);
@@ -267,6 +279,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     }
     minutes = minutes + 10;
     await Utils.getPreference().setInt(Utils.minutes,minutes);
+    Utils.logger.i("Adding to queue : From $durationFrom - $durationTo");
     print("Adding to queue");
     print("From $durationFrom - $durationTo");
 
@@ -401,6 +414,10 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   void dispose() {
     WidgetsBinding.instance?.removeObserver(this);
+  }
+
+  static getLogger() {
+    return Utils.logger;
   }
 
 }

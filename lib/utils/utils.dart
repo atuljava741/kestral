@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
 import 'package:kestral/utils/size_ext.dart';
+import 'package:logger_plus/logger_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -53,6 +54,8 @@ class Utils {
   static String currentTimeZone = "Asia/Kolkata";
 
   static var showAddButton = true;
+
+  static var logger =  Logger();
 
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);

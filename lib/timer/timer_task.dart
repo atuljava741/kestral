@@ -12,7 +12,7 @@ class TimeTracker{
   }
 
   void startTimer(Null Function() function) {
-    timer = Timer.periodic(Duration(minutes: Utils.intervalMinutes), (Timer timer) {
+    timer = Timer.periodic(Duration(minutes: 1), (Timer timer) {
       print("Sync To server according to timer");
       function.call();
     });

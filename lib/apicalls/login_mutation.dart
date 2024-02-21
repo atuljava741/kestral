@@ -33,6 +33,7 @@ Future<String?> customLoginMutation(String email, String password) async {
     }
   };
   print("parms ${objPost}");
+  Utils.logger.i("Login call ${objPost}");
   final MutationOptions options = MutationOptions(
     document: gql(createPostMutation),
     variables: objPost,
@@ -40,14 +41,16 @@ Future<String?> customLoginMutation(String email, String password) async {
 
   final QueryResult result = await client.mutate(options);
     if (result.hasException) {
+      Utils.logger.i("Login failed");
       try {
+
         Utils.accessToken =
             result.exception!.graphqlErrors.first.extensions!["cacheToken"] ??
                 "";
-
+        Utils.logger.i("cacheToken $Utils.accessToken");
       } catch (e) {}
-      print(result.data);
-      return result.exception!.graphqlErrors.first.message;
+      print(result.exception!.graphqlErrors.first.message ?? "false");
+      return result.exception!.graphqlErrors.first.message ?? "false";
     } else {
       print("login response");
       print(result.data!);

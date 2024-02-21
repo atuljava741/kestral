@@ -48,6 +48,7 @@ dependencies:
   aad_oauth:
   google_sign_in: ^6.1.6
   flutter_keychain: ^2.4.0
+  logger_plus: ^0.0.6+4
 
 dev_dependencies:
   flutter_test:

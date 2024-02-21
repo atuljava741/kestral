@@ -14,7 +14,7 @@ final String logoutMutation = """
 
 Future<String?> logoutUserMutation(data) async {
   print("Sending data ${Utils.accessToken}");
-  print(data);
+  Utils.logger.i("Log out using ${Utils.accessToken}");
   if (data == null){
     data = [];
   }
@@ -28,10 +28,10 @@ Future<String?> logoutUserMutation(data) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
-    print("Exception" + result.exception!.graphqlErrors.first.message);
+    Utils.logger.i("Exception in logout api " + result.exception!.graphqlErrors.first.message);
     return result.exception!.graphqlErrors.first.message;
   } else {
-    print("Logout data");
+    Utils.logger.i("Logout Success");
     print(result.data!);
     return "true";
   }

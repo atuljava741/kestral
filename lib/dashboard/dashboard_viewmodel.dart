@@ -259,7 +259,6 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
       await sendTimeToKeastral(
           lastUpdatedTime, formattedTime, formattedDate, roundedTime);
     }
-    await TaskQueue.sinkQueueToServer(context);
     refreshUI();
   }
 
@@ -298,6 +297,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     await TaskQueue.addToQueue(apiBody);
     await Utils.getPreference()
         .setInt(Utils.lastSentTime, scheduledTime.millisecondsSinceEpoch);
+    await TaskQueue.sinkQueueToServer(context);
   }
 
   DateTime roundToNearestInterval(DateTime dateTime, int intervalMinutes) {
@@ -400,12 +400,13 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      Utils.loadSavedProjectData();
-      getProjects();
-      getCategories();
-      onlaunchOfScreen();
+      checkAndSyncPendingData();
+      timeTracker.startTimer(() {
+        checkAndSyncPendingData();
+      });
       _isForeground.value = true;
     } else if (state == AppLifecycleState.paused) {
+      timeTracker.stopTimer();
       _isForeground.value = false;
     }
   }

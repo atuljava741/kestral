@@ -28,7 +28,8 @@ Future<String?> logoutUserMutation(data) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
-    Utils.logger.i("Exception in logout api " + result.exception!.graphqlErrors.first.message);
+    print(result);
+    //Utils.logger.i("Exception in logout api " + result.exception!.graphqlErrors.first.message);
     return result.exception!.graphqlErrors.first.message;
   } else {
     Utils.logger.i("Logout Success");

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      title: 'Kestral',
+      title: 'Kestrel',
       navigatorKey: Utils.navigatorKey,
         debugShowCheckedModeBanner : false,
       theme: ThemeData(

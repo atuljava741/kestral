@@ -94,7 +94,7 @@ class LandingPageViewModel extends ChangeNotifier {
           await Utils.getPreference().setString('deviceId', Utils.deviceId);
         });
       } else {
-        Utils.showCustomDialog(context, "Kestral Updates", responseMessage!);
+        Utils.showCustomDialog(context, "KestrelPro Updates", responseMessage!);
       }
     }
   }

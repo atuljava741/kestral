@@ -54,8 +54,35 @@ timeZone: \$timeZone\
 } 
 """;
 
+// Future<String> addTimeToKestral(body) async {
+//   try {
+//     final MutationOptions options = MutationOptions(
+//       document: gql(addTimeMutation),
+//       variables: body,
+//     );
+//
+//     final QueryResult result = await client.mutate(options);
+//     if (result.hasException) {
+//       try {
+//         Utils.accessToken =
+//             result.exception!.graphqlErrors.first.extensions!["cacheToken"] ?? "";
+//         Utils.errorCode = result.exception!.graphqlErrors.first.extensions!["code"] ?? "";
+//         //Utils.printLog(result.exception!.graphqlErrors.toString());
+//       } catch (e) {}
+//       return result.exception!.graphqlErrors.first.message;
+//     }
+//     else {
+//       return "true";
+//     }
+//   } catch (e) {
+//     print(e);
+//   }
+//   return "false";
+// }
+
+//Remove try catch  for off internet case PATCH
 Future<String> addTimeToKestral(body) async {
-  try {
+
     final MutationOptions options = MutationOptions(
       document: gql(addTimeMutation),
       variables: body,
@@ -74,8 +101,4 @@ Future<String> addTimeToKestral(body) async {
     else {
       return "true";
     }
-  } catch (e) {
-    print(e);
-  }
-  return "false";
 }

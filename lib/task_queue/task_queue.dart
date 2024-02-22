@@ -20,7 +20,7 @@ class TaskQueue {
   static Future<void> addToQueue(Map<String, dynamic> element) async {
     List<Map<String, dynamic>> newQueue = [...queue, element];
     await Utils.getPreference().setString('queue', jsonEncode(newQueue));
-    }
+  }
 
   static Future<void> sinkQueueToServer(BuildContext context) async {
     List<int> indicesToRemove = [];
@@ -31,19 +31,19 @@ class TaskQueue {
           data["durationFrom"] +
           " - " +
           data["durationTo"]);
-      String  b = await addTimeToKestral(data);
+      String b = await addTimeToKestral(data);
       if (b == "true") {
         indicesToRemove.add(i);
-      }
-      else {
+      } else {
         errorMessage = b;
         break;
       }
     }
     await removeElementsAtIndex(indicesToRemove);
-    if(Utils.errorCode == "PROCESS_CACHE_AND_LOGOUT") {
-      Utils.showLogoutDialog(context, "Alert", errorMessage,  () => {},  hideLaterButton: true);
-    }else {
+    if (Utils.errorCode == "PROCESS_CACHE_AND_LOGOUT") {
+      Utils.showLogoutDialog(context, "Alert", errorMessage, () => {},
+          hideLaterButton: true);
+    } else {
       if (errorMessage.length > 5) {
         Utils.showCustomDialog(context, "Alert", errorMessage);
       }
@@ -59,7 +59,6 @@ class TaskQueue {
       }
     }
   }
-
 
   static Future<void> _removeElement(int index) async {
     List<Map<String, dynamic>> newQueue = [...queue];

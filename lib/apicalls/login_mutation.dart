@@ -32,8 +32,7 @@ Future<String?> customLoginMutation(String email, String password) async {
       }
     }
   };
-  print("parms ${objPost}");
-  Utils.logger.i("Login call ${objPost}");
+
   final MutationOptions options = MutationOptions(
     document: gql(createPostMutation),
     variables: objPost,
@@ -49,12 +48,8 @@ Future<String?> customLoginMutation(String email, String password) async {
                 "";
         Utils.logger.i("cacheToken $Utils.accessToken");
       } catch (e) {}
-      print(result.exception!.graphqlErrors.first.message ?? "false");
       return result.exception!.graphqlErrors.first.message ?? "false";
     } else {
-      print("login response");
-      print(result.data!);
-
       // lines added for clear every thing on coming back
       Utils.deviceId = Utils.getPreference().getString('deviceId')!;
       await Utils.getPreference().clear();
@@ -68,11 +63,6 @@ Future<String?> customLoginMutation(String email, String password) async {
       await Utils.getPreference().setString("access_token", Utils.accessToken);
       await Utils.getPreference().setString("email", email);
       await Utils.getPreference().setString("password", password);
-      print(userData.data.userAuthentication.token);
-      print(
-          "acceptToolTasks${userData.data.userAuthentication.acceptToolTasks}");
-      print("true");
-
       return "true";
     }
 }

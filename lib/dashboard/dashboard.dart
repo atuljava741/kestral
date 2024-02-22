@@ -1151,9 +1151,7 @@ class KestralScreen extends StatelessWidget {
                         Future.delayed(Duration(seconds: 3), () {
                           Navigator.pop(context);
                           Utils.showBottomSheet(context, Icons.done, Colors.green, "Sync time");
-
                         });
-
                         TaskQueue.sinkQueueToServer(context);
                       },
                       child: Container(

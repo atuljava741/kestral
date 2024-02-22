@@ -78,27 +78,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   String getCurrentDuration() {
-    /*if (timerState) {
-      int initialTimeStamp =
-          Utils.getPreference().getInt(Utils.startTimestamp) ?? 0;
-      DateTime startTime =
-          DateTime.fromMillisecondsSinceEpoch(initialTimeStamp);
-
-      Duration difference = DateTime.now().difference(startTime);
-
-      // Calculate hours and minutes
-      int hours = difference.inHours;
-      int minutes = difference.inMinutes.remainder(60);
-      minutes = ((minutes) / 10).round() * 10;
-      if(minutes<0) minutes =0 ;
-      Utils.getPreference().setInt(Utils.minutes, minutes);
-      return "${formatWithLeadingZero(hours)}:${formatWithLeadingZero(minutes)}";
-    } else {
-      return "00:00";
-    }*/
     int minutes = Utils.getPreference().getInt(Utils.minutes) ?? 0;
-    Utils.logger.i("Minutes "+ minutes.toString() );
-    print(minutes);
     int hours = (minutes / 60).toInt(); // Get the integer division for hours
     int remainingMinutes = (minutes % 60).toInt(); // Get the remaining minutes
     // Format the hours and minutes into a string
@@ -176,7 +156,6 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> handleStartTimer() async {
-    print("Start Time Button clicked");
     if (Utils.selectedProjectId == 0 ||
         Utils.selectedSubTask == "" ||
         Utils.selectedCategoryId == 0 ||
@@ -189,6 +168,8 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     DateTime nearestTenMinutes = roundToNearestTenMinutes(currentTime);
     await Utils.getPreference()
         .setInt(Utils.startTimestamp, nearestTenMinutes.millisecondsSinceEpoch);
+    await Utils.getPreference()
+        .setInt(Utils.lastSentTime, nearestTenMinutes.millisecondsSinceEpoch);
     await saveLastStateOfButton(true);
     timeTracker.startTimer(() {
       checkAndSyncPendingData();
@@ -199,8 +180,8 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     //await checkAndSyncPendingData();
     timeTracker.stopTimer();
     await saveLastStateOfButton(false);
-    await Utils.getPreference().remove(Utils.lastSentTime);
-    await Utils.getPreference().remove(Utils.startTimestamp);
+    //await Utils.getPreference().remove(Utils.lastSentTime);
+    //await Utils.getPreference().remove(Utils.startTimestamp);
     refreshUI();
   }
 
@@ -225,23 +206,35 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     DateTime lastdatetime = DateTime.fromMillisecondsSinceEpoch(lastSentTime);
     if (lastSentTime == 0) {
       int initialTimeStamp =
-          Utils.getPreference().getInt(Utils.startTimestamp) ?? 0;
+          Utils.getPreference().getInt(Utils.startTimestamp) ?? DateTime.now().millisecondsSinceEpoch;
       lastdatetime = DateTime.fromMillisecondsSinceEpoch(initialTimeStamp);
     }
-
     return lastdatetime;
   }
 
   Future<void> checkAndSyncPendingData() async {
+    bool currentTimerState = Utils.getPreference().getBool(Utils.timerState) ?? false;
+    if(!currentTimerState) {
+      Utils.printLog("Timer is OFF cannot sync");
+      return;
+    }
+
+    if (Utils.selectedProjectId == 0 ||
+        Utils.selectedSubTask == "" ||
+        Utils.selectedCategoryId == 0 ||
+        Utils.selectedSubTaskId == 0) {
+      Utils.showCustomDialog(context, "Alert", "Please Select Project and Task");
+      return;
+    }
+
     DateTime lastdatetime = getLastSentDateTime();
+    Utils.printLog("lastSyncTime $lastdatetime");
     Duration difference = DateTime.now().difference(lastdatetime);
-    print("difference $difference");
-    Utils.logger.i("Difference Sync last sync $difference");
+    Utils.printLog("Difference Sync last sync $difference");
     int numberOfIntervals =
         (difference.inMinutes / Utils.intervalMinutes).floor();
+    Utils.printLog("No of Intervals $numberOfIntervals");
 
-    print("checkAndSyncPendingData $numberOfIntervals");
-    Utils.logger.i("Number of Intervals Detected to sync "+ numberOfIntervals.toString());
     for (int i = 1; i <= numberOfIntervals; i++) {
       lastdatetime = getLastSentDateTime();
       lastdatetime = roundToNearestTenMinutes(lastdatetime);
@@ -272,15 +265,17 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> sendTimeToKeastral(String durationFrom, String durationTo,
       String dateOfTask, DateTime scheduledTime) async {
     int minutes = Utils.getPreference().getInt(Utils.minutes) ?? 0;
+    minutes = minutes + Utils.intervalMinutes;
+
     bool timeToReset = isBetweenMidnightAndQuarterPastMidnight(scheduledTime);
     if(timeToReset) {
       minutes = 0;
     }
-    minutes = minutes + 10;
+
+    Utils.printLog("Minutes increaed $minutes");
     await Utils.getPreference().setInt(Utils.minutes,minutes);
-    Utils.logger.i("Adding to queue : From $durationFrom - $durationTo");
-    print("Adding to queue");
-    print("From $durationFrom - $durationTo");
+    Utils.printLog("Adding to queue : From $durationFrom - $durationTo");
+
 
     Map<String, dynamic> durationData = <String, dynamic>{
       "date": dateOfTask,

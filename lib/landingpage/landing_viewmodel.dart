@@ -91,9 +91,7 @@ class LandingPageViewModel extends ChangeNotifier {
           Utils.deviceId = Utils.getPreference().getString('deviceId')!;
           await logoutUserMutation(queue);
           await Utils.getPreference().clear();
-          if (queue != null) {
-            await Utils.getPreference().setString('deviceId', Utils.deviceId);
-          }
+          await Utils.getPreference().setString('deviceId', Utils.deviceId);
         });
       } else {
         Utils.showCustomDialog(context, "Kestral Updates", responseMessage!);

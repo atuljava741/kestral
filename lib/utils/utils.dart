@@ -181,7 +181,7 @@ class Utils {
           deviceId = strDeviceID;
           await getPreference().setString("deviceId", strDeviceID);
         }
-        deviceName = iosInfo.name;
+        deviceName = iosInfo.name != "" ? iosInfo.name : "iphone";
       }
     } catch (e) {
       print('Failed to get device info: $e');

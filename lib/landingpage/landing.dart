@@ -94,6 +94,9 @@ class LandingPage extends StatelessWidget {
                                 controller: viewModel.emailController,
                                 validator: viewModel.validateEmail,
                                 style: const TextStyle(color: Color(0XFF000000)),
+                                onChanged: (val){
+                                  viewModel.formKey.currentState!.validate();
+                                },
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10), // Adjust padding
@@ -132,7 +135,8 @@ class LandingPage extends StatelessWidget {
                               controller: viewModel.passwordController,
                               validator: viewModel.validatePassword,
                               onChanged: (value) {
-                                viewModel.validatePassword(value);
+                                viewModel.passwordFormKey.currentState!.validate();
+                               // viewModel.validatePassword(value);
                               },
                               decoration: InputDecoration(
                                 isDense: true,
@@ -159,21 +163,18 @@ class LandingPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        width: 320,
-                        height: 48,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFF1589CA),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            viewModel.handleButtonClick(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFF1589CA),
-                            minimumSize: const Size(550, 50),
+                      InkWell(
+                        onTap: (){
+                          viewModel.handleButtonClick(context);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 320,
+                          height: 48,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFF1589CA),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
                           ),
                           child: Text(
                             viewModel.getButtonLogInText(),

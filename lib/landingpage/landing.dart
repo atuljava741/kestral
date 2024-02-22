@@ -188,7 +188,7 @@ class LandingPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 32,),
-                      Row(
+                      /*Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
@@ -225,11 +225,11 @@ class LandingPage extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                       const SizedBox(
                         height: 30,
                       ),
-                      Row(
+                     /* Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InkWell(
@@ -266,7 +266,7 @@ class LandingPage extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
+                      ),*/
                     ],
                   ),
                 ),

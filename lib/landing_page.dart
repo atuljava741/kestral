@@ -166,7 +166,7 @@ class KestralPageState extends State<KestralPage> {
                 ),
               ),
               SizedBox(height: 30,),
-             Row(
+            /* Row(
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
              Container(
@@ -189,7 +189,7 @@ class KestralPageState extends State<KestralPage> {
                    child: Image.asset("assets/image 7.png"),
                  ),
         ],
-             ),
+             ),*/
             ],
           ),
         ),

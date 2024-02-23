@@ -947,6 +947,7 @@ class KestralScreen extends StatelessWidget {
                             Utils.projectName, Utils.selectProjectText);
                         print(Utils.selectProjectText);
                         await Utils.saveCurrentProjectjsonBodyInPreference();
+                        viewModel.handleStopTimer();
                         Utils.selectedSubTask = "";
                         Utils.selectedSubTaskId = 0;
                         setState(() {});

@@ -282,7 +282,17 @@ class LandingPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Visibility(visible : viewModel.showProgressBar,child: const CircularProgressIndicator()),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text("Kestral Pro ${viewModel.version}",
+                    style: const TextStyle(
+                      color: Color(0xFF252525),
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),),
+                ),
+                //Visibility(visible : viewModel.showProgressBar,child: const CircularProgressIndicator()),
               ],
             ),
           );

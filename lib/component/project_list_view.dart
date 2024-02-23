@@ -41,34 +41,38 @@ class ProjectsListViewState extends State<ProjectsListView> {
             color: index == selectedIndex
                 ? Utils.highlightColor
                 : Colors.white, // Highlight selected item
-                        child: Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                          Expanded(
-                          flex: 4,
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                padding: EdgeInsets.only( left : 16),
-                      child: Text(
-                        widget.projectList.elementAt(index).projectName,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyle.textStylePoppins15w400,
-                      ),
-                    ))),
                 Expanded(
-                  flex:1,
+                    flex: 4,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Text(
+                            widget.projectList.elementAt(index).projectName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyle.textStylePoppins15w400,
+                          ),
+                        ))),
+                Expanded(
+                  flex: 1,
                   child: Container(
-                    margin: EdgeInsets.only(top: 10.0, right: 20.Sw,bottom: 10.0,),
+                    margin: EdgeInsets.only(
+                      top: 10.0,
+                      right: 20.Sw,
+                      bottom: 10.0,
+                    ),
                     alignment: Alignment.centerRight,
                     child: Visibility(
                       visible: index == selectedIndex,
                       child: SvgPicture.asset(
                         'assets/images/select_icon.svg',
                         height: 28.Sw,
-                        width:
-                        28.Sw, // Replace 'my_icon.svg' with your SVG file path
+                        width: 28
+                            .Sw, // Replace 'my_icon.svg' with your SVG file path
                       ),
                     ),
                   ),

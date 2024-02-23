@@ -261,30 +261,31 @@ class KestralScreen extends StatelessWidget {
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(left: 10.Sw, right: 10.Sw),
-      padding: EdgeInsets.only(top: 50.Sh),
+      //padding: EdgeInsets.only(top: 30.Sh),
       decoration: BoxDecoration(
         gradient: viewModel.getLinearGradient(),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 25.Sh),
+          SizedBox(height: 20.Sh),
           GestureDetector(child : Utils.getIcon("assets/images/logo.png", 72, 64), onTap: (){
             viewModel.displayLogs();
           }),
-          SizedBox(height: 2.Sh),
+          SizedBox(height: 0.Sh),
           Text(
             viewModel.currentDuration,
             textAlign: TextAlign.right,
             style: AppTextStyle.textStylePoppins72w600,
           ),
-          SizedBox(height: 2.Sh),
+          SizedBox(height: 0.Sh),
           Text(
             viewModel.getcurrentText(),
             textAlign: TextAlign.center,
             style: AppTextStyle.textStylePoppins14w400,
           ),
-          SizedBox(height: 30.Sh),
-        ],
+         SizedBox(height: 40.Sh),
+       ],
       ),
     );
   }

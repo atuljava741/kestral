@@ -348,29 +348,29 @@ class Utils {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisSize: MainAxisSize.min, // Setting to min to take only the required space
               children: [
-                SizedBox(height: 56.Sh),
+                SizedBox(height: 20.Sh),
                 SvgPicture.asset(
                   'assets/images/alert.svg', // Path to your SVG file
                   width: 64.Sw,
                   height: 64.Sh,
                 ),
-                SizedBox(height: 20.Sh),
+                SizedBox(height: 10.Sh),
                 Text(
                   title,
                   style: AppTextStyle.textStylePoppins18,
                 ),
-                SizedBox(height: 28.Sh),
+                SizedBox(height: 10.Sh),
                 Text(
                   message,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStylePoppins15,
                 ),
-                SizedBox(height: 72),
+                SizedBox(height: 20.Sh),
                 Container(
                   width: double.infinity,
                   height: 48.Sh,
@@ -408,29 +408,30 @@ class Utils {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisSize: MainAxisSize.min, // Setting to min to take only the required space
               children: [
-                SizedBox(height: 56.Sh),
+                SizedBox(height: 20.Sh),
                 SvgPicture.asset(
                   'assets/images/alert.svg', // Path to your SVG file
                   width: 64.Sw,
                   height: 64.Sh,
                 ),
-                SizedBox(height: 20.Sh),
+                SizedBox(height: 10.Sh),
                 Text(
                   title,
                   style: AppTextStyle.textStylePoppins18,
                 ),
-                SizedBox(height: 28.Sh),
+                SizedBox(height: 10.Sh),
                 Text(
                   message,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStylePoppins15,
                 ),
-                SizedBox(height: 72),
+                // SizedBox(height: 72),
+                SizedBox(height: 20.Sh),
                 Row(
                   children: [
                     Expanded(

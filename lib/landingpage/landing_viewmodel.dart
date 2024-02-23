@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,8 @@ import 'package:aad_oauth/aad_oauth.dart';
 
 class LandingPageViewModel extends ChangeNotifier {
   final navigatorKey = GlobalKey<NavigatorState>();
+  String version = "";
+  String buildNumber = "";
 
   final BuildContext context;
 
@@ -87,21 +90,21 @@ class LandingPageViewModel extends ChangeNotifier {
       print(Utils.getPreference().get("access_token"));
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,
-            () async {
-          var queue = Utils.getPreference().getString('queue');
-          Utils.deviceId = Utils.getPreference().getString('deviceId')!;
-          await logoutUserMutation(queue);
-          await Utils.getPreference().clear();
-          await Utils.getPreference().setString('deviceId', Utils.deviceId);
-        });
+                () async {
+              var queue = Utils.getPreference().getString('queue');
+              Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+              await logoutUserMutation(queue);
+              await Utils.getPreference().clear();
+              await Utils.getPreference().setString('deviceId', Utils.deviceId);
+            });
       } else {
         Utils.showCustomDialog(context, "KestrelPro Updates", responseMessage!);
       }
     }
   }
 
-  Future<void> handleAutoLogin(
-      BuildContext context, String email, String password) async {
+  Future<void> handleAutoLogin(BuildContext context, String email,
+      String password) async {
     responseMessage = await customLoginMutation(email, password);
 
     if (responseMessage == "true") {
@@ -160,6 +163,7 @@ class LandingPageViewModel extends ChangeNotifier {
       autoLogin(context);
       notifyListeners();
     });
+    getVersionInfo();
   }
 
   void onBackPress() {}
@@ -188,7 +192,6 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   autoLogin(context) async {
-
     String email = Utils.getPreference().getString("email") ?? "";
     String password = Utils.getPreference().getString("password") ?? "";
     Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
@@ -221,8 +224,8 @@ class LandingPageViewModel extends ChangeNotifier {
     final result = await oauth.login();
 
     result.fold(
-      (l) => print("Microsoft Authentication Failed!"),
-      (r) async {
+          (l) => print("Microsoft Authentication Failed!"),
+          (r) async {
         print("Microsoft Authentication token ${r.accessToken}!");
         // setState(() {
         //   strToken = "${r.accessToken}";
@@ -255,7 +258,9 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   String getGreetingMessage() {
-    final hour = DateTime.now().hour;
+    final hour = DateTime
+        .now()
+        .hour;
 
     if (hour < 12) {
       return 'Hey! Good Morning';
@@ -267,7 +272,19 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   void progressBarVisibility(bool pbstate) {
-    showProgressBar= pbstate;
+    showProgressBar = pbstate;
     refreshUI();
+  }
+
+
+  void getVersionInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    try {
+      version = packageInfo.version;
+      buildNumber = packageInfo.buildNumber;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 }

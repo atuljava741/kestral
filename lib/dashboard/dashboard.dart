@@ -314,11 +314,11 @@ class KestralScreen extends StatelessWidget {
                   children: [
                     Container(
                       width: 320.Sw,
-                      height: 64.Sh,
+                      height: 68.Sh,
                       decoration: ShapeDecoration(
                         color: const Color(0xFFFBFAFA),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
+                            borderRadius: BorderRadius.circular(0)),
                         shadows: const [
                           BoxShadow(
                             color: Color(0x1E343330),

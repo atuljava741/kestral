@@ -284,11 +284,6 @@ class KestralScreen extends StatelessWidget {
             style: AppTextStyle.textStylePoppins14w400,
           ),
           SizedBox(height: 20.Sh),
-          Text(
-            viewModel.getCurrent2Text(),
-            textAlign: TextAlign.center,
-            style: AppTextStyle.textStylePoppins14w400,
-          ),
         ],
       ),
     );

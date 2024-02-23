@@ -28,7 +28,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   bool showCheckIcon = false;
   var color1 = [Color(0xFFF7F4EF), Color(0xFFFFE7A0)];
   var color2 = [Color(0xFFF1FFEE), Color(0xFFB6F1B1)];
-  var currentText = "Select a task or create one to start";
+  var currentText = "Select a task or create one to start \ntracking";
   var currect2Text = "tracking";
   var kestrelText = "Kestrel pro dev";
   var logOutText = "Logout";
@@ -322,6 +322,17 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   String getcurrentText() {
+    if(Utils.selectedProjectId == 0 ||
+        Utils.selectedSubTask == "" ||
+        Utils.selectedCategoryId == 0 ||
+        Utils.selectedSubTaskId == 0){
+      return currentText ?? "Start Tracking";
+    }
+    else if(timerState) {
+      currentText = "Tracking Time";
+    } else {
+      currentText = "Start Tracking";
+    }
     return currentText ?? "";
   }
 

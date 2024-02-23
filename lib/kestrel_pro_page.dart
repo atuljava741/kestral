@@ -55,7 +55,6 @@ class KestrelProPageState extends State<NextPage> {
                           fontSize: 14,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
-                          height: 0.10,
                         ),
                       ),
                       Center(

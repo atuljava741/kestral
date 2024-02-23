@@ -74,6 +74,7 @@ class LandingPageViewModel extends ChangeNotifier {
       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
       return;
     }
+
     if (responseMessage == "true") {
       Navigator.pushAndRemoveUntil(
         context,
@@ -156,9 +157,7 @@ class LandingPageViewModel extends ChangeNotifier {
     SharedPreferences.getInstance().then((value) {
       Utils.pref = value;
       print("Trying Auto login");
-      showProgressBar = true;
       autoLogin(context);
-      showProgressBar = false;
       notifyListeners();
     });
   }
@@ -189,16 +188,13 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   autoLogin(context) async {
+
     String email = Utils.getPreference().getString("email") ?? "";
     String password = Utils.getPreference().getString("password") ?? "";
     Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
     Utils.deviceId = Utils.getPreference().getString("deviceId") ?? "";
-
     if (email != "" && password != "") {
-      notifyListeners();
       String? responseMes = await customLoginMutation(email, password);
-
-      notifyListeners();
       if (responseMes == "true") {
         Navigator.pushAndRemoveUntil(
           context,
@@ -268,5 +264,10 @@ class LandingPageViewModel extends ChangeNotifier {
     } else {
       return 'Hey! Good Evening';
     }
+  }
+
+  void progressBarVisibility(bool pbstate) {
+    showProgressBar= pbstate;
+    refreshUI();
   }
 }

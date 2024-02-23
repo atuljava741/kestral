@@ -285,4 +285,45 @@ class AppTextStyle {
       ],
     );
   }
+
+   static getShapeDecoration4() {
+     return ShapeDecoration(
+       color: Colors.white,
+       shape: RoundedRectangleBorder(
+         borderRadius: BorderRadius.circular(4),
+       ),
+       shadows: const [
+         BoxShadow(
+           color: Color(0x19CDBFB2),
+           blurRadius: 6,
+           offset: Offset(0, 3),
+           spreadRadius: 0,
+         ),
+         BoxShadow(
+           color: Color(0x16CDBFB2),
+           blurRadius: 11,
+           offset: Offset(0, 11),
+           spreadRadius: 0,
+         ),
+         BoxShadow(
+           color: Color(0x0CCDBFB2),
+           blurRadius: 15,
+           offset: Offset(0, 25),
+           spreadRadius: 0,
+         ),
+         BoxShadow(
+           color: Color(0x02CDBFB2),
+           blurRadius: 18,
+           offset: Offset(0, 45),
+           spreadRadius: 0,
+         ),
+         BoxShadow(
+           color: Color(0x00CDBFB2),
+           blurRadius: 20,
+           offset: Offset(0, 71),
+           spreadRadius: 0,
+         )
+       ],
+     );
+   }
 }

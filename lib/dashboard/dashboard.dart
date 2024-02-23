@@ -283,7 +283,7 @@ class KestralScreen extends StatelessWidget {
             textAlign: TextAlign.center,
             style: AppTextStyle.textStylePoppins14w400,
           ),
-          SizedBox(height: 20.Sh),
+          SizedBox(height: 30.Sh),
         ],
       ),
     );
@@ -339,7 +339,7 @@ class KestralScreen extends StatelessWidget {
                       },
                       child: Container(
                         width: 256.Sw,
-                        decoration: AppTextStyle.getShapeDecoration3(),
+                        decoration: AppTextStyle.getShapeDecoration4(),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -374,8 +374,8 @@ class KestralScreen extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 10.Sw),
-                                        child: const Icon(Icons.arrow_drop_down,
-                                            size: 35,
+                                        child:  Icon(Icons.arrow_drop_down,
+                                            size: 32.Sh,
                                             color: Colors.black),
                                       ),
                                     ],
@@ -495,8 +495,8 @@ class KestralScreen extends StatelessWidget {
                                       height: 3.Sh,
                                     ),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Flexible(
                                           child: Text(
@@ -1142,7 +1142,7 @@ class KestralScreen extends StatelessWidget {
                         Utils.showProgressBottomSheet(context, "Syncing Time to Server", false);
                         Future.delayed(Duration(seconds: 3), () {
                           Navigator.pop(context);
-                          Utils.showBottomSheet(context, Icons.done, Colors.green, "Sync time");
+                          Utils.showBottomSheet(context, Icons.done, Colors.green, "Time synchronization done successfully");
                         });
                         TaskQueue.sinkQueueToServer(context);
                       },

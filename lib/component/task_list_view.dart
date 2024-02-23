@@ -95,23 +95,26 @@ class CategoriesListViewState extends State<SubTaskListView> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width : 20.Sw),
-                    Text(
-                      "Due on : "+ (widget.subTaskList.elementAt(index).dueDate ?? ""),
-                      style: const TextStyle(
-                        color: Color(0xFF252525),
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
+                Visibility(
+                  visible : widget.subTaskList.elementAt(index).dueDate != "",
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(width : 20.Sw),
+                      Text(
+                        "Due on : "+ (widget.subTaskList.elementAt(index).dueDate ?? "-"),
+                        style: const TextStyle(
+                          color: Color(0xFF252525),
+                          fontSize: 12,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
-                    SizedBox(width : 10.Sw),
-                    Utils.getChip(widget.subTaskList.elementAt(index).taskPriority)
-                  ],
+                      SizedBox(width : 10.Sw),
+                      Utils.getChip(widget.subTaskList.elementAt(index).taskPriority)
+                    ],
+                  ),
                 ),
               ],
             ),

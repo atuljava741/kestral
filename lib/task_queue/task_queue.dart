@@ -46,8 +46,6 @@ class TaskQueue {
     } else {
       if (errorMessage.length > 5) {
         Utils.showCustomDialog(context, "Alert", errorMessage);
-      }else{
-        Utils.showCustomDialog(context, "Alert", "KestralPro is facing some issue. Please try again.");
       }
     }
   }

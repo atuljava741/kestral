@@ -318,7 +318,7 @@ class Utils {
         BorderRadius.circular(20), // Set border radius here
         color: getColorOfPriority(priority), // Set background color
       ),
-      margin: EdgeInsets.only(bottom: 3, left: 5),
+      ///margin: EdgeInsets.only(bottom: 3, left: 5),
       padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       child: Text(
         priority,

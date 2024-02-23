@@ -267,17 +267,17 @@ class KestralScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(height: 20.Sh),
+          SizedBox(height: 25.Sh),
           GestureDetector(child : Utils.getIcon("assets/images/logo.png", 72, 64), onTap: (){
             viewModel.displayLogs();
           }),
-          SizedBox(height: 25.Sh),
+          SizedBox(height: 2.Sh),
           Text(
             viewModel.currentDuration,
             textAlign: TextAlign.right,
             style: AppTextStyle.textStylePoppins72w600,
           ),
-          SizedBox(height: 25.Sh),
+          SizedBox(height: 2.Sh),
           Text(
             viewModel.getcurrentText(),
             textAlign: TextAlign.center,
@@ -531,22 +531,19 @@ class KestralScreen extends StatelessWidget {
                                   ),
                                   child : Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Container(
-                                            padding: EdgeInsets.only(top: 5.0, left : 16, right : 16, bottom : 15),
-                                            child: Text(
-                                              "Due on: "+ (Utils.dueDate),
-                                              style: const TextStyle(
-                                                color: Color(0xFF252525),
-                                                fontSize: 12,
-                                                fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0.14,
-                                              ),
-                                            ),
-                                          )),
+                                      SizedBox(width : 5.Sw),
+                                      Text(
+                                        "Due on: "+ (Utils.dueDate),
+                                        style: const TextStyle(
+                                          color: Color(0xFF252525),
+                                          fontSize: 12,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(width : 5.Sw),
                                       Utils.getChip(Utils.taskPriority)
                                     ],
                                   ),

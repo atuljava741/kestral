@@ -86,7 +86,7 @@ class LandingPageViewModel extends ChangeNotifier {
       );
     } else {
       responseMessage = responseMessage ??
-          "Unable to login. Please contact your Adminstrator";
+          "KestralPro is facing some issue. Please try again.";
       print(Utils.getPreference().get("access_token"));
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,

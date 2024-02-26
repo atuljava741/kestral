@@ -190,50 +190,38 @@ class LandingPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 32,),
-                          /*Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 142,
-                            decoration: const ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  width: 1,
-                                  strokeAlign: BorderSide.strokeAlignCenter,
-                                  color: Color(0xFFDFDFDF),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10,),
-                          Opacity(
-                            opacity: 0.50,
-                            child: Text(
-                              viewModel.getOrText(),
-                              style: AppTextStyle.textStylePoppins13w400,
-                            ),
-                          ),
-                          const SizedBox(width: 10,),
-                          Container(
-                            width: 142,
-                            decoration: const ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  width: 1,
-                                  strokeAlign: BorderSide.strokeAlignCenter,
-                                  color: Color(0xFFDFDFDF),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),*/
+
                           const SizedBox(
                             height: 30,
                           ),
                         ],),
                     ),),
-                   /* Row(
+                   //getSocialLoginButtons(viewModel),
+                    Text("Kestral Pro ${viewModel.version}",
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
+                        color: Color(0xFF252525),
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+                //Visibility(visible : viewModel.showProgressBar,child: const CircularProgressIndicator()),
+              ],
+            ),
+          );
+        });
+  }
+
+  Future<void> loadInitialData(context) async {
+    await Utils.init();
+    await Utils.getDeviceInfo(context);
+  }
+
+  getSocialLoginButtons(LandingPageViewModel viewModel) {
+    return  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InkWell(
@@ -270,27 +258,6 @@ class LandingPage extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),*/
-                    Text("Kestral Pro ${viewModel.version}",
-                      textAlign: TextAlign.end,
-                      style: const TextStyle(
-                        color: Color(0xFF252525),
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-                //Visibility(visible : viewModel.showProgressBar,child: const CircularProgressIndicator()),
-              ],
-            ),
-          );
-        });
-  }
-
-  Future<void> loadInitialData(context) async {
-    await Utils.init();
-    await Utils.getDeviceInfo(context);
+                    );
   }
 }

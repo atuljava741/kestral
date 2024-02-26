@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:aad_oauth/aad_oauth.dart';
@@ -7,16 +6,11 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kestral/utils/size_ext.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../apicalls/login_mutation.dart';
 import '../apicalls/logout_mutation.dart';
 import '../dashboard/dashboard.dart';
-import '../kestrel_pro_page.dart';
 import '../utils/utils.dart';
-import 'landing.dart';
-import 'package:aad_oauth/aad_oauth.dart';
 
 class LandingPageViewModel extends ChangeNotifier {
   final navigatorKey = GlobalKey<NavigatorState>();

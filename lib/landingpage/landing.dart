@@ -197,7 +197,7 @@ class LandingPage extends StatelessWidget {
                         ],),
                     ),),
                    //getSocialLoginButtons(viewModel),
-                    Text("Kestral Pro ${viewModel.version}",
+                    Text("Kestrel Pro ${viewModel.version}",
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         color: Color(0xFF252525),

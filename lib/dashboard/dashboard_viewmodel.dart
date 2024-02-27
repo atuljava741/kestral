@@ -163,6 +163,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
       Utils.showCustomDialog(context, "Alert", "Please Select Project and Task");
       return;
     }
+    Utils.printLog("Timer Started");
     await Utils.saveCurrentProjectjsonBodyInPreference();
     DateTime currentTime = DateTime.now();
     DateTime nearestTenMinutes = roundToNearestTenMinutes(currentTime);
@@ -177,6 +178,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> handleStopTimer() async {
+    Utils.printLog("Timer Stopped");
     //await checkAndSyncPendingData();
     timeTracker.stopTimer();
     await saveLastStateOfButton(false);
@@ -228,12 +230,9 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     }
 
     DateTime lastdatetime = getLastSentDateTime();
-    Utils.printLog("lastSyncTime $lastdatetime");
     Duration difference = DateTime.now().difference(lastdatetime);
-    Utils.printLog("Difference Sync last sync $difference");
     int numberOfIntervals =
         (difference.inMinutes / Utils.intervalMinutes).floor();
-    Utils.printLog("No of Intervals $numberOfIntervals");
 
     for (int i = 1; i <= numberOfIntervals; i++) {
       lastdatetime = getLastSentDateTime();
@@ -272,7 +271,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
       minutes = 0;
     }
 
-    Utils.printLog("Minutes increaed $minutes");
+    Utils.printLog("Minutes Increased $minutes");
     await Utils.getPreference().setInt(Utils.minutes,minutes);
     Utils.printLog("Adding to queue : From $durationFrom - $durationTo");
 
@@ -398,7 +397,6 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     DateTime quarterPastMidnight = DateTime(inputTime.year, inputTime.month, inputTime.day, 0, 15); // 12:15 AM
     return inputTime.isAfter(midnight) && inputTime.isBefore(quarterPastMidnight);
   }
-
   ValueNotifier<bool> _isForeground = ValueNotifier<bool>(true);
 
 
@@ -406,12 +404,14 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      Utils.printLog("Appication Resumed");
       checkAndSyncPendingData();
       timeTracker.startTimer(() {
         checkAndSyncPendingData();
       });
       _isForeground.value = true;
     } else if (state == AppLifecycleState.paused) {
+      Utils.printLog("Appication Paused");
       timeTracker.stopTimer();
       _isForeground.value = false;
     }

@@ -1,14 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keychain/flutter_keychain.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:logger_plus/logger_plus.dart';
+import 'package:path_provider/path_provider.dart';
+
+// import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_storage/saf.dart';
+
+// import 'package:shared_storage/shared_storage.dart';
 import 'package:uuid/uuid.dart';
 
 import '../apicalls/logout_mutation.dart';
@@ -16,6 +24,7 @@ import '../datamodal/incomplete_task.dart';
 import '../datamodal/project_detail.dart';
 import '../landingpage/landing.dart';
 import 'appt_text_style.dart';
+import 'package:flutter/services.dart';
 
 class Utils {
   static var navigatorKey = GlobalKey<NavigatorState>();
@@ -32,7 +41,7 @@ class Utils {
 
   static var highlightColor = Color(0XFFDDF3FF);
 
-  static  SharedPreferences? pref;
+  static SharedPreferences? pref;
 
   static int intervalMinutes = 10;
 
@@ -55,7 +64,7 @@ class Utils {
 
   static var showAddButton = true;
 
-  static var logger =  Logger();
+  static var logger = Logger();
 
   static var errorCode = "";
 
@@ -78,9 +87,8 @@ class Utils {
   }
 
   static SharedPreferences getPreference() {
-   return pref!;
+    return pref!;
   }
-
 
   //static String selectedProject = "";
   static int selectedProjectId = 0;
@@ -125,7 +133,8 @@ class Utils {
       "isManual": false,
       "mousePressCount": 0,
       "keyPressCount": 0,
-      "organizationId": Utils.userInformation!.data.userAuthentication.organizationId,
+      "organizationId":
+          Utils.userInformation!.data.userAuthentication.organizationId,
       "idealFlag": 0,
       "screenshotImageUrl": "",
       "comment": null,
@@ -136,23 +145,22 @@ class Utils {
         .setString(Utils.projectDetailsSP, jsonEncode(projectDetails));
   }
 
-
   static Future<void> getDeviceInfo(BuildContext context) async {
     Utils.currentTimeZone = getCurrentTimeZone();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
     try {
-      if (Theme
-          .of(context)
-          .platform == TargetPlatform.android) {
-        String strDeviceID = await FlutterKeychain.get(key: "device_unique_id_kestral") ?? "";
+      if (Theme.of(context).platform == TargetPlatform.android) {
+        String strDeviceID =
+            await FlutterKeychain.get(key: "device_unique_id_kestral") ?? "";
         AndroidDeviceInfo androidObj = await deviceInfo.androidInfo;
         if (strDeviceID.isEmpty) {
           String androidId = androidObj.androidId ?? "";
           deviceId = androidId;
           await getPreference().setString("deviceId", deviceId);
-          await FlutterKeychain.put(key: "device_unique_id_kestral", value: deviceId);
-        }else{
+          await FlutterKeychain.put(
+              key: "device_unique_id_kestral", value: deviceId);
+        } else {
           deviceId = strDeviceID;
           await getPreference().setString("deviceId", strDeviceID);
         }
@@ -167,17 +175,17 @@ class Utils {
         // }
         // print(deviceId);
         deviceName = androidObj.model;
-      } else if (Theme
-          .of(context)
-          .platform == TargetPlatform.iOS) {
-        String strDeviceID = await FlutterKeychain.get(key: "device_unique_id_kestral") ?? "";
+      } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+        String strDeviceID =
+            await FlutterKeychain.get(key: "device_unique_id_kestral") ?? "";
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
         if (strDeviceID.isEmpty) {
           String iosId = iosInfo.identifierForVendor ?? "";
           deviceId = iosId;
           await getPreference().setString("deviceId", deviceId);
-          await FlutterKeychain.put(key: "device_unique_id_kestral", value: deviceId);
-        }else{
+          await FlutterKeychain.put(
+              key: "device_unique_id_kestral", value: deviceId);
+        } else {
           deviceId = strDeviceID;
           await getPreference().setString("deviceId", strDeviceID);
         }
@@ -199,8 +207,8 @@ class Utils {
     print("Device id " + deviceId);
   }
 
-  static void showBottomSheet(BuildContext context, IconData error,
-      Color iconColor, String message) {
+  static void showBottomSheet(
+      BuildContext context, IconData error, Color iconColor, String message) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -219,8 +227,7 @@ class Utils {
               Flexible(
                 child: Text(
                   message,
-                  style: AppTextStyle
-                      .textStylePoppins12w400,
+                  style: AppTextStyle.textStylePoppins12w400,
                 ),
               ),
               SizedBox(height: 60.Sh),
@@ -231,10 +238,11 @@ class Utils {
     );
   }
 
-  static void showProgressBottomSheet(BuildContext context, String message, bool dismissable) {
+  static void showProgressBottomSheet(
+      BuildContext context, String message, bool dismissable) {
     showModalBottomSheet(
         context: context,
-        isDismissible : dismissable,
+        isDismissible: dismissable,
         builder: (BuildContext context) {
           return Container(
             width: double.infinity,
@@ -249,8 +257,7 @@ class Utils {
                 Flexible(
                   child: Text(
                     message,
-                    style: AppTextStyle
-                        .textStylePoppins12w400,
+                    style: AppTextStyle.textStylePoppins12w400,
                   ),
                 ),
                 SizedBox(height: 60.Sh),
@@ -260,7 +267,7 @@ class Utils {
         });
   }
 
-    /*showModalBottomSheet(
+  /*showModalBottomSheet(
       context: context,
       builder: (context) => StatefulBuilder(
         builder:
@@ -314,10 +321,10 @@ class Utils {
   static getChip(String priority) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius:
-        BorderRadius.circular(20), // Set border radius here
+        borderRadius: BorderRadius.circular(20), // Set border radius here
         color: getColorOfPriority(priority), // Set background color
       ),
+
       ///margin: EdgeInsets.only(bottom: 3, left: 5),
       padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       child: Text(
@@ -333,17 +340,17 @@ class Utils {
   }
 
   static getColorOfPriority(String priority) {
-    if(priority.toLowerCase() == "high"){
+    if (priority.toLowerCase() == "high") {
       return Color(0xFFF72828);
     }
-    if(priority.toLowerCase() == "medium"){
+    if (priority.toLowerCase() == "medium") {
       return Color(0xffF7A428);
     }
     return Color(0xFF27CE38);
   }
 
-
-  static void showCustomDialog(BuildContext context, String title, String message) {
+  static void showCustomDialog(
+      BuildContext context, String title, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -351,7 +358,8 @@ class Utils {
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Setting to min to take only the required space
+              mainAxisSize: MainAxisSize.min,
+              // Setting to min to take only the required space
               children: [
                 SizedBox(height: 20.Sh),
                 SvgPicture.asset(
@@ -384,9 +392,9 @@ class Utils {
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xff1589CA),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                        borderRadius: BorderRadius.circular(
+                            4.0), // Set border radius here
                       ),
-
                     ),
                     child: Text(
                       'OK',
@@ -400,10 +408,11 @@ class Utils {
         );
       },
     );
-
   }
 
-  static void showLogoutDialog(BuildContext context, String title, String message,  Function() callback, {hideLaterButton = false}) {
+  static void showLogoutDialog(
+      BuildContext context, String title, String message, Function() callback,
+      {hideLaterButton = false}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -411,7 +420,8 @@ class Utils {
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Setting to min to take only the required space
+              mainAxisSize: MainAxisSize.min,
+              // Setting to min to take only the required space
               children: [
                 SizedBox(height: 20.Sh),
                 SvgPicture.asset(
@@ -432,15 +442,15 @@ class Utils {
                 ),
                 // SizedBox(height: 72),
                 SizedBox(height: 20.Sh),
-                Row(
-                  children: [
-                    Expanded(
-                      flex : 1,
-                      child: Visibility(
-                        visible: !hideLaterButton,
+                Visibility(
+                  visible: !hideLaterButton,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
                         child: Container(
                           height: 48.Sh,
-                          margin: EdgeInsets.only(right:10.Sw),
+                          margin: EdgeInsets.only(right: 10.Sw),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -451,9 +461,9 @@ class Utils {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFD5D5D5),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                                borderRadius: BorderRadius.circular(
+                                    4.0), // Set border radius here
                               ),
-
                             ),
                             child: const Text(
                               'LATER',
@@ -469,11 +479,63 @@ class Utils {
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex : 1,
-                      child: Container(
-                        margin: EdgeInsets.only(left:10.Sw),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 10.Sw),
+                          height: 48.Sh,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              callback.call();
+                              var queue =
+                                  Utils.getPreference().getString('queue');
+                              Utils.deviceId =
+                                  Utils.getPreference().getString('deviceId')!;
+                              await logoutUserMutation(queue);
+                              await Utils.getPreference().clear();
+                              await Utils.getPreference()
+                                  .setString('deviceId', Utils.deviceId);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LandingPage()),
+                                (route) => false,
+                              ); // Close the dialog
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFecc7c7),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    4.0), // Set border radius here
+                              ),
+                            ),
+                            child: const Text(
+                              'LOGOUT',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Color(0xFFF72727),
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: hideLaterButton,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        //margin: EdgeInsets.only(left : 70.Sw, right : 70.Sw),
                         height: 48.Sh,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
@@ -481,23 +543,27 @@ class Utils {
                         child: ElevatedButton(
                           onPressed: () async {
                             callback.call();
-                            var queue = Utils.getPreference().getString('queue');
-                            Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+                            var queue =
+                                Utils.getPreference().getString('queue');
+                            Utils.deviceId =
+                                Utils.getPreference().getString('deviceId')!;
                             await logoutUserMutation(queue);
                             await Utils.getPreference().clear();
-                            await Utils.getPreference().setString('deviceId', Utils.deviceId);
+                            await Utils.getPreference()
+                                .setString('deviceId', Utils.deviceId);
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => LandingPage()),
-                                  (route) => false,
+                              MaterialPageRoute(
+                                  builder: (context) => LandingPage()),
+                              (route) => false,
                             ); // Close the dialog
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFecc7c7),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0), // Set border radius here
+                              borderRadius: BorderRadius.circular(
+                                  4.0), // Set border radius here
                             ),
-
                           ),
                           child: const Text(
                             'LOGOUT',
@@ -512,8 +578,8 @@ class Utils {
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -521,7 +587,6 @@ class Utils {
         );
       },
     );
-
   }
 
   static String getCurrentTimeZone() {
@@ -568,10 +633,50 @@ class Utils {
     return timezoneNames[DateTime.now().timeZoneOffset.inMilliseconds];
   }
 
-  static void printLog(String message) {
+  static Future<void> printLog(String message) async {
     print(message);
-    Utils.logger.i(message);
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd-MM-yy HH:mm:ss').format(now);
+    File? textFile = await setLog(formattedDate +" : "+ message);
+    // saveFile();
+
+    // if (textFile != null) {
+    //   await saveFile(textFile);
+    // }
   }
 
+  static Future<File?> setLog(String logMessage) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/my_text_file.txt');
+      await file.writeAsString('$logMessage\n', mode: FileMode.append);
+      return file;
+    } catch (e) {
+      // showCustomDialog(context, "", "");
+      return null;
+    }
+  }
 
+  static saveFile({bool retried = false}) async {
+    try {
+    String location = pref?.getString("storageDirectory") ?? "";
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/my_text_file.txt');
+    Map<String, dynamic>? result =
+        await MethodChannel('com.ivehement.plugins/saf/documentfile')
+            .invokeMapMethod<String, dynamic>('createFile', <String, dynamic>{
+      'mimeType': 'text/plain',
+      'content': file.readAsBytesSync(),
+      'displayName': "logs_${DateTime.now()}",
+      'directoryUri': location,
+    });
+    await file.writeAsString('');
+     } catch(e) {
+      Uri? uri = await openDocumentTree();
+      await pref?.setString("storageDirectory", uri.toString());
+      if(!retried) {
+        await saveFile(retried: true);
+      }
+    }
+  }
 }

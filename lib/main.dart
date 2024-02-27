@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kestral/utils/utils.dart';
-import 'dashboard/dashboard.dart';
 import 'landingpage/landing.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
 }
 

@@ -34,6 +34,7 @@ class ProjectsListViewState extends State<ProjectsListView> {
             setState(() {
               selectedIndex = index;
             });
+            Utils.printLog("Project Selected");
             widget.callback.call(index);
           },
           child: Container(

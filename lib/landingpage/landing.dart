@@ -40,7 +40,9 @@ class LandingPage extends StatelessWidget {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Utils.getIcon("assets/images/logo.png", 72, 56),
+                                GestureDetector(onTap: (){
+                                  Utils.saveFile();
+                                }, child : Utils.getIcon("assets/images/logo.png", 72, 56)),
                                 const SizedBox(
                                   height: 34,
                                 ),

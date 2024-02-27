@@ -50,6 +50,9 @@ dependencies:
   flutter_keychain: ^2.4.0
   logger_plus: ^0.0.6+4
   package_info_plus:
+  saf: ^1.0.3+4
+  path_provider:
+  shared_storage: ^0.7.0
 
 dev_dependencies:
   flutter_test:

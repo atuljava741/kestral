@@ -83,6 +83,8 @@ timeZone: \$timeZone\
 //Remove try catch  for off internet case PATCH
 Future<String> addTimeToKestral(body) async {
   try {
+    Utils.printLog("Sending Time to server");
+    Utils.printLog(body.toString());
     final MutationOptions options = MutationOptions(
       document: gql(addTimeMutation),
       variables: body,
@@ -96,14 +98,17 @@ Future<String> addTimeToKestral(body) async {
                 "";
         Utils.errorCode =
             result.exception!.graphqlErrors.first.extensions!["code"] ?? "";
+        Utils.printLog("ErrorCode " + Utils.errorCode);
         Utils.printLog(result.exception!.graphqlErrors.toString());
       } catch (e) {}
       return result.exception!.graphqlErrors.first.message;
     } else {
+      Utils.printLog("Time Synced Successfully");
       return "true";
     }
   } catch (e) {
-    print(e);
+    Utils.printLog("Error in sync time to server " + e.toString());
   }
+  Utils.printLog("Time Not synced to server");
   return "false";
 }

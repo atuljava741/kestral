@@ -37,21 +37,22 @@ Future<String?> customLoginMutation(String email, String password) async {
     document: gql(createPostMutation),
     variables: objPost,
   );
-
+  Utils.printLog("Login Api invoked");
   final QueryResult result = await client.mutate(options);
     if (result.hasException) {
-      Utils.logger.i("Login failed");
+      Utils.printLog(result.exception!.graphqlErrors.toString());
       try {
 
         Utils.accessToken =
             result.exception!.graphqlErrors.first.extensions!["cacheToken"] ??
                 "";
-        Utils.logger.i("cacheToken $Utils.accessToken");
+        Utils.printLog("cacheToken $Utils.accessToken");
       } catch (e) {}
-      Utils.printLog(result.exception!.graphqlErrors.first.message ?? "false");
+      Utils.printLog("Error Message recieved from Server : " + result.exception!.graphqlErrors.first.message ?? "false");
       return result.exception!.graphqlErrors.first.message ?? "false";
     } else {
       // lines added for clear every thing on coming back
+      Utils.printLog("Login Success");
       Utils.deviceId = Utils.getPreference().getString('deviceId')!;
       await Utils.getPreference().clear();
       await Utils.getPreference().setString('deviceId', Utils.deviceId);

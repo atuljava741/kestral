@@ -13,8 +13,8 @@ final String logoutMutation = """
 """;
 
 Future<String?> logoutUserMutation(data) async {
-  print("Sending data ${Utils.accessToken}");
-  Utils.logger.i("Log out using ${Utils.accessToken}");
+  Utils.printLog("Sending data ${data}");
+  Utils.printLog("Log out using ${Utils.accessToken}");
   if (data == null){
     data = [];
   }
@@ -28,8 +28,10 @@ Future<String?> logoutUserMutation(data) async {
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
+    Utils.printLog(result.exception!.graphqlErrors.first.message);
     return result.exception!.graphqlErrors.first.message;
   } else {
+    Utils.printLog("Logout Success");
     return "true";
   }
 }

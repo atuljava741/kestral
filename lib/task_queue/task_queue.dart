@@ -36,10 +36,10 @@ class TaskQueue {
         indicesToRemove.add(i);
       } else {
         errorMessage = b;
-        break;
       }
     }
     await removeElementsAtIndex(indicesToRemove);
+
     if (Utils.errorCode == "PROCESS_CACHE_AND_LOGOUT" && errorMessage.length > 5) {
       Utils.showLogoutDialog(context, "Alert", errorMessage, () => {},
           hideLaterButton: true);
@@ -48,6 +48,7 @@ class TaskQueue {
         Utils.showCustomDialog(context, "Alert", errorMessage);
       }
     }
+
   }
 
   static Future<void> removeElementsAtIndex(List<int> indicesToRemove) async {

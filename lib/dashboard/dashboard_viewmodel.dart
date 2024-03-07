@@ -246,7 +246,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
       String formattedTime = DateFormat('HH:mm:ss').format(roundedTime);
       // print(formattedTime);
 
-      String formattedDate = DateFormat('yyyy-MM-dd').format(roundedTime);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(lastdatetime);
       // print(formattedDate);
       await sendTimeToKeastral(
           lastUpdatedTime, formattedTime, formattedDate, roundedTime);

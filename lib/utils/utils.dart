@@ -491,7 +491,7 @@ class Utils {
                             onPressed: () async {
                               callback.call();
                               var queue =
-                                  Utils.getPreference().getString('queue');
+                                  Utils.getPreference().getString('queue') ?? [];
                               Utils.deviceId =
                                   Utils.getPreference().getString('deviceId')!;
                               await logoutUserMutation(queue);
@@ -544,7 +544,7 @@ class Utils {
                           onPressed: () async {
                             callback.call();
                             var queue =
-                                Utils.getPreference().getString('queue');
+                                Utils.getPreference().getString('queue') ?? [];
                             Utils.deviceId =
                                 Utils.getPreference().getString('deviceId')!;
                             await logoutUserMutation(queue);

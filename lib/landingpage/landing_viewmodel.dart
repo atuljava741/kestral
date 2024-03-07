@@ -85,7 +85,7 @@ class LandingPageViewModel extends ChangeNotifier {
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,
                 () async {
-              var queue = Utils.getPreference().getString('queue');
+              var queue = Utils.getPreference().getString('queue') ?? [];
               Utils.deviceId = Utils.getPreference().getString('deviceId')!;
               await logoutUserMutation(queue);
               await Utils.getPreference().clear();

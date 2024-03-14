@@ -18,6 +18,13 @@ class AppTextStyle {
      fontWeight: FontWeight.w400,
    );
 
+   static TextStyle textStylePoppins14w400Green = const TextStyle(
+     color: Color(0xFF37872A),
+     fontSize: 14,
+     fontFamily: 'Poppins',
+     fontWeight: FontWeight.w400,
+   );
+
    static TextStyle textStylePoppins15w400 = const TextStyle(
      color: Color(0xFF252525),
      fontSize: 15,
@@ -107,6 +114,13 @@ class AppTextStyle {
      fontFamily: 'Poppins',
      fontWeight: FontWeight.w600,
 
+   );
+
+   static TextStyle textStylePoppinsGreen72w600 = const TextStyle(
+     color: Color(0xFF37872A),
+     fontSize: 72,
+     fontFamily: 'Poppins',
+     fontWeight: FontWeight.w600,
    );
 
    static TextStyle textStylePoppins13w400 = const TextStyle(

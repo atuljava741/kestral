@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kestral/apicalls/get_projects.dart';
 import 'package:kestral/component/category_list_view.dart';
 import 'package:kestral/task_queue/task_queue.dart';
 import 'package:kestral/utils/appt_text_style.dart';
@@ -13,9 +12,10 @@ import '../component/task_list_view.dart';
 import '../component/toggle_button.dart';
 import '../datamodal/incomplete_task.dart';
 import 'dashboard_viewmodel.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 class KestralScreen extends StatelessWidget {
+  const KestralScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     apiTest();
@@ -145,12 +145,13 @@ class KestralScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          GestureDetector(
+                          Padding(padding: EdgeInsets.only(right:10.Sw),
+                          child: GestureDetector(
                               onTap: () {
                                 openBottomOptions(context, viewModel);
                               },
                               child: Utils.getIcon(
-                                  "assets/images/threepoints.png", 24, 24))
+                                  "assets/images/threepoints.png", 24, 24)),)
                           // Right-side icon
                         ],
                       ),
@@ -263,7 +264,7 @@ class KestralScreen extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 10.Sw, right: 10.Sw),
+      // margin: EdgeInsets.only(left: 10.Sw, right: 10.Sw),
       //padding: EdgeInsets.only(top: 30.Sh),
       decoration: BoxDecoration(
         gradient: viewModel.getLinearGradient(),
@@ -281,13 +282,17 @@ class KestralScreen extends StatelessWidget {
           Text(
             viewModel.currentDuration,
             textAlign: TextAlign.right,
-            style: AppTextStyle.textStylePoppins72w600,
+            style: viewModel.timerState ?
+            AppTextStyle.textStylePoppinsGreen72w600
+            :AppTextStyle.textStylePoppins72w600,
           ),
           SizedBox(height: 0.Sh),
           Text(
             viewModel.getcurrentText(),
             textAlign: TextAlign.center,
-            style: AppTextStyle.textStylePoppins14w400,
+            style:viewModel.timerState
+            ? AppTextStyle.textStylePoppins14w400Green
+            :AppTextStyle.textStylePoppins14w400,
           ),
           SizedBox(height: 40.Sh),
         ],
@@ -403,7 +408,7 @@ class KestralScreen extends StatelessWidget {
                             viewModel.getProjects().then((value) {
                               if (viewModel.bottomNavVisible) {
                                 viewModel.bottomNavVisible = false;
-                                Future.delayed(Duration(seconds: 2), () {
+                                Future.delayed(const Duration(seconds: 2), () {
                                   viewModel.refreshButtonClicked = false;
                                   Navigator.pop(context);
                                   Utils.showBottomSheet(context, Icons.done,
@@ -545,7 +550,7 @@ class KestralScreen extends StatelessWidget {
                                   padding:
                                       EdgeInsets.only(left: 5.Sw, right: 10.Sw),
                                   decoration: ShapeDecoration(
-                                    color: Color(0xFFF1F1F1),
+                                    color: const Color(0xFFF1F1F1),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(4)),
                                   ),
@@ -815,7 +820,7 @@ class KestralScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TButtons((index) {
                       print(index);
                       viewModel.newTaskPriority = index;
@@ -834,7 +839,7 @@ class KestralScreen extends StatelessWidget {
                               Utils.selectedCategoryId,
                               Utils.userInformation!.data.userAuthentication
                                   .employeeId,
-                              viewModel.textFieldController.text,
+                              viewModel.textFieldController.text.trim(),
                               viewModel.getDueDate(),
                               viewModel.newTaskPriority);
                           Navigator.pop(context);
@@ -895,7 +900,7 @@ class KestralScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10.Sh),
                   Container(
-                      margin: EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(20),
                       width: double.infinity,
                       height: 300
                           .Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
@@ -939,13 +944,9 @@ class KestralScreen extends StatelessWidget {
                       ),
                       child: ProjectsListView(Utils.projectList, viewModel,
                           (index) async {
-                        Utils.selectedProjectId =
-                            Utils.projectList.elementAt(index).projectId;
-                        Utils.selectProjectText =
-                            Utils.projectList.elementAt(index).projectName;
-                        await Utils.getPreference().setString(
-                            Utils.projectName, Utils.selectProjectText);
-                        print(Utils.selectProjectText);
+                        Utils.selectedProjectId = Utils.projectList.elementAt(index).projectId;
+                        Utils.selectProjectText = Utils.projectList.elementAt(index).projectName;
+                        await Utils.getPreference().setString(Utils.projectName, Utils.selectProjectText);
                         await Utils.saveCurrentProjectjsonBodyInPreference();
                         viewModel.handleStopTimer();
                         Utils.selectedSubTask = "";
@@ -968,12 +969,12 @@ class KestralScreen extends StatelessWidget {
                     },
                     child: Container(
                         margin:
-                            EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                            const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                         width: double.infinity,
                         height: 48.Sh,
                         decoration: ShapeDecoration(
                           color: Utils.selectedProjectId != 0
-                              ? Color(0xFF1589CA)
+                              ? const Color(0xFF1589CA)
                               : Colors.grey,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4)),
@@ -1031,7 +1032,7 @@ class KestralScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(top: 5 , left: 20, right :20, bottom: 20),
+                      margin: const EdgeInsets.only(top: 5 , left: 20, right :20, bottom: 20),
                       width: double.infinity,
                       height: 300
                           .Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
@@ -1095,12 +1096,12 @@ class KestralScreen extends StatelessWidget {
                     },
                     child: Container(
                         margin:
-                            EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                            const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                         width: double.infinity,
                         height: 48.Sh,
                         decoration: ShapeDecoration(
                           color: Utils.selectedSubTaskId != 0
-                              ? Color(0xFF1589CA)
+                              ? const Color(0xFF1589CA)
                               : Colors.grey,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4)),
@@ -1137,7 +1138,7 @@ class KestralScreen extends StatelessWidget {
                 ),
                 child: Container(
                   decoration: ShapeDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFFF8F5F0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -1176,94 +1177,110 @@ class KestralScreen extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Column(
-                      // Arrange rows vertically
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // Align rows to the left
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // Navigator.pop(context);
-                            Utils.showProgressBottomSheet(
-                                context, "Syncing Time to Server", false);
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.pop(context);
-                              Utils.showBottomSheet(
-                                  context,
-                                  Icons.done,
-                                  Colors.green,
-                                  "Time synchronization done successfully");
-                            });
-                            TaskQueue.sinkQueueToServer(context);
-                          },
-                          child: Container(
-                            color: Colors.transparent,
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              children: [
-                                Utils.getIcon(
-                                    "assets/images/watch.png", 24, 24),
-                                const SizedBox(width: 11),
-                                Text(
-                                  viewModel.getSyncTimeText(),
-                                  style: AppTextStyle.textStylePoppins22w400,
-                                ),
-                              ],
-                            ),
-                          ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2,
                         ),
-                        const SizedBox(height: 24),
-                        // Add spacing between rows
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                            Utils.showBottomSheet(context, Icons.done,
-                                Colors.green, "Cleared Task Queue");
-                            TaskQueue.clearQueue();
-                          },
-                          child: Container(
-                            color: Colors.transparent,
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              children: [
-                                // Add widgets for the second row here
-                                Utils.getIcon(
-                                    "assets/images/delete.png", 24, 24),
-                                const SizedBox(width: 11),
-                                Text(
-                                  viewModel.getClearCacheText(),
-                                  style: AppTextStyle.textStylePoppins22w400,
+                      ),
+                      child:Padding(
+                        padding: const EdgeInsets.only(left:20),
+                        child: Column(
+                          // Arrange rows vertically
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // Align rows to the left
+                          children: [
+                            const SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigator.pop(context);
+                                Utils.showProgressBottomSheet(
+                                    context, "Syncing Time to Server", false);
+                                Future.delayed(const Duration(seconds: 3), () {
+                                  Navigator.pop(context);
+                                  Utils.showBottomSheet(
+                                      context,
+                                      Icons.done,
+                                      Colors.green,
+                                      "Time synchronization done successfully");
+                                });
+                                TaskQueue.sinkQueueToServer(context);
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: Row(
+                                  children: [
+                                    Utils.getIcon(
+                                        "assets/images/watch.png", 24, 24),
+                                    const SizedBox(width: 11),
+                                    Text(
+                                      viewModel.getSyncTimeText(),
+                                      style: AppTextStyle.textStylePoppins22w400,
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        // Add spacing between rows
-                        GestureDetector(
-                          onTap: () {
-                            print("logout");
-                            Navigator.pop(context);
-                            viewModel.logout(context);
-                          },
-                          child: Container(
-                            color: Colors.transparent,
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              children: [
-                                // Add widgets for the second row here
-                                Utils.getIcon(
-                                    "assets/images/logout.png", 24, 24),
-                                const SizedBox(width: 11),
-                                Text(
-                                  viewModel.getLogOutText(),
-                                  style: AppTextStyle.textStylePoppins22w400,
+                            const SizedBox(height: 20),
+                            // Add spacing between rows
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Utils.showBottomSheet(context, Icons.done,
+                                    Colors.green, "Cache cleared successfully");
+                                TaskQueue.clearQueue();
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: Row(
+                                  children: [
+                                    // Add widgets for the second row here
+                                    Utils.getIcon(
+                                        "assets/images/delete.png", 24, 24),
+                                    const SizedBox(width: 11),
+                                    Text(
+                                      viewModel.getClearCacheText(),
+                                      style: AppTextStyle.textStylePoppins22w400,
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 20),
+                            // Add spacing between rows
+                            GestureDetector(
+                              onTap: () {
+                                print("logout");
+                                Navigator.pop(context);
+                                viewModel.logout(context);
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: Row(
+                                  children: [
+                                    // Add widgets for the second row here
+                                    Utils.getIcon(
+                                        "assets/images/logout.png", 24, 24),
+                                    const SizedBox(width: 11),
+                                    Text(
+                                      viewModel.getLogOutText(),
+                                      style: AppTextStyle.textStylePoppins22w400,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

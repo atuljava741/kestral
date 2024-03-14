@@ -6,8 +6,12 @@ import '../utils/utils.dart';
 import 'landing_viewmodel.dart';
 
 class LandingPage extends StatelessWidget {
+  const LandingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+    bool isKeyboardOpen = bottomInsets != 0;
     loadInitialData(context);
     Utils.deviceHeight = MediaQuery.of(context).size.height;
     Utils.deviceWidth = MediaQuery.of(context).size.width;
@@ -40,9 +44,10 @@ class LandingPage extends StatelessWidget {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                GestureDetector(onTap: (){
+                                GestureDetector(onTap: () {
                                   Utils.saveFile();
-                                }, child : Utils.getIcon("assets/images/logo.png", 72, 56)),
+                                },
+                                    child: Utils.getIcon("assets/images/logo.png", 72, 56)),
                                 const SizedBox(
                                   height: 34,
                                 ),
@@ -76,7 +81,8 @@ class LandingPage extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 240),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment
-                                  .center, // Center content horizontally within Row
+                                  .center,
+                              // Center content horizontally within Row
                               children: [
                                 Text(
                                   viewModel.getEmailAddressText(),
@@ -96,18 +102,25 @@ class LandingPage extends StatelessWidget {
                                   child: TextFormField(
                                     controller: viewModel.emailController,
                                     validator: viewModel.validateEmail,
-                                    style: const TextStyle(color: Color(0XFF000000)),
-                                    onChanged: (val){
-                                      viewModel.formKey.currentState!.validate();
+                                    style: const TextStyle(
+                                        color: Color(0XFF000000)),
+                                    onChanged: (val) {
+                                      viewModel.formKey.currentState!
+                                          .validate();
                                     },
                                     decoration: InputDecoration(
                                       isDense: true,
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10), // Adjust padding
+                                      contentPadding: const EdgeInsets
+                                          .symmetric(
+                                          vertical: 12, horizontal: 10),
+                                      // Adjust padding
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.blue), // Set the focused border color
+                                        borderSide: const BorderSide(
+                                            color: Colors.blue),
+                                        // Set the focused border color
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       hintText: "",
@@ -143,17 +156,21 @@ class LandingPage extends StatelessWidget {
                                   },
                                   decoration: InputDecoration(
                                     isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 10),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(color: Colors.blue), // Set the focused border color
+                                      borderSide: const BorderSide(
+                                          color: Colors.blue),
+                                      // Set the focused border color
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     hintText: '',
                                     suffixIcon: IconButton(
-                                      icon: Icon(viewModel.obscureText ? Icons.visibility_off : Icons.visibility),
+                                      icon: Icon(viewModel.obscureText ? Icons
+                                          .visibility : Icons.visibility_off),
                                       onPressed: () {
                                         viewModel.toggleObscureText();
                                       },
@@ -163,11 +180,24 @@ class LandingPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          Row(
+                            children: <Widget>[
+                              const SizedBox(width: 5),
+                              Checkbox(
+                                value: viewModel.rememberMe,
+                                  onChanged: (bool? val) {
+                                    if (val != null) {
+                                       viewModel.setRememberMe(val);
+                                    }
+                                  }
+                              ),
+                              Text('Remember Me',
+                                style: AppTextStyle.textStylePoppins12w400,
+                              ),
+                            ],
                           ),
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               viewModel.handleButtonClick(context);
                             },
                             child: Container(
@@ -192,21 +222,23 @@ class LandingPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 32,),
-
                           const SizedBox(
                             height: 30,
                           ),
                         ],),
                     ),),
-                   //getSocialLoginButtons(viewModel),
-                    Text("KestrelPro ${viewModel.version}",
-                      textAlign: TextAlign.end,
-                      style: const TextStyle(
-                        color: Color(0xFF252525),
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),),
+                    //getSocialLoginButtons(viewModel),
+                    Visibility(
+                      visible: isKeyboardOpen ? false :true,
+                      child: Text("KestrelPro ${viewModel.version}",
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          color: Color(0xFF252525),
+                          fontSize: 12,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),),
+                    ),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -223,43 +255,43 @@ class LandingPage extends StatelessWidget {
   }
 
   getSocialLoginButtons(LandingPageViewModel viewModel) {
-    return  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          child: Container(
-                              width: 64.Sh,
-                              height: 64.Sh,
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFFF6F3EE),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              child: Utils.getIcon("assets/images/image 6.png", 35.Sh, 35.Sh)
-                          ),
-                          onTap: (){
-                            viewModel.onBtnClick_Microsoft();
-                          },
-                        ),
-                        SizedBox(
-                          width: 16.Sw,
-                        ),
-                        InkWell(
-                          onTap: (){
-                            viewModel.onBtnClick_Google();
-                          },
-                          child: Container(
-                            width: 64.Sh,
-                            height: 64.Sh,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFF6F3EE),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                            ),
-                            child: Utils.getIcon("assets/images/image 7.png", 35.Sh, 35.Sh),
-                          ),
-                        ),
-                      ],
-                    );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          child: Container(
+              width: 64.Sh,
+              height: 64.Sh,
+              decoration: ShapeDecoration(
+                color: const Color(0xFFF6F3EE),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+              child: Utils.getIcon("assets/images/image 6.png", 35.Sh, 35.Sh)
+          ),
+          onTap: () {
+            viewModel.onBtnClick_Microsoft();
+          },
+        ),
+        SizedBox(
+          width: 16.Sw,
+        ),
+        InkWell(
+          onTap: () {
+            viewModel.onBtnClick_Google();
+          },
+          child: Container(
+            width: 64.Sh,
+            height: 64.Sh,
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF6F3EE),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Utils.getIcon("assets/images/image 7.png", 35.Sh, 35.Sh),
+          ),
+        ),
+      ],
+    );
   }
 }

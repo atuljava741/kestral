@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,12 +27,19 @@ class LandingPageViewModel extends ChangeNotifier {
   TextEditingController passwordController = TextEditingController();
   String? responseMessage = "Please provide correct Email Address and Password";
 
+  bool rememberMe = false;
+
+  void setRememberMe(bool value){
+    rememberMe= value;
+    notifyListeners();
+  }
+
   String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       responseMessage = 'Please enter a valid email address';
       return 'Please enter your email address';
     } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
-        .hasMatch(value)) {
+        .hasMatch(value.trim())) {
       responseMessage = 'Please enter a valid email address';
       return 'Please enter a valid email address';
     }
@@ -42,7 +47,7 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   String? validatePassword(String? value) {
-    if (value == null || value.isEmpty || value.length < 8) {
+    if (value == null || value.trim().isEmpty || value.trim().length < 8) {
       responseMessage = 'Please enter a valid password';
       return "Please enter a valid password";
     }
@@ -65,7 +70,12 @@ class LandingPageViewModel extends ChangeNotifier {
     bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;
 
     if (isEmailValid && isPasswordValid) {
-      responseMessage = await customLoginMutation(email, password);
+      responseMessage = await customLoginMutation(email.trim().toLowerCase(), password.trim());
+      if(responseMessage=="true" && rememberMe){
+        await Utils.getPreference().setBool("rememberMe", true);
+      }else{
+        await Utils.getPreference().setBool("rememberMe", false);
+      }
     } else {
       String errorMessage = getErrorMessage();
       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
@@ -97,9 +107,9 @@ class LandingPageViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> handleAutoLogin(BuildContext context, String email,
+/*  Future<void> handleAutoLogin(BuildContext context, String email,
       String password) async {
-    responseMessage = await customLoginMutation(email, password);
+    responseMessage = await customLoginMutation(email.trim().toLowerCase(), password.trim());
 
     if (responseMessage == "true") {
       Navigator.pushAndRemoveUntil(
@@ -112,7 +122,7 @@ class LandingPageViewModel extends ChangeNotifier {
       print(Utils.getPreference().get("access_token"));
       Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
     }
-  }
+  }*/
 
   String morningText = "Hey! Good Morning";
   var emailAddressText = "Email Address";
@@ -149,11 +159,9 @@ class LandingPageViewModel extends ChangeNotifier {
     return orText ?? "";
   }
 
-  init() {
-    print("INIT landing page");
+  void init() {
     SharedPreferences.getInstance().then((value) {
       Utils.pref = value;
-      print("Trying Auto login");
       autoLogin(context);
       notifyListeners();
     });
@@ -191,7 +199,7 @@ class LandingPageViewModel extends ChangeNotifier {
     Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
     Utils.deviceId = Utils.getPreference().getString("deviceId") ?? "";
     if (email != "" && password != "") {
-      String? responseMes = await customLoginMutation(email, password);
+      String? responseMes = await customLoginMutation(email.trim().toLowerCase(), password.trim());
       if (responseMes == "true") {
         Navigator.pushAndRemoveUntil(
           context,

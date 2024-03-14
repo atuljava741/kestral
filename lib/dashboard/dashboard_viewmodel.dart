@@ -1,20 +1,15 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kestral/datamodal/task_category.dart';
-import 'package:kestral/landingpage/landing.dart';
 import 'package:kestral/task_queue/task_queue.dart';
 import 'package:logger_plus/logger_plus.dart';
 
-import '../apicalls/add_time_to_kestral.dart';
 import '../apicalls/get_projects.dart';
 import '../apicalls/get_task.dart';
 import '../apicalls/get_task_categories.dart';
-import '../apicalls/logout_mutation.dart';
 import '../datamodal/incomplete_task.dart';
-import '../datamodal/project_detail.dart';
 import '../timer/timer_task.dart';
 import '../utils/utils.dart';
 
@@ -420,6 +415,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   ValueNotifier<bool> get isForeground => _isForeground;
 
   void dispose() {
+    super.dispose();
     WidgetsBinding.instance?.removeObserver(this);
   }
 

@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kestral/dashboard/dashboard_viewmodel.dart';
-import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/utils/size_ext.dart';
 
 import '../datamodal/incomplete_task.dart';
@@ -14,7 +12,7 @@ class SubTaskListView extends StatefulWidget {
   DashboardViewModel viewModel;
   Function callback;
 
-  SubTaskListView(this.subTaskList, this.viewModel,this.callback);
+  SubTaskListView(this.subTaskList, this.viewModel,this.callback, {super.key});
 
   @override
   CategoriesListViewState createState() => CategoriesListViewState();
@@ -68,7 +66,7 @@ class CategoriesListViewState extends State<SubTaskListView> {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            padding: EdgeInsets.only( left : 16),
+                            padding: EdgeInsets.only( left : 16.Sw),
                             child: Text(
                               widget.subTaskList.elementAt(index).taskName,
                               maxLines: 2,
@@ -101,7 +99,7 @@ class CategoriesListViewState extends State<SubTaskListView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(width : 20.Sw),
+                      SizedBox(width : 16.Sw),
                       Text(
                         "Due on : "+ (widget.subTaskList.elementAt(index).dueDate ?? "-"),
                         style: const TextStyle(

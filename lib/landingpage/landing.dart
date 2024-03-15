@@ -184,6 +184,7 @@ class LandingPage extends StatelessWidget {
                             children: <Widget>[
                               const SizedBox(width: 5),
                               Checkbox(
+                                activeColor: Colors.blue,
                                 value: viewModel.rememberMe,
                                   onChanged: (bool? val) {
                                     if (val != null) {

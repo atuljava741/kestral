@@ -57,7 +57,6 @@ Future<String?> customLoginMutation(String email, String password) async {
       await Utils.getPreference().clear();
       await Utils.getPreference().setString('deviceId', Utils.deviceId);
 
-
       UserAuthResponse userData = UserAuthResponse.fromJson(result.data!);
       Utils.userInformation = userData;
       Utils.accessToken = userData.data.userAuthentication.token;
@@ -65,6 +64,7 @@ Future<String?> customLoginMutation(String email, String password) async {
       await Utils.getPreference().setString("access_token", Utils.accessToken);
       await Utils.getPreference().setString("email", email);
       await Utils.getPreference().setString("password", password);
+      await Utils.getPreference().setBool("isLoggedIn", true);
       return "true";
     }
 }

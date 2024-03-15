@@ -17,10 +17,15 @@ class MyApp extends StatelessWidget {
       navigatorKey: Utils.navigatorKey,
         debugShowCheckedModeBanner : false,
       theme: ThemeData(
-       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue[300] ?? Colors.blue),
+        textSelectionTheme:  TextSelectionThemeData(
+          cursorColor: Colors.blue[300], //thereby
+          selectionColor: Colors.blue[300],
+          selectionHandleColor: Colors.blue[300]
+        ),
         useMaterial3: true,
       ),
-      home:  LandingPage()
+      home:  const LandingPage()
     );
   }
 }

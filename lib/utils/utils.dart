@@ -99,6 +99,9 @@ class Utils {
   static var selectProjectText = "Select Project";
   static String deviceId = "";
   static String deviceName = "";
+  static String email = "";
+  static String password = "";
+  static bool rememberMe = false;
 
   static List<Projects> projectList = [];
   static List<GetInCompleteTasks> taskList = [];
@@ -227,7 +230,7 @@ class Utils {
               Flexible(
                 child: Text(
                   message,
-                  style: AppTextStyle.textStylePoppins12w400,
+                  style: AppTextStyle.textStylePoppins12w600,
                 ),
               ),
               SizedBox(height: 60.Sh),
@@ -257,7 +260,7 @@ class Utils {
                 Flexible(
                   child: Text(
                     message,
-                    style: AppTextStyle.textStylePoppins12w400,
+                    style: AppTextStyle.textStylePoppins12w600,
                   ),
                 ),
                 SizedBox(height: 60.Sh),
@@ -490,14 +493,17 @@ class Utils {
                           child: ElevatedButton(
                             onPressed: () async {
                               callback.call();
-                              var queue =
-                                  Utils.getPreference().getString('queue') ?? [];
-                              Utils.deviceId =
-                                  Utils.getPreference().getString('deviceId')!;
+                              var queue = Utils.getPreference().getString('queue') ?? [];
+                              Utils.deviceId = Utils.getPreference().getString('deviceId')!;
+
+                              /// for set emailId and password in textField
+                              Utils.email =  Utils.getPreference().getString('email') ?? "";
+                              Utils.password =  Utils.getPreference().getString('password') ?? "";
+                              Utils.rememberMe = Utils.getPreference().getBool('rememberMe') ?? false;
+
                               await logoutUserMutation(queue);
                               await Utils.getPreference().clear();
-                              await Utils.getPreference()
-                                  .setString('deviceId', Utils.deviceId);
+                              await Utils.getPreference().setString('deviceId', Utils.deviceId);
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

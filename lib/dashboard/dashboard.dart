@@ -55,7 +55,7 @@ class KestralScreen extends StatelessWidget {
                           onTap: () {
                             onStartButtonClicked(viewModel);
                           },
-                          child: Container(
+                          child: SizedBox(
                             width: 120,
                             height: 120,
                             child: Stack(
@@ -68,7 +68,7 @@ class KestralScreen extends StatelessWidget {
                                 Center(
                                   child: Opacity(
                                     opacity: 1,
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 100,
                                       height: 100,
                                       child: Stack(
@@ -652,31 +652,29 @@ class KestralScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // Added to space items
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 24, top: 14, bottom: 14),
-                              child: Utils.getIcon(
-                                  "assets/images/rong.png.png", 30, 30),
-                            ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // Added to space items
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 24, top: 14, bottom: 14),
+                            child: Utils.getIcon(
+                                "assets/images/rong.png.png", 30, 30),
                           ),
-                          Text(
-                            viewModel.getCreateTask(),
-                            style: AppTextStyle.textStylePoppins16w600,
-                          ),
-                          const SizedBox(width: 54),
-                          // Added space between the image and text
-                        ],
-                      ),
+                        ),
+                        Text(
+                          viewModel.getCreateTask(),
+                          style: AppTextStyle.textStylePoppins16w600,
+                        ),
+                        const SizedBox(width: 54),
+                        // Added space between the image and text
+                      ],
                     ),
                     Container(
                       width: double.infinity,
@@ -1255,7 +1253,6 @@ class KestralScreen extends StatelessWidget {
                             // Add spacing between rows
                             GestureDetector(
                               onTap: () {
-                                print("logout");
                                 Navigator.pop(context);
                                 viewModel.logout(context);
                               },

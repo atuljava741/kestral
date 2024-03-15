@@ -162,10 +162,31 @@ class LandingPageViewModel extends ChangeNotifier {
   void init() {
     SharedPreferences.getInstance().then((value) {
       Utils.pref = value;
-      autoLogin(context);
+      setEmailAndPassword();
+      bool isLoggedIn=Utils.getPreference().getBool("isLoggedIn") ?? false;
+      if(isLoggedIn){
+        autoLogin(context);
+      }
       notifyListeners();
     });
     getVersionInfo();
+  }
+
+  Future<void> setEmailAndPassword() async {
+    bool isRememberMe=  Utils.getPreference().getBool("rememberMe") ?? false;
+    if(Utils.rememberMe){
+      emailController.text=Utils.email;
+      passwordController.text=Utils.password;
+      setRememberMe(true);
+      await Utils.getPreference().setString("email", Utils.email);
+      await Utils.getPreference().setString("password", Utils.password);
+      await Utils.getPreference().setBool("rememberMe", true);
+    }else if(isRememberMe){
+      emailController.text=Utils.getPreference().getString("email") ?? "";
+      passwordController.text=Utils.getPreference().getString("password") ?? "";
+      setRememberMe(true);
+    }
+    notifyListeners();
   }
 
   void onBackPress() {}
@@ -248,14 +269,14 @@ class LandingPageViewModel extends ChangeNotifier {
     );
     try {
       await _googleSignIn.signIn().then((value) {
-        print(" hsdg response google ${value}");
+        print(" hsdg response google $value");
         if (value != null) {
           print(value.email);
         }
       });
     } catch (error) {
       print(error);
-      print(" error response google ${error}");
+      print(" error response google $error");
     }
   }
 

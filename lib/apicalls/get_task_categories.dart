@@ -24,6 +24,7 @@ Future<TaskCategory> getTaskCategoryList() async {
   final QueryResult result = await client.query(options);
 
   if (result.hasException) {
+    Utils.printLog(result.exception!.graphqlErrors.toString());
     throw Exception(result.exception.toString());
   } else {
     //print(result.data);

@@ -100,7 +100,9 @@ Future<String> addTimeToKestral(body) async {
             result.exception!.graphqlErrors.first.extensions!["code"] ?? "";
         Utils.printLog("ErrorCode " + Utils.errorCode);
         Utils.printLog(result.exception!.graphqlErrors.toString());
-      } catch (e) {}
+      } catch (e) {
+        Utils.printLog(e.toString());
+      }
       return result.exception!.graphqlErrors.first.message;
     } else {
       Utils.printLog("Time Synced Successfully");

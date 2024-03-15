@@ -3,6 +3,7 @@ import 'package:kestral/apicalls/graphql_client.dart';
 import 'package:kestral/datamodal/project_detail.dart';
 
 import '../datamodal/add_task.dart';
+import '../utils/utils.dart';
 
 final String addTaskMutation = """
   mutation AddTasks(
@@ -45,6 +46,7 @@ addTasks(
   final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
+    Utils.printLog(result.exception!.graphqlErrors.toString());
     throw Exception(result.exception.toString());
   } else {
     print(result.data);

@@ -3,6 +3,8 @@ import 'package:kestral/apicalls/graphql_client.dart';
 import 'package:kestral/datamodal/incomplete_task.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
 
+import '../utils/utils.dart';
+
 
 final String getMyTaskQuery = """
   query Query(\$projectId: Int!, \$employeeId: Int!) {
@@ -25,6 +27,7 @@ Future<InCompleteTaskList> getMyTaskList(int projectId, int employeeId) async {
   final QueryResult result = await client.query(options);
 
   if (result.hasException) {
+    Utils.printLog(result.exception!.graphqlErrors.toString());
     throw Exception(result.exception.toString());
   } else {
     print(result.data);

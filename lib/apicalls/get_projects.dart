@@ -24,6 +24,7 @@ Future<bool> getProjectList(int employeeId) async {
   final QueryResult result = await client.query(options);
 
   if (result.hasException) {
+    Utils.printLog(result.exception!.graphqlErrors.toString());
     print("In Error getProjectList : "+result.exception!.graphqlErrors.first.message);
     return false;
   } else {

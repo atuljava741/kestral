@@ -5,14 +5,14 @@ class AddTaskResponse {
 
   AddTaskResponse.fromJson(Map<String, dynamic> json) {
     addTasks = json['addTasks'] != null
-        ? new AddTasks.fromJson(json['addTasks'])
+        ? AddTasks.fromJson(json['addTasks'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.addTasks != null) {
-      data['addTasks'] = this.addTasks!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (addTasks != null) {
+      data['addTasks'] = addTasks!.toJson();
     }
     return data;
   }
@@ -59,18 +59,18 @@ class AddTasks {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['createdAt'] = this.createdAt;
-    data['employeeId'] = this.employeeId;
-    data['organizationId'] = this.organizationId;
-    data['projectId'] = this.projectId;
-    data['taskCategoryId'] = this.taskCategoryId;
-    data['taskName'] = this.taskName;
-    data['isCompleted'] = this.isCompleted;
-    data['dueDate'] = this.dueDate;
-    data['taskPriority'] = this.taskPriority;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['createdAt'] = createdAt;
+    data['employeeId'] = employeeId;
+    data['organizationId'] = organizationId;
+    data['projectId'] = projectId;
+    data['taskCategoryId'] = taskCategoryId;
+    data['taskName'] = taskName;
+    data['isCompleted'] = isCompleted;
+    data['dueDate'] = dueDate;
+    data['taskPriority'] = taskPriority;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

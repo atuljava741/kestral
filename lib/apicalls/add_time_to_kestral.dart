@@ -2,7 +2,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kestral/apicalls/graphql_client.dart';
 
 import '../utils/utils.dart';
-import 'logout_mutation.dart';
 
 final String addTimeMutation = """
   mutation Mutation( 

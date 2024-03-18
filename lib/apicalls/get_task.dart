@@ -1,7 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kestral/apicalls/graphql_client.dart';
 import 'package:kestral/datamodal/incomplete_task.dart';
-import 'package:kestral/datamodal/user_aunthentication.dart';
 
 import '../utils/utils.dart';
 

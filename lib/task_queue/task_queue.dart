@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:kestral/apicalls/add_time_to_kestral.dart';
 
@@ -69,7 +70,7 @@ class TaskQueue {
 
   static Future<void> clearQueue() async {
     await Utils.getPreference().remove('queue');
-    print("Queue Cleared ${queue}");
+    print("Queue Cleared $queue");
   }
 
   static Future<void> _setQueue(List<Map<String, dynamic>> newQueue) async {

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kestral/dashboard/dashboard_viewmodel.dart';
 import 'package:kestral/datamodal/task_category.dart';
@@ -11,7 +10,7 @@ class TaskCategoriesListView extends StatefulWidget {
   List<TaskCategories> categoryList;
   DashboardViewModel viewModel;
 
-  TaskCategoriesListView(this.categoryList, this.viewModel);
+  TaskCategoriesListView(this.categoryList, this.viewModel, {super.key});
 
   @override
   _MyListViewState createState() => _MyListViewState();

@@ -5,6 +5,7 @@ import 'package:kestral/utils/appt_text_style.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:kestral/utils/utils.dart';
 import 'package:stacked/stacked.dart';
+
 import '../apicalls/add_task.dart';
 import '../apicalls/get_task.dart';
 import '../component/project_list_view.dart';
@@ -13,8 +14,8 @@ import '../component/toggle_button.dart';
 import '../datamodal/incomplete_task.dart';
 import 'dashboard_viewmodel.dart';
 
-class KestralScreen extends StatelessWidget {
-  const KestralScreen({super.key});
+class KestrelScreen extends StatelessWidget {
+  const KestrelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +231,7 @@ class KestralScreen extends StatelessWidget {
     return list;
   }*/
 
-  Widget CreateTask(DashboardViewModel viewModel, String text,
+/*  Widget CreateTask(DashboardViewModel viewModel, String text,
       {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: () {
@@ -258,9 +259,9 @@ class KestralScreen extends StatelessWidget {
         ),
       ),
     );
-  }
+  }*/
 
-  getTopLogoAndText(BuildContext context, DashboardViewModel viewModel) {
+  Widget getTopLogoAndText(BuildContext context, DashboardViewModel viewModel) {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
@@ -300,7 +301,7 @@ class KestralScreen extends StatelessWidget {
     );
   }
 
-  getProjectAndTaskUI(BuildContext context, DashboardViewModel viewModel) {
+  Widget getProjectAndTaskUI(BuildContext context, DashboardViewModel viewModel) {
     return Positioned(
       top: MediaQuery.of(context).size.height / 2,
       bottom: 0,
@@ -328,7 +329,7 @@ class KestralScreen extends StatelessWidget {
                       decoration: ShapeDecoration(
                         color: const Color(0xFFFBFAFA),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
+                            borderRadius: BorderRadius.circular(4)),
                         shadows: const [
                           BoxShadow(
                             color: Color(0x1E343330),
@@ -342,16 +343,16 @@ class KestralScreen extends StatelessWidget {
                     GestureDetector(
                       // Wrap the Container with a GestureDetector
                       onTap: () {
-                        if (Utils.projectList != null &&
-                            Utils.projectList.length > 0) {
+                        if (Utils.projectList != null && Utils.projectList.length > 0) {
                           showProjectBottomSheet(context, viewModel);
                         } else {
                           Utils.showBottomSheet(context, Icons.error,
-                              Colors.red, "Your Project List is Empty");
+                              Colors.red, "Your project list is empty");
                         }
                       },
                       child: Container(
                         width: 256.Sw,
+                        height: 68.Sh,
                         decoration: AppTextStyle.getShapeDecoration4(),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -418,24 +419,27 @@ class KestralScreen extends StatelessWidget {
                             });
                             viewModel.bottomNavVisible = true;
                             Utils.showProgressBottomSheet(
-                                context, "Refreshing Project List", false);
+                                context, "Refreshing project list", false);
                           }
                         },
-                        child: Container(
-                          width: 48.Sw,
-                          height: 48.Sh,
-                          decoration: ShapeDecoration(
+                        child:Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
                             color: const Color(0xFF1589CA),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Utils.getIcon(
-                                "assets/images/refresh_image.png.png", 72, 64),
+                          child: Center(
+                            child: SizedBox(
+                              width: 24.Sw,
+                              height: 24.Sh,
+                              child: Image.asset(
+                                "assets/images/refresh_image.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
-                        ),
+                        )
                       ),
                     ),
                   ],
@@ -482,15 +486,16 @@ class KestralScreen extends StatelessWidget {
                             showTaskBottomSheet(context, viewModel);
                           } else {
                             Utils.showBottomSheet(context, Icons.error,
-                                Colors.red, "Please Select A Project First");
+                                Colors.red, "Please select a project first");
                           }
                         },
                         child: Container(
-                          width: Utils.showAddButton ? 256.Sw : 320.Sw,
+                          width: Utils.showAddButton ? 252.Sw : 320.Sw,
                           //height: 64.Sh,
                           decoration: AppTextStyle.getBoxDecoration(),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
                                 padding:
@@ -500,7 +505,7 @@ class KestralScreen extends StatelessWidget {
                                     Row(
                                       children: [
                                         Text(
-                                          "Task",
+                                          "TASK",
                                           style: AppTextStyle
                                               .textStylePoppins12w400,
                                         ),
@@ -527,9 +532,9 @@ class KestralScreen extends StatelessWidget {
                                         Padding(
                                           padding:
                                               EdgeInsets.only(right: 10.Sw),
-                                          child: const Icon(
+                                          child:  Icon(
                                               Icons.arrow_drop_down,
-                                              size: 35,
+                                              size: 32.Sh,
                                               color: Colors.black),
                                         ),
                                       ],
@@ -583,7 +588,7 @@ class KestralScreen extends StatelessWidget {
                       Utils.showAddButton
                           ? Padding(
                               padding:
-                                  EdgeInsets.only(left: 265.Sw, top: 10.Sh),
+                                  EdgeInsets.only(left: 265.Sw, top: 10.Sh, right: 5.Sh),
                               child: GestureDetector(
                                 onTap: () {
                                   showModalBottomSheet(
@@ -631,7 +636,7 @@ class KestralScreen extends StatelessWidget {
     //await getTaskCategoryList();
   }
 
-  getCategoryList(BuildContext context, DashboardViewModel viewModel) {
+  Widget getCategoryList(BuildContext context, DashboardViewModel viewModel) {
     return SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.only(
@@ -841,6 +846,7 @@ class KestralScreen extends StatelessWidget {
                               viewModel.getDueDate(),
                               viewModel.newTaskPriority);
                           Navigator.pop(context);
+                          Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
                         },
                         child: Container(
                           width: double.infinity,
@@ -900,8 +906,7 @@ class KestralScreen extends StatelessWidget {
                   Container(
                       margin: const EdgeInsets.all(20),
                       width: double.infinity,
-                      height: 300
-                          .Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
+                      height: Utils.projectList.length>3 ? 300.Sh: Utils.projectList.length*55.Sh,
                       decoration: ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -940,17 +945,20 @@ class KestralScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      child: ProjectsListView(Utils.projectList, viewModel,
-                          (index) async {
-                        Utils.selectedProjectId = Utils.projectList.elementAt(index).projectId;
-                        Utils.selectProjectText = Utils.projectList.elementAt(index).projectName;
-                        await Utils.getPreference().setString(Utils.projectName, Utils.selectProjectText);
-                        await Utils.saveCurrentProjectjsonBodyInPreference();
-                        viewModel.handleStopTimer();
-                        Utils.selectedSubTask = "";
-                        Utils.selectedSubTaskId = 0;
-                        setState(() {});
-                      })),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.Sh),
+                        child: ProjectsListView(Utils.projectList, viewModel,
+                            (index) async {
+                          Utils.selectedProjectId = Utils.projectList.elementAt(index).projectId;
+                          Utils.selectProjectText = Utils.projectList.elementAt(index).projectName;
+                          await Utils.getPreference().setString(Utils.projectName, Utils.selectProjectText);
+                          await Utils.saveCurrentProjectjsonBodyInPreference();
+                          viewModel.handleStopTimer();
+                          Utils.selectedSubTask = "";
+                          Utils.selectedSubTaskId = 0;
+                          setState(() {});
+                        }),
+                      )),
                   GestureDetector(
                     onTap: () async {
                       // if (Utils.selectedProjectId == 0) {
@@ -1020,20 +1028,10 @@ class KestralScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10.Sh),
                   Container(
-                    margin: EdgeInsets.only(left: 20.Sw),
-                    width: double.infinity,
-                    child: Text(
-                      "Tasks",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyle.textStylePoppins14w600,
-                    ),
-                  ),
-                  Container(
                       margin: const EdgeInsets.only(top: 5 , left: 20, right :20, bottom: 20),
                       width: double.infinity,
-                      height: 300
-                          .Sh, //MediaQuery.of(context).size.height/2 - 80.Sh,
+                      height: Utils.taskList.length>2 ? 320.Sh: Utils.taskList.length*120.Sh,
+                      //MediaQuery.of(context).size.height/2 - 80.Sh,
                       decoration: ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -1196,14 +1194,14 @@ class KestralScreen extends StatelessWidget {
                               onTap: () {
                                 // Navigator.pop(context);
                                 Utils.showProgressBottomSheet(
-                                    context, "Syncing Time to Server", false);
+                                    context, "Syncing time to server", false);
                                 Future.delayed(const Duration(seconds: 3), () {
                                   Navigator.pop(context);
                                   Utils.showBottomSheet(
                                       context,
                                       Icons.done,
                                       Colors.green,
-                                      "Time synchronization done successfully");
+                                      "Time synchronization completed successfully");
                                 });
                                 TaskQueue.sinkQueueToServer(context);
                               },

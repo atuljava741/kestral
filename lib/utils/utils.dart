@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_keychain/flutter_keychain.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -11,11 +13,9 @@ import 'package:kestral/datamodal/user_aunthentication.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:logger_plus/logger_plus.dart';
 import 'package:path_provider/path_provider.dart';
-
 // import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_storage/saf.dart';
-
 // import 'package:shared_storage/shared_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,7 +24,6 @@ import '../datamodal/incomplete_task.dart';
 import '../datamodal/project_detail.dart';
 import '../landingpage/landing.dart';
 import 'appt_text_style.dart';
-import 'package:flutter/services.dart';
 
 class Utils {
   static var navigatorKey = GlobalKey<NavigatorState>();
@@ -39,7 +38,7 @@ class Utils {
 
   static TaskCategory? taskCategory;
 
-  static var highlightColor = Color(0XFFDDF3FF);
+  static var highlightColor = const Color(0XFFDDF3FF);
 
   static SharedPreferences? pref;
 
@@ -202,7 +201,7 @@ class Utils {
   static Future<void> getDeviceId() async {
     deviceId = getPreference().getString("deviceId") ?? "";
     if (deviceId == "") {
-      var uuid = Uuid();
+      var uuid = const Uuid();
       String id = uuid.v4();
       deviceId = id;
       await getPreference().setString("deviceId", deviceId);
@@ -217,7 +216,7 @@ class Utils {
       builder: (BuildContext context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -249,11 +248,11 @@ class Utils {
         builder: (BuildContext context) {
           return Container(
             width: double.infinity,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   color: Colors.black,
                 ),
                 SizedBox(width: 10.Sh),
@@ -329,10 +328,10 @@ class Utils {
       ),
 
       ///margin: EdgeInsets.only(bottom: 3, left: 5),
-      padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       child: Text(
         priority,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 12,
           fontFamily: 'Poppins',
@@ -344,12 +343,12 @@ class Utils {
 
   static getColorOfPriority(String priority) {
     if (priority.toLowerCase() == "high") {
-      return Color(0xFFF72828);
+      return const Color(0xFFF72828);
     }
     if (priority.toLowerCase() == "medium") {
-      return Color(0xffF7A428);
+      return const Color(0xffF7A428);
     }
-    return Color(0xFF27CE38);
+    return const Color(0xFF27CE38);
   }
 
   static void showCustomDialog(
@@ -393,7 +392,7 @@ class Utils {
                       Navigator.of(context).pop(); // Close the dialog
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xff1589CA),
+                      primary: const Color(0xff1589CA),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             4.0), // Set border radius here
@@ -462,14 +461,14 @@ class Utils {
                               Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFD5D5D5),
+                              backgroundColor: const Color(0xFFD5D5D5),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                     4.0), // Set border radius here
                               ),
                             ),
                             child: const Text(
-                              'LATER',
+                              'Later',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -507,19 +506,19 @@ class Utils {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LandingPage()),
+                                    builder: (context) => const LandingPage()),
                                 (route) => false,
                               ); // Close the dialog
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFecc7c7),
+                              backgroundColor: const Color(0xFFecc7c7),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                     4.0), // Set border radius here
                               ),
                             ),
                             child: const Text(
-                              'LOGOUT',
+                              'Log out',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -560,12 +559,12 @@ class Utils {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LandingPage()),
+                                  builder: (context) => const LandingPage()),
                               (route) => false,
                             ); // Close the dialog
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFecc7c7),
+                            backgroundColor: const Color(0xFFecc7c7),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   4.0), // Set border radius here
@@ -669,7 +668,7 @@ class Utils {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/my_text_file.txt');
     Map<String, dynamic>? result =
-        await MethodChannel('com.ivehement.plugins/saf/documentfile')
+        await const MethodChannel('com.ivehement.plugins/saf/documentfile')
             .invokeMapMethod<String, dynamic>('createFile', <String, dynamic>{
       'mimeType': 'text/plain',
       'content': file.readAsBytesSync(),

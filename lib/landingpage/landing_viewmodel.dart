@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'package:package_info_plus/package_info_plus.dart';
+
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../apicalls/login_mutation.dart';
 import '../apicalls/logout_mutation.dart';
 import '../dashboard/dashboard.dart';
@@ -85,12 +87,12 @@ class LandingPageViewModel extends ChangeNotifier {
     if (responseMessage == "true") {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => KestralScreen()),
+        MaterialPageRoute(builder: (context) => const KestrelScreen()),
             (route) => false,
       );
     } else {
       responseMessage = responseMessage ??
-          "KestralPro is facing some issue. Please try again.";
+          "KestrelPro is facing some issue. Please try again.";
       print(Utils.getPreference().get("access_token"));
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,
@@ -114,7 +116,7 @@ class LandingPageViewModel extends ChangeNotifier {
     if (responseMessage == "true") {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => KestralScreen()),
+        MaterialPageRoute(builder: (context) => KestrelScreen()),
             (route) => false,
       );
     } else {
@@ -224,7 +226,7 @@ class LandingPageViewModel extends ChangeNotifier {
       if (responseMes == "true") {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => KestralScreen()),
+          MaterialPageRoute(builder: (context) => const KestrelScreen()),
               (route) => false,
         );
       }
@@ -232,7 +234,6 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   onBtnClick_Microsoft() async {
-    print("call");
     final Config config = Config(
       tenant: "f47a48fd-3a59-4131-b9c0-cfdad78da389",
       //"Your TenantId",
@@ -243,7 +244,7 @@ class LandingPageViewModel extends ChangeNotifier {
       navigatorKey: Utils
           .navigatorKey, // Ensure this key is defined in your main file under MaterialApp.
     );
-    final AadOAuth oauth = new AadOAuth(config);
+    final AadOAuth oauth = AadOAuth(config);
     final result = await oauth.login();
 
     result.fold(

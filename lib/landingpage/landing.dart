@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:stacked/stacked.dart';
+
 import '../utils/appt_text_style.dart';
 import '../utils/utils.dart';
 import 'landing_viewmodel.dart';
@@ -149,7 +150,7 @@ class LandingPage extends StatelessWidget {
                                 child: TextFormField(
                                   obscureText: viewModel.obscureText,
                                   controller: viewModel.passwordController,
-                                  validator: viewModel.validatePassword,
+                                //  validator: viewModel.validatePassword,
                                   onChanged: (value) {
                                     viewModel.passwordFormKey.currentState!.validate();
                                     // viewModel.validatePassword(value);

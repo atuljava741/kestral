@@ -313,8 +313,7 @@ class AppTextStyle {
      return ShapeDecoration(
        color: Colors.white,
        shape: RoundedRectangleBorder(
-         borderRadius: BorderRadius.circular(4),
-       ),
+           borderRadius: BorderRadius.circular(4)),
        shadows: const [
          BoxShadow(
            color: Color(0x19CDBFB2),

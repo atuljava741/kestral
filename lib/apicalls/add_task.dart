@@ -1,6 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:kestral/apicalls/graphql_client.dart';
-import 'package:kestral/datamodal/project_detail.dart';
 
 import '../datamodal/add_task.dart';
 import '../utils/utils.dart';

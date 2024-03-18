@@ -21,8 +21,8 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   String? value;
   String? selectValue;
   bool showCheckIcon = false;
-  var color1 = [Color(0xFFF7F4EF), Color(0xFFFFE7A0)];
-  var color2 = [Color(0xFFF1FFEE), Color(0xFFB6F1B1)];
+  var color1 = [const Color(0xFFF7F4EF), const Color(0xFFFFE7A0)];
+  var color2 = [const Color(0xFFF1FFEE), const Color(0xFFB6F1B1)];
   var currentText = "Select a task or create one to start \ntracking";
   var currect2Text = "tracking";
   var kestrelText = "Kestrel pro dev";
@@ -46,7 +46,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   bool refreshButtonClicked = false;
   DashboardViewModel(this.context){
-          WidgetsBinding.instance?.addObserver(this);
+          WidgetsBinding.instance.addObserver(this);
       }
 
   bool get obscureText => selectedText2;
@@ -135,7 +135,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   String getDueDate() {
     DateTime currentDate = DateTime.now();
-    DateTime dateAfter30Days = currentDate.add(Duration(days: 30));
+    DateTime dateAfter30Days = currentDate.add(const Duration(days: 30));
     String formattedDateAfter30Days =
         DateFormat('yyyy-MM-dd').format(dateAfter30Days);
     return formattedDateAfter30Days;
@@ -414,9 +414,10 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   ValueNotifier<bool> get isForeground => _isForeground;
 
+  @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   static getLogger() {

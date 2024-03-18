@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kestral/dashboard/dashboard_viewmodel.dart';
-import 'package:kestral/datamodal/task_category.dart';
 import 'package:kestral/utils/size_ext.dart';
 
 import '../datamodal/project_detail.dart';
@@ -14,7 +12,7 @@ class ProjectsListView extends StatefulWidget {
   DashboardViewModel viewModel;
   Function callback;
 
-  ProjectsListView(this.projectList, this.viewModel, this.callback);
+  ProjectsListView(this.projectList, this.viewModel, this.callback, {super.key});
 
   @override
   ProjectsListViewState createState() => ProjectsListViewState();
@@ -50,7 +48,7 @@ class ProjectsListViewState extends State<ProjectsListView> {
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
-                          padding: EdgeInsets.only(left: 16),
+                          padding: const EdgeInsets.only(left: 16),
                           child: Text(
                             widget.projectList.elementAt(index).projectName,
                             maxLines: 2,

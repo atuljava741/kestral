@@ -1,11 +1,10 @@
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:kestral/apicalls/graphql_client.dart';
 import 'dart:io' show Platform;
 
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:kestral/apicalls/graphql_client.dart';
 import 'package:kestral/datamodal/user_aunthentication.dart';
 
 import '../utils/utils.dart';
-import 'logout_mutation.dart';
 
 final String createPostMutation = """
   mutation UserAuthentication(

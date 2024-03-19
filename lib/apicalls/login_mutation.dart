@@ -6,7 +6,7 @@ import 'package:kestral/datamodal/user_aunthentication.dart';
 
 import '../utils/utils.dart';
 
-final String createPostMutation = """
+const String createPostMutation = """
   mutation UserAuthentication(
     \$loginType: LoginType! 
     \$input: buildVersionInput!) {	

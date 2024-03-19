@@ -87,7 +87,7 @@ class LandingPageViewModel extends ChangeNotifier {
     if (responseMessage == "true") {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const KestrelScreen()),
+        MaterialPageRoute(builder: (context) =>  KestrelScreen()),
             (route) => false,
       );
     } else {
@@ -226,7 +226,7 @@ class LandingPageViewModel extends ChangeNotifier {
       if (responseMes == "true") {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const KestrelScreen()),
+          MaterialPageRoute(builder: (context) =>  KestrelScreen()),
               (route) => false,
         );
       }

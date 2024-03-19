@@ -13,7 +13,7 @@ class TimeTracker{
   }
 
   void startTimer(Null Function() function) {
-    timer = Timer.periodic(Duration(minutes: 1), (Timer timer) {
+    timer = Timer.periodic(const Duration(minutes: 1), (Timer timer) {
       function.call();
     });
   }

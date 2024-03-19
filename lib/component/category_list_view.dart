@@ -34,7 +34,7 @@ class _MyListViewState extends State<TaskCategoriesListView> {
           },
           child: Container(
             color: index == selectedIndex ? Utils.highlightColor : Colors.white, // Highlight selected item
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Text(widget.categoryList.elementAt(index).taskCategoryTitle, style: AppTextStyle.textStylePoppins15w400,),
           ),
         );

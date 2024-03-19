@@ -3,7 +3,7 @@ import 'package:kestral/apicalls/graphql_client.dart';
 
 import '../utils/utils.dart';
 
-final String logoutMutation = """
+const String logoutMutation = """
   mutation LogoutUser(\$data: [JSON]!) {	
       logoutUser(data: \$data) 
     } 

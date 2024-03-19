@@ -8,18 +8,24 @@ import '../utils/appt_text_style.dart';
 import '../utils/utils.dart';
 
 class SubTaskListView extends StatefulWidget {
-  List<GetInCompleteTasks> subTaskList;
-  DashboardViewModel viewModel;
-  Function callback;
+  final List<GetInCompleteTasks> subTaskList;
+  final DashboardViewModel viewModel;
+  final Function callback;
 
-  SubTaskListView(this.subTaskList, this.viewModel,this.callback, {super.key});
+  const SubTaskListView(this.subTaskList, this.viewModel,this.callback, {super.key});
 
   @override
   CategoriesListViewState createState() => CategoriesListViewState();
 }
 
 class CategoriesListViewState extends State<SubTaskListView> {
-  int selectedIndex = -1; // Initially, no item is selected
+  int selectedIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    setSelectedIndex();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,5 +147,13 @@ class CategoriesListViewState extends State<SubTaskListView> {
     );
   }
 
-
+  void setSelectedIndex(){
+    int id = Utils.selectedSubTaskId;
+    int index = widget.subTaskList.indexWhere((test) => test.id == id);
+    if (index != -1) {
+      setState(() {
+        selectedIndex = index;
+      });
+    }
+  }
 }

@@ -5,7 +5,7 @@ import 'package:kestral/datamodal/incomplete_task.dart';
 import '../utils/utils.dart';
 
 
-final String getMyTaskQuery = """
+const String getMyTaskQuery = """
   query Query(\$projectId: Int!, \$employeeId: Int!) {
           getInCompleteTasks(projectId: \$projectId, employeeId: \$employeeId)
         }

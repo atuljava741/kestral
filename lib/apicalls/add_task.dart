@@ -4,7 +4,7 @@ import 'package:kestral/apicalls/graphql_client.dart';
 import '../datamodal/add_task.dart';
 import '../utils/utils.dart';
 
-final String addTaskMutation = """
+const String addTaskMutation = """
   mutation AddTasks(
     \$projectId: Int!
     \$taskCategoryId: Int!

@@ -5,7 +5,7 @@ import 'package:kestral/datamodal/project_detail.dart';
 import '../utils/utils.dart';
 
 
-final String getProjectQuery = """
+const String getProjectQuery = """
   query Query(\$employeeId: Int!) { 
     getActiveProjectDetailsByEmployeeId(employeeId: \$employeeId)
 } 
@@ -25,7 +25,7 @@ Future<bool> getProjectList(int employeeId) async {
 
   if (result.hasException) {
     Utils.printLog(result.exception!.graphqlErrors.toString());
-    print("In Error getProjectList : "+result.exception!.graphqlErrors.first.message);
+    print("In Error getProjectList : ${result.exception!.graphqlErrors.first.message}");
     return false;
   } else {
     print("In Success getProjectList");

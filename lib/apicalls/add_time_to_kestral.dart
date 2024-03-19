@@ -3,7 +3,7 @@ import 'package:kestral/apicalls/graphql_client.dart';
 
 import '../utils/utils.dart';
 
-final String addTimeMutation = """
+const String addTimeMutation = """
   mutation Mutation( 
 \$projectId: Int! 
 \$employeeId: Int! 
@@ -48,7 +48,7 @@ idealFlag: \$idealFlag
 organizationId: \$organizationId 
 screenshotImageUrl: \$screenshotImageUrl 
 comment: \$comment 
-timeZone: \$timeZone\
+timeZone: \$timeZone
 ) 
 } 
 """;
@@ -97,7 +97,7 @@ Future<String> addTimeToKestral(body) async {
                 "";
         Utils.errorCode =
             result.exception!.graphqlErrors.first.extensions!["code"] ?? "";
-        Utils.printLog("ErrorCode " + Utils.errorCode);
+        Utils.printLog("ErrorCode ${Utils.errorCode}");
         Utils.printLog(result.exception!.graphqlErrors.toString());
       } catch (e) {
         Utils.printLog(e.toString());
@@ -108,7 +108,7 @@ Future<String> addTimeToKestral(body) async {
       return "true";
     }
   } catch (e) {
-    Utils.printLog("Error in sync time to server " + e.toString());
+    Utils.printLog("Error in sync time to server $e");
   }
   Utils.printLog("Time Not synced to server");
   return "false";

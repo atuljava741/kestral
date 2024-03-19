@@ -8,11 +8,11 @@ import '../utils/appt_text_style.dart';
 import '../utils/utils.dart';
 
 class ProjectsListView extends StatefulWidget {
-  List<Projects> projectList;
-  DashboardViewModel viewModel;
-  Function callback;
+  final List<Projects> projectList;
+  final DashboardViewModel viewModel;
+  final Function callback;
 
-  ProjectsListView(this.projectList, this.viewModel, this.callback, {super.key});
+  const ProjectsListView(this.projectList, this.viewModel, this.callback, {super.key});
 
   @override
   ProjectsListViewState createState() => ProjectsListViewState();
@@ -20,6 +20,12 @@ class ProjectsListView extends StatefulWidget {
 
 class ProjectsListViewState extends State<ProjectsListView> {
   int selectedIndex = -1; // Initially, no item is selected
+
+  @override
+  void initState() {
+    super.initState();
+    setSelectedIndex();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,5 +88,15 @@ class ProjectsListViewState extends State<ProjectsListView> {
         );
       },
     );
+  }
+
+  void setSelectedIndex(){
+     int id = Utils.selectedProjectId;
+    int index = widget.projectList.indexWhere((project) => project.projectId == id);
+    if (index != -1) {
+      setState(() {
+        selectedIndex = index;
+      });
+    }
   }
 }

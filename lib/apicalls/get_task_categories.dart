@@ -4,7 +4,7 @@ import 'package:kestral/apicalls/graphql_client.dart';
 import '../datamodal/task_category.dart';
 import '../utils/utils.dart';
 
-final String getTaskCategoryQuery = """
+const String getTaskCategoryQuery = """
   query TaskCategories {
     taskCategories { 
     id 

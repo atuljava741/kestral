@@ -13,10 +13,8 @@ import 'package:kestral/datamodal/user_aunthentication.dart';
 import 'package:kestral/utils/size_ext.dart';
 import 'package:logger_plus/logger_plus.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_storage/saf.dart';
-// import 'package:shared_storage/shared_storage.dart';
 import 'package:uuid/uuid.dart';
 
 import '../apicalls/logout_mutation.dart';
@@ -206,7 +204,7 @@ class Utils {
       deviceId = id;
       await getPreference().setString("deviceId", deviceId);
     }
-    print("Device id " + deviceId);
+    print("Device id $deviceId");
   }
 
   static void showBottomSheet(
@@ -252,14 +250,16 @@ class Utils {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(width: 20.Sw),
                 const CircularProgressIndicator(
                   color: Colors.black,
                 ),
                 SizedBox(width: 10.Sh),
-                Flexible(
+                Expanded(
                   child: Text(
                     message,
                     style: AppTextStyle.textStylePoppins12w600,
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: 60.Sh),
@@ -392,7 +392,7 @@ class Utils {
                       Navigator.of(context).pop(); // Close the dialog
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff1589CA),
+                      backgroundColor: const Color(0xff1589CA),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             4.0), // Set border radius here
@@ -642,7 +642,7 @@ class Utils {
     print(message);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MM-yy HH:mm:ss').format(now);
-    File? textFile = await setLog(formattedDate +" : "+ message);
+    File? textFile = await setLog("$formattedDate : $message");
     // saveFile();
 
     // if (textFile != null) {

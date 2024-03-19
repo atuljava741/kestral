@@ -10,9 +10,9 @@ const List<Widget> priorityItems = <Widget>[
 
 class TButtons extends StatefulWidget {
 
-  Function(dynamic index) callabck;
+  final Function(dynamic index) callabck;
 
-  TButtons(this.callabck, {super.key});
+  const TButtons(this.callabck, {super.key});
 
   @override
   State<TButtons> createState() => _ToggleButtonsSampleState();
@@ -24,7 +24,6 @@ class _ToggleButtonsSampleState extends State<TButtons> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Center(
       child: ToggleButtons(
                   direction: Axis.horizontal,

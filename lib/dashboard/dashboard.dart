@@ -47,9 +47,20 @@ class KestrelScreen extends StatelessWidget {
                     child: Container(
                       height: 100,
                       width: 100,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.blue, // Change color as needed
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 4,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x6E5A21).withOpacity(0.4), // Adjust opacity if needed
+                            offset: Offset(0, 0),
+                            blurRadius: 20,
+                            spreadRadius: 0,
+                          ),
+                        ],
                       ),
                       child: Center(
                         child: GestureDetector(
@@ -57,8 +68,6 @@ class KestrelScreen extends StatelessWidget {
                             onStartButtonClicked(viewModel);
                           },
                           child: SizedBox(
-                            width: 120,
-                            height: 120,
                             child: Stack(
                               children: [
                                 Center(
@@ -70,19 +79,17 @@ class KestrelScreen extends StatelessWidget {
                                   child: Opacity(
                                     opacity: 1,
                                     child: SizedBox(
-                                      width: 100,
-                                      height: 100,
                                       child: Stack(
                                         alignment: Alignment.center,
                                         children: [
                                           Container(
-                                            width: 85,
-                                            height: 85,
+                                            width: 70,
+                                            height: 70,
                                             decoration: ShapeDecoration(
                                               color: viewModel.getColor(),
                                               shape: const OvalBorder(
                                                 side: BorderSide(
-                                                    width: 8,
+                                                    width: 5,
                                                     color: Color(0XFFFFFFFF)),
                                               ),
                                               shadows: const [
@@ -472,10 +479,7 @@ class KestrelScreen extends StatelessWidget {
                       GestureDetector(
                         // Wrap the Container with a GestureDetector
                         onTap: () async {
-                          if (viewModel.getSelectProjectText() != "" &&
-                              viewModel.getSelectProjectText() !=
-                                  "Select Project") {
-                            print("callll");
+                          if (viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
                             InCompleteTaskList incompleteTashList =
                                 await getMyTaskList(
                                     Utils.selectedProjectId,
@@ -825,7 +829,6 @@ class KestrelScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TButtons((index) {
-                      print(index);
                       viewModel.newTaskPriority = index;
                     }),
                     Padding(
@@ -836,19 +839,22 @@ class KestrelScreen extends StatelessWidget {
                           bottom: 20.Sh),
                       child: GestureDetector(
                         onTap: () async {
-                          //int projectId, int taskCategoryId, int employeeId, String taskName, String dueDate,String taskPriority
+                          if( Utils.selectedCategoryId==-1 || viewModel.textFieldController.text.trim().isEmpty){
+                            Utils.showBottomSheet(context, Icons.error,
+                                Colors.red, "The task field is empty. Please enter a task.");
+                          }else{
                           await addTask(
                               Utils.selectedProjectId,
                               Utils.selectedCategoryId,
-                              Utils.userInformation!.data.userAuthentication
-                                  .employeeId,
+                              Utils.userInformation!.data.userAuthentication.employeeId,
                               viewModel.textFieldController.text.trim(),
                               viewModel.getDueDate(),
                               viewModel.newTaskPriority);
-                          Utils.selectedCategoryId=-1;
-                          viewModel.textFieldController.text="";
-                          Navigator.pop(context);
-                          Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
+                              Utils.selectedCategoryId=-1;
+                              viewModel.textFieldController.text="";
+                              Navigator.pop(context);
+                              Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
+                          }
                         },
                         child: Container(
                           width: double.infinity,
@@ -1084,8 +1090,6 @@ class KestrelScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       // if(Utils.selectedSubTaskId != 0 ) {
-                      print(
-                          "Utils.selectedSubTaskId  ${Utils.selectedSubTaskId}");
                       InCompleteTaskList incompleteTashList =
                           await getMyTaskList(
                               Utils.selectedProjectId,

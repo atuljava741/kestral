@@ -250,16 +250,18 @@ class Utils {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: 20.Sw),
-                const CircularProgressIndicator(
-                  color: Colors.black,
+                SizedBox(
+                  height: 30.Sh,
+                  width: 30.Sh,
+                  child: const CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
                 ),
                 SizedBox(width: 10.Sh),
-                Expanded(
+                Flexible(
                   child: Text(
                     message,
                     style: AppTextStyle.textStylePoppins12w600,
-                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: 60.Sh),

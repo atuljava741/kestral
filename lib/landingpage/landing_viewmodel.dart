@@ -111,7 +111,7 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   Future<void> loginFor2ndDevice(BuildContext context) async {
-    responseMessage = await customLoginMutation(emailController.text.trim(), passwordController.text.trim());
+    responseMessage = await customLoginMutation(emailController.text.trim().toLowerCase(), passwordController.text.trim());
     if(responseMessage=="true" && rememberMe){
       await Utils.getPreference().setBool("rememberMe", true);
     }else{

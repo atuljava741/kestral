@@ -16,7 +16,9 @@ import 'dashboard_viewmodel.dart';
 
 class KestrelScreen extends StatelessWidget {
    KestrelScreen({super.key});
-  int tempSelectedProjectIndex=-1;
+   int tempSelectedProjectIndex=-1;
+   int tempSelectedTaskIndex=-1;
+
   @override
   Widget build(BuildContext context) {
     apiTest();
@@ -642,6 +644,7 @@ class KestrelScreen extends StatelessWidget {
 
   Widget getCategoryList(BuildContext context, DashboardViewModel viewModel) {
     return SingleChildScrollView(
+        controller: viewModel.scrollController,
         child: Container(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -819,6 +822,14 @@ class KestrelScreen extends StatelessWidget {
                           bottom: 15,
                         ),
                         child: TextField(
+                          onTap: (){
+                            Future.delayed(const Duration(milliseconds: 500), () {
+                              viewModel.scrollController.animateTo(
+                                  viewModel.scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.ease);
+                            });
+                            },
                           controller: viewModel.textFieldController,
                           decoration: InputDecoration(
                             labelText: viewModel.getTaskText(),
@@ -839,7 +850,7 @@ class KestrelScreen extends StatelessWidget {
                           bottom: 20.Sh),
                       child: GestureDetector(
                         onTap: () async {
-                          if( Utils.selectedCategoryId==-1 || viewModel.textFieldController.text.trim().isEmpty){
+                          if( Utils.selectedCategoryId==0 || viewModel.textFieldController.text.trim().isEmpty){
                             Utils.showBottomSheet(context, Icons.error,
                                 Colors.red, "The task field is empty. Please enter a task.");
                           }else{
@@ -850,7 +861,7 @@ class KestrelScreen extends StatelessWidget {
                               viewModel.textFieldController.text.trim(),
                               viewModel.getDueDate(),
                               viewModel.newTaskPriority);
-                              Utils.selectedCategoryId=-1;
+                              Utils.selectedCategoryId=0;
                               viewModel.textFieldController.text="";
                               Navigator.pop(context);
                               Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
@@ -889,7 +900,6 @@ class KestrelScreen extends StatelessWidget {
   void showProjectBottomSheet(
       BuildContext context, DashboardViewModel viewModel) {
     showModalBottomSheet(
-        isDismissible: false,
         context: context,
         isScrollControlled: true, // Allow for custom height
         builder: (context) {
@@ -964,26 +974,31 @@ class KestrelScreen extends StatelessWidget {
                       )),
                   GestureDetector(
                     onTap: () async {
-                      Utils.selectedProjectId = Utils.projectList.elementAt(tempSelectedProjectIndex).projectId;
-                      Utils.selectProjectText = Utils.projectList.elementAt(tempSelectedProjectIndex).projectName;
-                      await Utils.getPreference().setString(Utils.projectName, Utils.selectProjectText);
-                      await Utils.saveCurrentProjectjsonBodyInPreference();
-                      viewModel.handleStopTimer();
-                      Utils.selectedSubTask = "";
-                      Utils.selectedSubTaskId = 0;
-                      setState(() {});
+                      try {
+                        Utils.selectedProjectId = Utils.projectList.elementAt(tempSelectedProjectIndex).projectId;
+                        Utils.selectProjectText = Utils.projectList.elementAt(tempSelectedProjectIndex).projectName;
+                        await Utils.getPreference().setString(Utils.projectName, Utils.selectProjectText);
+                        await Utils.saveCurrentProjectjsonBodyInPreference();
+                        viewModel.handleStopTimer();
+                        Utils.selectedSubTask = "";
+                        Utils.selectedSubTaskId = 0;
 
-                      // if (Utils.selectedProjectId == 0) {
-                      InCompleteTaskList incompleteTashList =
-                          await getMyTaskList(
-                              Utils.selectedProjectId,
-                              Utils.userInformation!.data.userAuthentication
-                                  .employeeId);
-                      Utils.taskList =
-                          incompleteTashList.data.getInCompleteTasks;
-                      Navigator.pop(context);
-                      viewModel.refreshUI();
-                      // }
+                        // if (Utils.selectedProjectId == 0) {
+                        InCompleteTaskList incompleteTashList =
+                            await getMyTaskList(
+                                Utils.selectedProjectId,
+                                Utils.userInformation!.data.userAuthentication
+                                    .employeeId);
+                        Utils.taskList =
+                            incompleteTashList.data.getInCompleteTasks;
+                        Navigator.pop(context);
+                        viewModel.refreshUI();
+                        setState(() {});
+                      } catch (e) {
+                        Navigator.pop(context);
+                        viewModel.refreshUI();
+                        setState(() {});
+                      }
                     },
                     child: Container(
                         margin:
@@ -991,7 +1006,7 @@ class KestrelScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 48.Sh,
                         decoration: ShapeDecoration(
-                          color: tempSelectedProjectIndex != -1
+                          color: tempSelectedProjectIndex != -1 || Utils.selectedProjectId!=0
                               ? const Color(0xFF1589CA)
                               : Colors.grey,
                           shape: RoundedRectangleBorder(
@@ -1013,7 +1028,6 @@ class KestrelScreen extends StatelessWidget {
 
   void showTaskBottomSheet(BuildContext context, DashboardViewModel viewModel) {
     showModalBottomSheet(
-        isDismissible: false,
         context: context,
         isScrollControlled: true, // Allow for custom height
         builder: (context) {
@@ -1086,20 +1100,34 @@ class KestrelScreen extends StatelessWidget {
                       child: SubTaskListView(Utils.taskList, viewModel,
                           (index) async {
                         setState(() {});
+                        tempSelectedTaskIndex=index;
                       })),
                   GestureDetector(
                     onTap: () async {
-                      // if(Utils.selectedSubTaskId != 0 ) {
-                      InCompleteTaskList incompleteTashList =
-                          await getMyTaskList(
-                              Utils.selectedProjectId,
-                              Utils.userInformation!.data.userAuthentication
-                                  .employeeId);
-                      Utils.taskList =
-                          incompleteTashList.data.getInCompleteTasks;
-                      Navigator.pop(context);
-                      viewModel.refreshUI();
-                      // }
+                      try{
+                        Utils.selectedSubTaskId = Utils.taskList.elementAt(tempSelectedTaskIndex).id;
+                        Utils.taskPriority = Utils.taskList.elementAt(tempSelectedTaskIndex).taskPriority;
+                        Utils.dueDate = Utils.taskList.elementAt(tempSelectedTaskIndex).dueDate;
+                        Utils.selectedSubTask = Utils.taskList.elementAt(tempSelectedTaskIndex).taskName;
+                        Utils.selectedCategoryId = Utils.taskList.elementAt(tempSelectedTaskIndex).taskCategoryId;
+                        await Utils.getPreference().setString(Utils.taskName, Utils.selectedSubTask);
+                        await Utils.getPreference().setString("dueDate",Utils.dueDate) ;
+                        await Utils.getPreference().setString("taskPriority",Utils.taskPriority) ;
+                        await Utils.saveCurrentProjectjsonBodyInPreference();
+
+                        InCompleteTaskList incompleteTashList =
+                        await getMyTaskList(
+                            Utils.selectedProjectId,
+                            Utils.userInformation!.data.userAuthentication
+                                .employeeId);
+                        Utils.taskList =
+                            incompleteTashList.data.getInCompleteTasks;
+                        Navigator.pop(context);
+                        viewModel.refreshUI();
+                      }catch(e){
+                        Navigator.pop(context);
+                        viewModel.refreshUI();
+                      }
                     },
                     child: Container(
                         margin:
@@ -1107,7 +1135,7 @@ class KestrelScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 48.Sh,
                         decoration: ShapeDecoration(
-                          color: Utils.selectedSubTaskId != 0
+                          color: Utils.selectedSubTaskId != 0 || tempSelectedTaskIndex!=-1
                               ? const Color(0xFF1589CA)
                               : Colors.grey,
                           shape: RoundedRectangleBorder(
@@ -1283,7 +1311,6 @@ class KestrelScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-
                           ],
                         ),
                       ),

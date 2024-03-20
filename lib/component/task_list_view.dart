@@ -49,20 +49,6 @@ class CategoriesListViewState extends State<SubTaskListView> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () async {
-                  Utils.selectedSubTaskId = widget.subTaskList.elementAt(index).id;
-                  Utils.taskPriority = widget.subTaskList.elementAt(index).taskPriority;
-                  Utils.dueDate = widget.subTaskList.elementAt(index).dueDate;
-                  Utils.selectedSubTask =
-                      widget.subTaskList.elementAt(index).taskName;
-                  Utils.selectedCategoryId =
-                      widget.subTaskList.elementAt(index).taskCategoryId;
-                  await Utils.getPreference()
-                      .setString(Utils.taskName, Utils.selectedSubTask);
-                  await Utils.getPreference()
-                      .setString("dueDate",Utils.dueDate) ;
-                  await Utils.getPreference()
-                      .setString("taskPriority",Utils.taskPriority) ;
-                  await Utils.saveCurrentProjectjsonBodyInPreference();
                   setState(() {
                     selectedIndex = index;
                   });

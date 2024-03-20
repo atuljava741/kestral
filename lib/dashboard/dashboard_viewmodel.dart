@@ -43,6 +43,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   bool bottomNavVisible = false;
 
   final BuildContext context;
+  ScrollController scrollController = ScrollController();
 
   bool refreshButtonClicked = false;
   DashboardViewModel(this.context){

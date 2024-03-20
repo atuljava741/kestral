@@ -97,11 +97,12 @@ class LandingPageViewModel extends ChangeNotifier {
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,
                 () async {
-              var queue = Utils.getPreference().getString('queue') ?? [];
+   /*           var queue = Utils.getPreference().getString('queue') ?? [];
               Utils.deviceId = Utils.getPreference().getString('deviceId')!;
               await logoutUserMutation(queue);
               await Utils.getPreference().clear();
-              await Utils.getPreference().setString('deviceId', Utils.deviceId);
+              await Utils.getPreference().setString('deviceId', Utils.deviceId);*/
+                  // Delay for 200 milliseconds
               loginFor2ndDevice(context);
             });
       } else {
@@ -111,11 +112,7 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   Future<void> loginFor2ndDevice(BuildContext context) async {
-    Utils.printLog("Loggin again");
-    print(emailController.text);
-    print(passwordController.text);
-    responseMessage = await customLoginMutation(emailController.text, passwordController.text);
-    print("Loggin $responseMessage");
+    responseMessage = await customLoginMutation(emailController.text.trim(), passwordController.text.trim());
     if(responseMessage=="true" && rememberMe){
       await Utils.getPreference().setBool("rememberMe", true);
     }else{

@@ -493,7 +493,6 @@ class Utils {
                           ),
                           child: ElevatedButton(
                             onPressed: () async {
-                              callback.call();
                               var queue = Utils.getPreference().getString('queue') ?? [];
                               Utils.deviceId = Utils.getPreference().getString('deviceId')!;
 
@@ -511,6 +510,8 @@ class Utils {
                                     builder: (context) => const LandingPage()),
                                 (route) => false,
                               ); // Close the dialog
+
+                              callback.call();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFecc7c7),

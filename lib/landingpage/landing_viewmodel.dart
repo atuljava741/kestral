@@ -97,12 +97,11 @@ class LandingPageViewModel extends ChangeNotifier {
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,
                 () async {
-   /*           var queue = Utils.getPreference().getString('queue') ?? [];
+              var queue = Utils.getPreference().getString('queue') ?? [];
               Utils.deviceId = Utils.getPreference().getString('deviceId')!;
               await logoutUserMutation(queue);
               await Utils.getPreference().clear();
-              await Utils.getPreference().setString('deviceId', Utils.deviceId);*/
-                  // Delay for 200 milliseconds
+              await Utils.getPreference().setString('deviceId', Utils.deviceId);
               loginFor2ndDevice(context);
             });
       } else {
@@ -120,8 +119,7 @@ class LandingPageViewModel extends ChangeNotifier {
     }
 
     if (responseMessage == "true") {
-      Navigator.pushAndRemoveUntil(
-        context,
+      Utils.navigatorKey.currentState!.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) =>  KestrelScreen()),
             (route) => false,
       );

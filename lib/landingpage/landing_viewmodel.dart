@@ -102,6 +102,7 @@ class LandingPageViewModel extends ChangeNotifier {
               await logoutUserMutation(queue);
               await Utils.getPreference().clear();
               await Utils.getPreference().setString('deviceId', Utils.deviceId);
+              loginFor2ndDevice(context);
             });
       } else {
         Utils.showCustomDialog(context, "KestrelPro Updates", responseMessage!);

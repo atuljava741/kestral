@@ -103,10 +103,30 @@ class LandingPageViewModel extends ChangeNotifier {
               await Utils.getPreference().clear();
               await Utils.getPreference().setString('deviceId', Utils.deviceId);
             });
-        autoLogin(context);
       } else {
         Utils.showCustomDialog(context, "KestrelPro Updates", responseMessage!);
       }
+    }
+  }
+
+  Future<void> loginFor2ndDevice(BuildContext context) async {
+    Utils.printLog("Loggin again");
+    print(emailController.text);
+    print(passwordController.text);
+    responseMessage = await customLoginMutation(emailController.text, passwordController.text);
+    print("Loggin $responseMessage");
+    if(responseMessage=="true" && rememberMe){
+      await Utils.getPreference().setBool("rememberMe", true);
+    }else{
+      await Utils.getPreference().setBool("rememberMe", false);
+    }
+
+    if (responseMessage == "true") {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) =>  KestrelScreen()),
+            (route) => false,
+      );
     }
   }
 

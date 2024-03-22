@@ -214,9 +214,12 @@ class Utils {
                   color: iconColor,
                 ),
                 SizedBox(width: 10.Sh),
-                Text(
-                  message,
-                  style: AppTextStyle.textStylePoppins12w600,
+                Flexible(
+                  child: Text(
+                    message,
+                    style: AppTextStyle.textStylePoppins12w600,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 SizedBox(height: 60.Sh, width: 30.Sh),
               ],
@@ -250,6 +253,7 @@ class Utils {
                   child: Text(
                     message,
                     style: AppTextStyle.textStylePoppins12w600,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 SizedBox(height: 60.Sh, width: 30.Sh),

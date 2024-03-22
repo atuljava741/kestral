@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kestral/component/category_list_view.dart';
 import 'package:kestral/task_queue/task_queue.dart';
 import 'package:kestral/utils/appt_text_style.dart';
@@ -33,7 +34,7 @@ class KestrelScreen extends StatelessWidget {
               Utils.showLogoutDialog(
                   context,
                   "Alert",
-                  "Are you sure you want to log out? Logging out will end your current session. If you're ready to log out, just tap 'Logout' below.",
+                  "Are you sure you want to log out? Logging out will end your current session. If you're ready to log out, just tap 'Log out' below.",
                   () => null);
               return false; // Return true to allow the back press
             },
@@ -57,7 +58,7 @@ class KestrelScreen extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0x6E5A21).withOpacity(0.4), // Adjust opacity if needed
+                            color: Color(0x6E5A21).withOpacity(0.4),
                             offset: Offset(0, 0),
                             blurRadius: 20,
                             spreadRadius: 0,
@@ -96,7 +97,7 @@ class KestrelScreen extends StatelessWidget {
                                               ),
                                               shadows: const [
                                                 BoxShadow(
-                                                  color: Color(0x3F000000),
+                                                  color: Color(0XFFFFFFFF),
                                                   blurRadius: 50,
                                                   offset: Offset(0, 8),
                                                   spreadRadius: 3,
@@ -597,14 +598,19 @@ class KestrelScreen extends StatelessWidget {
                                   EdgeInsets.only(left: 265.Sw, top: 10.Sh, right: 5.Sh),
                               child: GestureDetector(
                                 onTap: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      // Allow for custom height
-                                      builder: (context) {
-                                        return getCategoryList(
-                                            context, viewModel);
-                                      });
+                                  if (viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        // Allow for custom height
+                                        builder: (context) {
+                                          return getCategoryList(
+                                              context, viewModel);
+                                        });
+                                  } else {
+                                    Utils.showBottomSheet(context, Icons.error,
+                                        Colors.red, "Please select a project first");
+                                  }
                                 },
                                 child: Container(
                                   width: 48.Sw,
@@ -677,7 +683,7 @@ class KestrelScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 left: 24, top: 14, bottom: 14),
                             child: Utils.getIcon(
-                                "assets/images/rong.png.png", 30, 30),
+                                "assets/images/rong.png", 30, 30),
                           ),
                         ),
                         Text(
@@ -699,7 +705,7 @@ class KestrelScreen extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(left: 24),
                       child: Text(
-                        viewModel.getKestrelText(),
+                        Utils.selectProjectText,
                         style: AppTextStyle.textStylePoppins20w600,
                       ),
                     ),
@@ -830,6 +836,9 @@ class KestrelScreen extends StatelessWidget {
                                   curve: Curves.ease);
                             });
                             },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                          ],
                           controller: viewModel.textFieldController,
                           decoration: InputDecoration(
                             labelText: viewModel.getTaskText(),
@@ -850,21 +859,24 @@ class KestrelScreen extends StatelessWidget {
                           bottom: 20.Sh),
                       child: GestureDetector(
                         onTap: () async {
-                          if( Utils.selectedCategoryId==0 || viewModel.textFieldController.text.trim().isEmpty){
+                          if( Utils.selectedCategoryId==0){
+                            Utils.showBottomSheet(context, Icons.error,
+                                Colors.red, "Please select a category.");
+                          }else if(viewModel.textFieldController.text.trim().isEmpty){
                             Utils.showBottomSheet(context, Icons.error,
                                 Colors.red, "The task field is empty. Please enter a task.");
-                          }else{
-                          await addTask(
-                              Utils.selectedProjectId,
-                              Utils.selectedCategoryId,
-                              Utils.userInformation!.data.userAuthentication.employeeId,
-                              viewModel.textFieldController.text.trim(),
-                              viewModel.getDueDate(),
-                              viewModel.newTaskPriority);
-                              Utils.selectedCategoryId=0;
-                              viewModel.textFieldController.text="";
-                              Navigator.pop(context);
-                              Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
+                          } else{
+                            await addTask(
+                                Utils.selectedProjectId,
+                                Utils.selectedCategoryId,
+                                Utils.userInformation!.data.userAuthentication.employeeId,
+                                viewModel.textFieldController.text.trim(),
+                                viewModel.getDueDate(),
+                                viewModel.newTaskPriority);
+                            Utils.selectedCategoryId=0;
+                            viewModel.textFieldController.text="";
+                            Navigator.pop(context);
+                            Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
                           }
                         },
                         child: Container(
@@ -1231,13 +1243,13 @@ class KestrelScreen extends StatelessWidget {
                             const SizedBox(height: 20),
                             GestureDetector(
                               onTap: () {
-                                // Navigator.pop(context);
+                                Utils.navigatorKey.currentState!.pop();
                                 Utils.showProgressBottomSheet(
                                     context, "Syncing time to server", false);
                                 Future.delayed(const Duration(seconds: 3), () {
-                                  Navigator.pop(context);
+                                  Utils.navigatorKey.currentState!.pop();
                                   Utils.showBottomSheet(
-                                      context,
+                                      Utils.navigatorKey.currentState!.context,
                                       Icons.done,
                                       Colors.green,
                                       "Time synchronization completed successfully");

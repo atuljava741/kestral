@@ -297,7 +297,7 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> logout(context) async {
-    Utils.showLogoutDialog(context, "Alert", "Do you want to logout from the KestrelPro tool?", (){});
+    Utils.showLogoutDialog(context, "Alert", "Do you want to log out from the KestrelPro tool?", (){});
   }
 
   refreshUI() {

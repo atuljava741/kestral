@@ -49,9 +49,9 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   String? validatePassword(String? value) {
-    if (value == null || value.trim().isEmpty || value.trim().length < 8) {
-      responseMessage = 'Please enter a valid password';
-      return "Please enter a valid password";
+    if (value == null || value.trim().isEmpty ) {
+      responseMessage = 'Please enter a password';
+      return "Please enter a password";
     }
     return null;
   }
@@ -80,7 +80,6 @@ class LandingPageViewModel extends ChangeNotifier {
       }
     } else {
       String errorMessage = getErrorMessage();
-      Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
       return;
     }
 

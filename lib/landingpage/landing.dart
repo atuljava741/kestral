@@ -150,7 +150,7 @@ class LandingPage extends StatelessWidget {
                                 child: TextFormField(
                                   obscureText: viewModel.obscureText,
                                   controller: viewModel.passwordController,
-                                //  validator: viewModel.validatePassword,
+                                 validator: viewModel.validatePassword,
                                   onChanged: (value) {
                                     viewModel.passwordFormKey.currentState!.validate();
                                     // viewModel.validatePassword(value);

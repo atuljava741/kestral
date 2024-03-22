@@ -31,15 +31,10 @@ class Utils {
   static var deviceWidth;
 
   static String accessToken = "";
-
   static UserAuthResponse? userInformation;
-
   static TaskCategory? taskCategory;
-
   static var highlightColor = const Color(0XFFDDF3FF);
-
   static SharedPreferences? pref;
-
   static int intervalMinutes = 10;
 
   static String timerState = "timer_state";
@@ -49,21 +44,33 @@ class Utils {
 
   static String projectName = "projectName";
   static String taskName = "taskName";
-
   static String taskPriority = "Low";
-
   static var dueDate = "";
 
   static String hours = "hours";
   static String minutes = "minutes";
-
   static String currentTimeZone = "Asia/Kolkata";
 
   static var showAddButton = true;
-
   static var logger = Logger();
-
   static var errorCode = "";
+
+  static int selectedProjectId = 0;
+  static int selectedSubTaskId = 0;
+  static var selectedSubTask = "";
+  static int selectedCategoryId = 0;
+  static int categoryForAddTask = 0;
+  static var selectedCategory = "";
+  static var selectProjectText = "Select Project";
+  static String deviceId = "";
+  static String deviceName = "";
+  static String email = "";
+  static String password = "";
+  static bool rememberMe = false;
+
+  static List<Projects> projectList = [];
+  static List<GetInCompleteTasks> taskList = [];
+  static List<TaskCategories> categoryList = [];
 
   static getIcon(String iconName, double w, double h) {
     return Image.asset(iconName, width: w, height: h);
@@ -86,23 +93,6 @@ class Utils {
   static SharedPreferences getPreference() {
     return pref!;
   }
-
-  //static String selectedProject = "";
-  static int selectedProjectId = 0;
-  static int selectedSubTaskId = 0;
-  static var selectedSubTask = "";
-  static int selectedCategoryId = 0;
-  static var selectedCategory = "";
-  static var selectProjectText = "Select Project";
-  static String deviceId = "";
-  static String deviceName = "";
-  static String email = "";
-  static String password = "";
-  static bool rememberMe = false;
-
-  static List<Projects> projectList = [];
-  static List<GetInCompleteTasks> taskList = [];
-  static List<TaskCategories> categoryList = [];
 
   static void loadSavedProjectData() {
     Map<String, dynamic> projectData = jsonDecode(
@@ -214,25 +204,23 @@ class Utils {
       builder: (BuildContext context) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                error,
-                size: 30.Sh,
-                color: iconColor,
-              ),
-              SizedBox(width: 10.Sh),
-              Flexible(
-                child: Text(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+            child:Row(
+           mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  error,
+                  size: 30.Sh,
+                  color: iconColor,
+                ),
+                SizedBox(width: 10.Sh),
+                Text(
                   message,
                   style: AppTextStyle.textStylePoppins12w600,
                 ),
-              ),
-              SizedBox(height: 60.Sh),
-            ],
-          ),
+                SizedBox(height: 60.Sh, width: 30.Sh),
+              ],
+            )
         );
       },
     );
@@ -246,7 +234,7 @@ class Utils {
         builder: (BuildContext context) {
           return Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -264,63 +252,12 @@ class Utils {
                     style: AppTextStyle.textStylePoppins12w600,
                   ),
                 ),
-                SizedBox(height: 60.Sh),
+                SizedBox(height: 60.Sh, width: 30.Sh),
               ],
             ),
           );
         });
   }
-
-  /*showModalBottomSheet(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder:
-            (BuildContext context, StateSetter setState) {
-          return Container(
-            width: double.infinity,
-            decoration: const ShapeDecoration(
-              color: Color(0xFFF8F5F0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 10.Sh,
-                ),
-                Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      color: Colors.black,
-                    ),
-                    const SizedBox(
-                      width: 13,
-                    ),
-                    Text(
-                      message,
-                      style: AppTextStyle
-                          .textStylePoppins12w400,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 60.Sh,
-                ),
-              ],
-            ),
-          )
-        },
-      ),
-    );
-  }
-*/
 
   static getChip(String priority) {
     return Container(

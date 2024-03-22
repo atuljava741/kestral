@@ -599,6 +599,8 @@ class KestrelScreen extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   if (viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
+                                    Utils.categoryForAddTask=0;
+                                    viewModel.textFieldController.text="";
                                     showModalBottomSheet(
                                         context: context,
                                         isScrollControlled: true,
@@ -859,7 +861,7 @@ class KestrelScreen extends StatelessWidget {
                           bottom: 20.Sh),
                       child: GestureDetector(
                         onTap: () async {
-                          if( Utils.selectedCategoryId==0){
+                          if( Utils.categoryForAddTask ==0){
                             Utils.showBottomSheet(context, Icons.error,
                                 Colors.red, "Please select a category.");
                           }else if(viewModel.textFieldController.text.trim().isEmpty){
@@ -868,12 +870,13 @@ class KestrelScreen extends StatelessWidget {
                           } else{
                             await addTask(
                                 Utils.selectedProjectId,
-                                Utils.selectedCategoryId,
+                                Utils.categoryForAddTask,
                                 Utils.userInformation!.data.userAuthentication.employeeId,
                                 viewModel.textFieldController.text.trim(),
                                 viewModel.getDueDate(),
                                 viewModel.newTaskPriority);
-                            Utils.selectedCategoryId=0;
+
+                            Utils.categoryForAddTask=0;
                             viewModel.textFieldController.text="";
                             Navigator.pop(context);
                             Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");

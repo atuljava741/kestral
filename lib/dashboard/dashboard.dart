@@ -48,22 +48,14 @@ class KestrelScreen extends StatelessWidget {
                     top: (MediaQuery.of(context).size.height - 100) / 2,
                     left: (MediaQuery.of(context).size.width - 100) / 2,
                     child: Container(
-                      height: 100,
-                      width: 100,
+                      height: 120.Sh,
+                      width: 120.Sh,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white,
+                          color: Colors.transparent,
                           width: 4,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x6E5A21).withOpacity(0.4),
-                            offset: Offset(0, 0),
-                            blurRadius: 20,
-                            spreadRadius: 0,
-                          ),
-                        ],
                       ),
                       child: Center(
                         child: GestureDetector(
@@ -97,10 +89,10 @@ class KestrelScreen extends StatelessWidget {
                                               ),
                                               shadows: const [
                                                 BoxShadow(
-                                                  color: Color(0XFFFFFFFF),
+                                                  color: Color(0XFFC7C8CC),
                                                   blurRadius: 50,
                                                   offset: Offset(0, 8),
-                                                  spreadRadius: 3,
+                                                  spreadRadius: 20,
                                                 )
                                               ],
                                             ),

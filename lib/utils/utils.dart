@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +30,9 @@ class Utils {
   static var mockupWidth = 360;
   static var deviceHeight;
   static var deviceWidth;
+
+  /// for internet connection check
+  static bool isConnected = false;
 
   static String accessToken = "";
   static UserAuthResponse? userInformation;
@@ -441,7 +445,11 @@ class Utils {
                               Utils.email =  Utils.getPreference().getString('email') ?? "";
                               Utils.password =  Utils.getPreference().getString('password') ?? "";
                               Utils.rememberMe = Utils.getPreference().getBool('rememberMe') ?? false;
-
+                              if(!Utils.isConnected){
+                                Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                                    "Alert", "Please check your internet connectivity.");
+                                return;
+                              }
                               await logoutUserMutation(queue);
                               await Utils.getPreference().clear();
                               await Utils.getPreference().setString('deviceId', Utils.deviceId);
@@ -491,6 +499,12 @@ class Utils {
                         ),
                         child: ElevatedButton(
                           onPressed: () async {
+                            if(!Utils.isConnected){
+                              Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                                  "Alert", "Please check your internet connectivity.");
+                              return;
+                            }
+
                             callback.call();
                             var queue =
                                 Utils.getPreference().getString('queue') ?? [];
@@ -627,5 +641,28 @@ class Utils {
         await saveFile(retried: true);
       }
     }
+  }
+
+  void registerConnectivityListener() {
+    Connectivity().checkConnectivity().then((value) {
+      if (ConnectivityResult.none == value) {
+        isConnected = false;
+      } else {
+        isConnected = true;
+      }
+    });
+
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (ConnectivityResult.none == result) {
+        isConnected = false;
+
+/*        if (!(Get.isDialogOpen ?? false)) {
+          Utils.showInternetDialog();
+        }*/
+      } else {
+        isConnected = true;
+        // if (Get.isDialogOpen ?? false) Get.back();
+      }
+    });
   }
 }

@@ -4,6 +4,8 @@ import 'package:kestral/utils/utils.dart';
 import 'landingpage/landing.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Utils().registerConnectivityListener();
   runApp(const MyApp());
 }
 

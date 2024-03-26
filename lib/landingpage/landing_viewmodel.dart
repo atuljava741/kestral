@@ -57,13 +57,6 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   Future<void> handleButtonClick(BuildContext context) async {
-    /*String email = "atul.sharma@47billion.com";//"anshul.upadhyay@47billion.com";//emailController.text;
-     String password = "Test@123";////passwordController.text;
-
-     // Validate email and password
-     bool isEmailValid = true;//formKey.currentState?.validate() ?? false;
-     bool isPasswordValid = true;//passwordFormKey.currentState?.validate() ?? false;*/
-
     String email = emailController.text;
     String password = passwordController.text;
 
@@ -72,6 +65,11 @@ class LandingPageViewModel extends ChangeNotifier {
     bool isPasswordValid = passwordFormKey.currentState?.validate() ?? false;
 
     if (isEmailValid && isPasswordValid) {
+      if(!Utils.isConnected){
+        Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+            "Alert", "Please check your internet connectivity.");
+        return;
+      }
       responseMessage = await customLoginMutation(email.trim().toLowerCase(), password.trim());
       if(responseMessage=="true" && rememberMe){
         await Utils.getPreference().setBool("rememberMe", true);
@@ -79,7 +77,7 @@ class LandingPageViewModel extends ChangeNotifier {
         await Utils.getPreference().setBool("rememberMe", false);
       }
     } else {
-      String errorMessage = getErrorMessage();
+      getErrorMessage();
       return;
     }
 
@@ -96,6 +94,12 @@ class LandingPageViewModel extends ChangeNotifier {
       if (responseMessage!.contains("You are currently logged")) {
         Utils.showLogoutDialog(context, "Kestral Updates", responseMessage!,
                 () async {
+                  if(!Utils.isConnected){
+                    Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                        "Alert", "Please check your internet connectivity.");
+                    return;
+                  }
+
               var queue = Utils.getPreference().getString('queue') ?? [];
               Utils.deviceId = Utils.getPreference().getString('deviceId')!;
               await logoutUserMutation(queue);
@@ -110,6 +114,11 @@ class LandingPageViewModel extends ChangeNotifier {
   }
 
   Future<void> loginFor2ndDevice(BuildContext context) async {
+    if(!Utils.isConnected){
+      Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+          "Alert", "Please check your internet connectivity.");
+      return;
+    }
     responseMessage = await customLoginMutation(emailController.text.trim().toLowerCase(), passwordController.text.trim());
     if(responseMessage=="true" && rememberMe){
       await Utils.getPreference().setBool("rememberMe", true);
@@ -124,23 +133,6 @@ class LandingPageViewModel extends ChangeNotifier {
       );
     }
   }
-
-/*  Future<void> handleAutoLogin(BuildContext context, String email,
-      String password) async {
-    responseMessage = await customLoginMutation(email.trim().toLowerCase(), password.trim());
-
-    if (responseMessage == "true") {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => KestrelScreen()),
-            (route) => false,
-      );
-    } else {
-      String errorMessage = getErrorMessage();
-      print(Utils.getPreference().get("access_token"));
-      Utils.showBottomSheet(context, Icons.error, Colors.red, errorMessage);
-    }
-  }*/
 
   String morningText = "Hey! Good Morning";
   var emailAddressText = "Email Address";
@@ -238,6 +230,12 @@ class LandingPageViewModel extends ChangeNotifier {
     Utils.accessToken = Utils.getPreference().getString("access_token") ?? "";
     Utils.deviceId = Utils.getPreference().getString("deviceId") ?? "";
     if (email != "" && password != "") {
+      if(!Utils.isConnected){
+        Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+            "Alert", "Please check your internet connectivity.");
+        return;
+      }
+
       String? responseMes = await customLoginMutation(email.trim().toLowerCase(), password.trim());
       if (responseMes == "true") {
         Navigator.pushAndRemoveUntil(

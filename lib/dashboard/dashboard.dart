@@ -22,7 +22,6 @@ class KestrelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    apiTest();
     Utils.deviceHeight = MediaQuery.of(context).size.height;
     Utils.deviceWidth = MediaQuery.of(context).size.width;
     return ViewModelBuilder<DashboardViewModel>.reactive(
@@ -355,7 +354,7 @@ class KestrelScreen extends StatelessWidget {
                       child: Container(
                         width: 256.Sw,
                         height: 68.Sh,
-                        decoration: AppTextStyle.getShapeDecoration4(),
+                        decoration: AppTextStyle.getBoxDecoration(),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -376,8 +375,7 @@ class KestrelScreen extends StatelessWidget {
                                     height: 3.Sh,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Flexible(
                                         child: Text(
@@ -389,7 +387,7 @@ class KestrelScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(right: 10.Sw),
+                                        padding: EdgeInsets.only(right: 10.Sh),
                                         child: Icon(Icons.arrow_drop_down,
                                             size: 32.Sh, color: Colors.black),
                                       ),
@@ -406,6 +404,11 @@ class KestrelScreen extends StatelessWidget {
                       padding: EdgeInsets.only(left: 265.Sw, top: 10.Sh),
                       child: GestureDetector(
                         onTap: () {
+                          if(!Utils.isConnected){
+                            Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                                "Alert", "Please check your internet connectivity.");
+                            return;
+                          }
                           if (!viewModel.refreshButtonClicked) {
                             viewModel.refreshButtonClicked = true;
                             viewModel.getProjects().then((value) {
@@ -475,6 +478,11 @@ class KestrelScreen extends StatelessWidget {
                         // Wrap the Container with a GestureDetector
                         onTap: () async {
                           if (viewModel.getSelectProjectText() != "" && viewModel.getSelectProjectText() != "Select Project") {
+                            if(!Utils.isConnected){
+                              Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                                  "Alert", "Please check your internet connectivity.");
+                              return;
+                            }
                             InCompleteTaskList incompleteTashList =
                                 await getMyTaskList(
                                     Utils.selectedProjectId,
@@ -489,8 +497,7 @@ class KestrelScreen extends StatelessWidget {
                           }
                         },
                         child: Container(
-                          width: Utils.showAddButton ? 252.Sw : 320.Sw,
-                          //height: 64.Sh,
+                          width: Utils.showAddButton ? 256.Sw : 320.Sw,
                           decoration: AppTextStyle.getBoxDecoration(),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -516,8 +523,6 @@ class KestrelScreen extends StatelessWidget {
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
                                       children: [
                                         Flexible(
                                           child: Text(
@@ -530,7 +535,7 @@ class KestrelScreen extends StatelessWidget {
                                         ),
                                         Padding(
                                           padding:
-                                              EdgeInsets.only(right: 10.Sw),
+                                              EdgeInsets.only(right: 12.Sh),
                                           child:  Icon(
                                               Icons.arrow_drop_down,
                                               size: 32.Sh,
@@ -551,6 +556,7 @@ class KestrelScreen extends StatelessWidget {
                                 child: Container(
                                   width: Utils.showAddButton ? 245.Sw : 305.Sw,
                                   height: 37.Sh,
+                                  margin: EdgeInsets.symmetric(horizontal: 10.Sw),
                                   padding:
                                       EdgeInsets.only(left: 5.Sw, right: 10.Sw),
                                   decoration: ShapeDecoration(
@@ -635,12 +641,6 @@ class KestrelScreen extends StatelessWidget {
     );
   }
 
-  void apiTest() async {
-    //await customLoginMutation("sanyam.sharma@47billion.com", "Test@123");
-    //await getProjectList(Utils.userInformation!.data.userAuthentication.employeeId);
-    //await getMyTaskList(327,560);
-    //await getTaskCategoryList();
-  }
 
   Widget getCategoryList(BuildContext context, DashboardViewModel viewModel) {
     return SingleChildScrollView(
@@ -831,7 +831,7 @@ class KestrelScreen extends StatelessWidget {
                             });
                             },
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
                           ],
                           controller: viewModel.textFieldController,
                           decoration: InputDecoration(
@@ -860,6 +860,12 @@ class KestrelScreen extends StatelessWidget {
                             Utils.showBottomSheet(context, Icons.error,
                                 Colors.red, "The task field is empty. Please enter a task.");
                           } else{
+                            if(!Utils.isConnected){
+                              Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                                  "Alert", "Please check your internet connectivity.");
+                              return;
+                            }
+
                             await addTask(
                                 Utils.selectedProjectId,
                                 Utils.categoryForAddTask,
@@ -990,6 +996,12 @@ class KestrelScreen extends StatelessWidget {
                         Utils.selectedSubTask = "";
                         Utils.selectedSubTaskId = 0;
 
+                        //check internet
+                        if(!Utils.isConnected){
+                          Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                              "Alert", "Please check your internet connectivity.");
+                          return;
+                        }
                         // if (Utils.selectedProjectId == 0) {
                         InCompleteTaskList incompleteTashList =
                             await getMyTaskList(

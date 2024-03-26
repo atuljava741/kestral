@@ -39,8 +39,7 @@ class LandingPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8)),
                             ),
                             child: Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const SizedBox(
                                   height: 20,
@@ -63,102 +62,47 @@ class LandingPage extends StatelessWidget {
                             height: 30,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 280),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .center,
-                              children: [
-                                Text(
-                                  viewModel.getLogInText(),
-                                  style: AppTextStyle.textStylePoppins17w500,
-                                ),
-                              ],
+                            padding:  EdgeInsets.only(left: 20.Sh),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                viewModel.getLogInText(),
+                                style: AppTextStyle.textStylePoppins17w500,
+                              ),
                             ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 240),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .center,
-                              // Center content horizontally within Row
-                              children: [
-                                Text(
-                                  viewModel.getEmailAddressText(),
-                                  style: AppTextStyle.textStylePoppins12w400,
-                                ),
-                              ],
+                            padding:  EdgeInsets.only(left: 20.Sh),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                viewModel.getEmailAddressText(),
+                                style: AppTextStyle.textStylePoppins12w400,
+                              ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(10),
+                            padding:EdgeInsets.symmetric(vertical: 10.Sh, horizontal: 20.Sh),
                             child: Form(
                                 key: viewModel.formKey,
-                                child: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 320, // Set the maximum width as per your requirement
-                                  ),
-                                  child: TextFormField(
-                                    controller: viewModel.emailController,
-                                    validator: viewModel.validateEmail,
-                                    style: const TextStyle(
-                                        color: Color(0XFF000000)),
-                                    onChanged: (val) {
-                                      viewModel.formKey.currentState!
-                                          .validate();
-                                    },
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      contentPadding: const EdgeInsets
-                                          .symmetric(
-                                          vertical: 12, horizontal: 10),
-                                      // Adjust padding
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.blue),
-                                        // Set the focused border color
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      hintText: "",
-                                    ),
-                                  ),
-                                )
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.only(right: 260),
-                              child: Text(
-                                viewModel.getPasswordText(),
-                                style: AppTextStyle.textStylePoppins12w400,
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxWidth: 320, // Set the maximum width as per your requirement
-                              ),
-                              child: Form(
-                                key: viewModel.passwordFormKey,
-                                child: TextFormField(
-                                  obscureText: viewModel.obscureText,
-                                  controller: viewModel.passwordController,
-                                 validator: viewModel.validatePassword,
-                                  onChanged: (value) {
-                                    viewModel.passwordFormKey.currentState!.validate();
-                                    // viewModel.validatePassword(value);
+                                child:TextFormField(
+                                  controller: viewModel.emailController,
+                                  validator: viewModel.validateEmail,
+                                  style: const TextStyle(
+                                      color: Color(0XFF000000)),
+                                  onChanged: (val) {
+                                    viewModel.formKey.currentState!
+                                        .validate();
                                   },
                                   decoration: InputDecoration(
                                     isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets
+                                        .symmetric(
                                         vertical: 12, horizontal: 10),
+                                    // Adjust padding
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -168,14 +112,55 @@ class LandingPage extends StatelessWidget {
                                       // Set the focused border color
                                       borderRadius: BorderRadius.circular(4),
                                     ),
-                                    hintText: '',
-                                    suffixIcon: IconButton(
-                                      icon: Icon(viewModel.obscureText ? Icons
-                                          .visibility : Icons.visibility_off),
-                                      onPressed: () {
-                                        viewModel.toggleObscureText();
-                                      },
-                                    ),
+                                    hintText: "",
+                                  ),
+                                )
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                              padding:  EdgeInsets.only(left: 20.Sh),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  viewModel.getPasswordText(),
+                                  style: AppTextStyle.textStylePoppins12w400,
+                                ),
+                              )),
+                          Padding(
+                            padding:EdgeInsets.symmetric(vertical: 10.Sh, horizontal: 20.Sh),
+                            child: Form(
+                              key: viewModel.passwordFormKey,
+                              child: TextFormField(
+                                obscureText: viewModel.obscureText,
+                                controller: viewModel.passwordController,
+                               validator: viewModel.validatePassword,
+                                onChanged: (value) {
+                                  viewModel.passwordFormKey.currentState!.validate();
+                                  // viewModel.validatePassword(value);
+                                },
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.blue),
+                                    // Set the focused border color
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  hintText: '',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(viewModel.obscureText ? Icons
+                                        .visibility : Icons.visibility_off),
+                                    onPressed: () {
+                                      viewModel.toggleObscureText();
+                                    },
                                   ),
                                 ),
                               ),
@@ -193,7 +178,7 @@ class LandingPage extends StatelessWidget {
                                     }
                                   }
                               ),
-                              Text('Remember Me',
+                              Text('Remember me',
                                 style: AppTextStyle.textStylePoppins12w400,
                               ),
                             ],

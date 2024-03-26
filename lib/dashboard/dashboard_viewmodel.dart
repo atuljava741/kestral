@@ -123,6 +123,13 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> getSubTask(int projectId) async {
     Utils.selectedProjectId = projectId;
+    //check internet
+    if(!Utils.isConnected){
+      Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+          "Alert", "Please check your internet connectivity.");
+      return;
+    }
+
     InCompleteTaskList inCompleteTaskList = await getMyTaskList(
         projectId, Utils.userInformation!.data.userAuthentication.employeeId);
     Utils.taskList = inCompleteTaskList.data.getInCompleteTasks;
@@ -130,6 +137,12 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void getCategories() async {
+    //check internet
+    if(!Utils.isConnected){
+      Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+          "Alert", "Please check your internet connectivity.");
+      return;
+    }
     TaskCategory taskCategories = await getTaskCategoryList();
     Utils.categoryList = taskCategories.taskCategories;
   }

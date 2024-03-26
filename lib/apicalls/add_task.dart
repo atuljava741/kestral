@@ -36,7 +36,6 @@ addTasks(
    "dueDate": dueDate,
    "taskPriority": taskPriority,
    };
-   print(objPost);
   final MutationOptions options = MutationOptions(
   document: gql(addTaskMutation),
     variables:objPost ,

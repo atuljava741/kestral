@@ -16,9 +16,9 @@ import '../datamodal/incomplete_task.dart';
 import 'dashboard_viewmodel.dart';
 
 class KestrelScreen extends StatelessWidget {
-   KestrelScreen({super.key});
-   int tempSelectedProjectIndex=-1;
-   int tempSelectedTaskIndex=-1;
+    KestrelScreen({super.key});
+    int tempSelectedProjectIndex=-1;
+    int tempSelectedTaskIndex=-1;
 
   @override
   Widget build(BuildContext context) {
@@ -1064,8 +1064,8 @@ class KestrelScreen extends StatelessWidget {
                   Container(
                       margin: const EdgeInsets.only(top: 5 , left: 20, right :20, bottom: 20),
                       width: double.infinity,
-                      height: Utils.taskList.length>2 ? 320.Sh: Utils.taskList.length*120.Sh,
-                      //MediaQuery.of(context).size.height/2 - 80.Sh,
+                      height: Utils.taskList.length>2 ? 320.Sh:
+                      Utils.taskList.isNotEmpty ? Utils.taskList.length*120.Sh: 100.Sh,
                       decoration: ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(

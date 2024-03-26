@@ -7,22 +7,24 @@ import '../utils/utils.dart';
 
 class TaskCategoriesListView extends StatefulWidget {
 
-  List<TaskCategories> categoryList;
-  DashboardViewModel viewModel;
+  final List<TaskCategories> categoryList;
+  final DashboardViewModel viewModel;
 
-  TaskCategoriesListView(this.categoryList, this.viewModel, {super.key});
+  const TaskCategoriesListView(this.categoryList, this.viewModel, {super.key});
 
   @override
-  _MyListViewState createState() => _MyListViewState();
+  State<TaskCategoriesListView> createState() => _MyListViewState();
 }
 
 class _MyListViewState extends State<TaskCategoriesListView> {
-  int selectedIndex = -1; // Initially, no item is selected
+  int selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.categoryList.length, // Replace with your actual item count
+      shrinkWrap: true,
+      primary: false,
+      itemCount: widget.categoryList.length,
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
@@ -33,7 +35,7 @@ class _MyListViewState extends State<TaskCategoriesListView> {
             });
           },
           child: Container(
-            color: index == selectedIndex ? Utils.highlightColor : Colors.white, // Highlight selected item
+            color: index == selectedIndex ? Utils.highlightColor : Colors.white,
             padding: const EdgeInsets.all(16.0),
             child: Text(widget.categoryList.elementAt(index).taskCategoryTitle, style: AppTextStyle.textStylePoppins15w400,),
           ),

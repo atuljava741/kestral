@@ -119,8 +119,6 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
     return success;
   }
 
-
-
   Future<void> getSubTask(int projectId) async {
     Utils.selectedProjectId = projectId;
     //check internet
@@ -408,8 +406,6 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   }
   ValueNotifier<bool> _isForeground = ValueNotifier<bool>(true);
 
-
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -437,5 +433,4 @@ class DashboardViewModel extends ChangeNotifier with WidgetsBindingObserver {
   static getLogger() {
     return Utils.logger;
   }
-
 }

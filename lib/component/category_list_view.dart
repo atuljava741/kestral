@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kestral/dashboard/dashboard_viewmodel.dart';
 import 'package:kestral/datamodal/task_category.dart';
+import 'package:kestral/utils/size_ext.dart';
 
 import '../utils/appt_text_style.dart';
 import '../utils/utils.dart';
@@ -23,7 +24,6 @@ class _MyListViewState extends State<TaskCategoriesListView> {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      primary: false,
       itemCount: widget.categoryList.length,
       itemBuilder: (context, index) {
         return InkWell(
@@ -36,7 +36,7 @@ class _MyListViewState extends State<TaskCategoriesListView> {
           },
           child: Container(
             color: index == selectedIndex ? Utils.highlightColor : Colors.white,
-            padding: const EdgeInsets.all(16.0),
+            padding:  EdgeInsets.symmetric(vertical: 10.Sh, horizontal: 10.Sh),
             child: Text(widget.categoryList.elementAt(index).taskCategoryTitle, style: AppTextStyle.textStylePoppins15w400,),
           ),
         );

@@ -19,7 +19,7 @@ class ProjectsListView extends StatefulWidget {
 }
 
 class ProjectsListViewState extends State<ProjectsListView> {
-  int selectedIndex = -1; // Initially, no item is selected
+  int selectedIndex = -1;
 
   @override
   void initState() {

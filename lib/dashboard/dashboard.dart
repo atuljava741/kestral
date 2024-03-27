@@ -166,102 +166,6 @@ class KestrelScreen extends StatelessWidget {
         });
   }
 
-  /*List<Widget> projectContainer(DashboardViewModel viewModel) {
-    List<Widget> list = [];
-    for (var i = 0; i < viewModel.projectList.length; i++) {
-      Widget w = GestureDetector(s
-        onTap: () {
-          // view model me jo selectProject varaible me uska naam likhna hai jisko tap kiya
-          viewModel.seletedProject = viewModel.projectList.elementAt(i).projectName;
-          viewModel.getSubTask(viewModel.projectList.elementAt(i).projectId);
-          viewModel.refreshUI();
-        },
-        child: Container(
-          width: double.infinity,
-          height: 48.Sh,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                viewModel.projectList.elementAt(i).projectName,
-                textAlign: TextAlign.center, // Center text horizontally
-                style: AppTextStyle.textStylePoppins15w400,
-              ),
-            ),
-          ),
-        ),
-      );
-      list.add(w);
-    }
-    return list;
-  }*/
-
-  /*List<Widget> taskContainer(DashboardViewModel viewModel) {
-    List<Widget> list = [];
-    for (var j = 0; j < viewModel.taskList.length; j++) {
-      Widget x = GestureDetector(
-        onTap: () {
-          viewModel.selectedTask = viewModel.taskList.elementAt(j).taskName;
-          viewModel.refreshUI();
-        },
-        child: Container(
-          width: double.infinity,
-          height: 48.Sh,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                viewModel.taskList.elementAt(j).taskName,
-                textAlign: TextAlign.center, // Center text horizontally
-                style: AppTextStyle.textStylePoppins15w400,
-              ),
-            ),
-          ),
-        ),
-      );
-      list.add(x);
-    }
-    return list;
-  }*/
-
-/*  Widget CreateTask(DashboardViewModel viewModel, String text,
-      {VoidCallback? onTap}) {
-    return GestureDetector(
-      onTap: () {
-        // Call onTap callback if it is not null
-        onTap?.call();
-        // Print the text when tapped
-        //print(text);
-      },
-      child: Container(
-        width: double.infinity,
-        height: 48.Sh,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              text,
-              textAlign: TextAlign.center, // Center text horizontally
-              style: AppTextStyle.textStylePoppins15w400,
-            ),
-          ),
-        ),
-      ),
-    );
-  }*/
-
   Widget getTopLogoAndText(BuildContext context, DashboardViewModel viewModel) {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
@@ -641,264 +545,261 @@ class KestrelScreen extends StatelessWidget {
     );
   }
 
-
   Widget getCategoryList(BuildContext context, DashboardViewModel viewModel) {
-    return SingleChildScrollView(
-        controller: viewModel.scrollController,
-        child: Container(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Container(
-                //height: MediaQuery.of(context).size.height * 0.9,
-                decoration: const ShapeDecoration(
-                  color: Color(0xFFF8F5F0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
+    return SafeArea(
+      child: SingleChildScrollView(
+          controller: viewModel.scrollController,
+          child: Container(
+              decoration: const ShapeDecoration(
+                color: Color(0xFFF8F5F0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // Added to space items
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 24, top: 14, bottom: 14),
-                            child: Utils.getIcon(
-                                "assets/images/rong.png", 30, 30),
-                          ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // Added to space items
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding:  EdgeInsets.only(
+                              left: 24.Sh, top: 14.Sh, bottom: 14.Sh),
+                          child: Utils.getIcon(
+                              "assets/images/rong.png", 30.Sh, 30.Sh),
                         ),
-                        Text(
-                          viewModel.getCreateTask(),
-                          style: AppTextStyle.textStylePoppins16w600,
+                      ),
+                      Text(
+                        viewModel.getCreateTask(),
+                        style: AppTextStyle.textStylePoppins16w600,
+                      ),
+                       SizedBox(width: 54.Sh),
+                    ],
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
+                  ),
+                   SizedBox(
+                    height: 15.Sh
+                  ),
+                  Container(
+                    margin:  EdgeInsets.only(left: 24.Sh),
+                    child: Text(
+                      Utils.selectProjectText,
+                      style: AppTextStyle.textStylePoppins20w600,
+                    ),
+                  ),
+                   SizedBox(
+                    height: 15.Sh,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
+                  ),
+                   SizedBox(
+                    height: 16.Sh,
+                  ),
+                  Container(
+                    margin:  EdgeInsets.only(left: 24.Sh),
+                    child: Text(
+                      'CATEGORY',
+                      style: AppTextStyle.textStylePoppins14w600,
+                    ),
+                  ),
+                   SizedBox(
+                    height: 10.Sh,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20.Sh, right: 20.Sh),
+                    width: double.infinity,
+                    height: 255.Sh,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      color: Colors.white,
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x19CDBFB2),
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                          spreadRadius: 0,
                         ),
-                        const SizedBox(width: 54),
-                        // Added space between the image and text
+                        BoxShadow(
+                          color: Color(0x16CDBFB2),
+                          blurRadius: 11,
+                          offset: Offset(0, 11),
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: Color(0x0CCDBFB2),
+                          blurRadius: 15,
+                          offset: Offset(0, 25),
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: Color(0x02CDBFB2),
+                          blurRadius: 18,
+                          offset: Offset(0, 45),
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: Color(0x00CDBFB2),
+                          blurRadius: 20,
+                          offset: Offset(0, 71),
+                          spreadRadius: 0,
+                        )
                       ],
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 1,
-                      decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
+                    child: Padding(
+                      padding: EdgeInsets.all(5.Sh),
+                      child: TaskCategoriesListView(Utils.categoryList, viewModel),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 24),
-                      child: Text(
-                        Utils.selectProjectText,
-                        style: AppTextStyle.textStylePoppins20w600,
+                  ),
+                  SizedBox(
+                    height: 16.Sh,
+                  ),
+                  Container(
+                    margin:  EdgeInsets.only(left: 20.Sh, right: 20.Sh),
+                    width: double.infinity,
+                    //height: 93.Sh,
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 1,
-                      decoration: const BoxDecoration(color: Color(0xFFD9D9D9)),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 22),
-                      child: Text(
-                        'CATEGORY',
-                        style: AppTextStyle.textStylePoppins14w600,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      width: double.infinity,
-                      height: 255.Sh,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x19CDBFB2),
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                          spreadRadius: 0,
                         ),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(0x19CDBFB2),
-                            blurRadius: 6,
-                            offset: Offset(0, 3),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x16CDBFB2),
-                            blurRadius: 11,
-                            offset: Offset(0, 11),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x0CCDBFB2),
-                            blurRadius: 15,
-                            offset: Offset(0, 25),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x02CDBFB2),
-                            blurRadius: 18,
-                            offset: Offset(0, 45),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x00CDBFB2),
-                            blurRadius: 20,
-                            offset: Offset(0, 71),
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                      child:
-                          TaskCategoriesListView(Utils.categoryList, viewModel),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      width: double.infinity,
-                      //height: 93.Sh,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        BoxShadow(
+                          color: Color(0x16CDBFB2),
+                          blurRadius: 11,
+                          offset: Offset(0, 11),
+                          spreadRadius: 0,
                         ),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(0x19CDBFB2),
-                            blurRadius: 6,
-                            offset: Offset(0, 3),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x16CDBFB2),
-                            blurRadius: 11,
-                            offset: Offset(0, 11),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x0CCDBFB2),
-                            blurRadius: 15,
-                            offset: Offset(0, 25),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x02CDBFB2),
-                            blurRadius: 18,
-                            offset: Offset(0, 45),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x00CDBFB2),
-                            blurRadius: 20,
-                            offset: Offset(0, 71),
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          right: 16.Sw,
-                          left: 16.Sw,
-                          top: 5.Sh,
-                          bottom: 15,
+                        BoxShadow(
+                          color: Color(0x0CCDBFB2),
+                          blurRadius: 15,
+                          offset: Offset(0, 25),
+                          spreadRadius: 0,
                         ),
-                        child: TextField(
-                          onTap: (){
-                            Future.delayed(const Duration(milliseconds: 500), () {
-                              viewModel.scrollController.animateTo(
-                                  viewModel.scrollController.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.ease);
-                            });
-                            },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
-                          ],
-                          controller: viewModel.textFieldController,
-                          decoration: InputDecoration(
-                            labelText: viewModel.getTaskText(),
-                            labelStyle: AppTextStyle.textStylePoppins19w400,
-                          ),
+                        BoxShadow(
+                          color: Color(0x02CDBFB2),
+                          blurRadius: 18,
+                          offset: Offset(0, 45),
+                          spreadRadius: 0,
                         ),
-                      ),
+                        BoxShadow(
+                          color: Color(0x00CDBFB2),
+                          blurRadius: 20,
+                          offset: Offset(0, 71),
+                          spreadRadius: 0,
+                        )
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    TButtons((index) {
-                      viewModel.newTaskPriority = index;
-                    }),
-                    Padding(
+                    child: Padding(
                       padding: EdgeInsets.only(
-                          top: 120.Sh,
-                          left: 20.Sw,
-                          right: 20.Sw,
-                          bottom: 20.Sh),
-                      child: GestureDetector(
-                        onTap: () async {
-                          if( Utils.categoryForAddTask ==0){
-                            Utils.showBottomSheet(context, Icons.error,
-                                Colors.red, "Please select a category.");
-                          }else if(viewModel.textFieldController.text.trim().isEmpty){
-                            Utils.showBottomSheet(context, Icons.error,
-                                Colors.red, "The task field is empty. Please enter a task.");
-                          } else{
-                            if(!Utils.isConnected){
-                              Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
-                                  "Alert", "Please check your internet connectivity.");
-                              return;
-                            }
-
-                            await addTask(
-                                Utils.selectedProjectId,
-                                Utils.categoryForAddTask,
-                                Utils.userInformation!.data.userAuthentication.employeeId,
-                                viewModel.textFieldController.text.trim(),
-                                viewModel.getDueDate(),
-                                viewModel.newTaskPriority);
-
-                            Utils.categoryForAddTask=0;
-                            viewModel.textFieldController.text="";
-                            Navigator.pop(context);
-                            Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
+                        right: 16.Sw,
+                        left: 16.Sw,
+                        top: 5.Sh,
+                        bottom: 15.Sh,
+                      ),
+                      child: TextField(
+                        onTap: (){
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            viewModel.scrollController.animateTo(
+                                viewModel.scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.ease);
+                          });
+                          },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+                        ],
+                        controller: viewModel.textFieldController,
+                        decoration: InputDecoration(
+                          labelText: viewModel.getTaskText(),
+                          labelStyle: AppTextStyle.textStylePoppins19w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                   SizedBox(height: 10.Sh),
+                  TButtons((index) {
+                    viewModel.newTaskPriority = index;
+                  }),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 100.Sh,
+                        left: 20.Sw,
+                        right: 20.Sw,
+                        bottom: 20.Sh),
+                    child: GestureDetector(
+                      onTap: () async {
+                        if( Utils.categoryForAddTask ==0){
+                          Utils.showBottomSheet(context, Icons.error,
+                              Colors.red, "Please select a category.");
+                        }else if(viewModel.textFieldController.text.trim().isEmpty){
+                          Utils.showBottomSheet(context, Icons.error,
+                              Colors.red, "The task field is empty. Please enter a task.");
+                        } else{
+                          if(!Utils.isConnected){
+                            Utils.showCustomDialog(Utils.navigatorKey.currentState!.context,
+                                "Alert", "Please check your internet connectivity.");
+                            return;
                           }
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 48.0,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFF1589CA),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Add Task',
-                              style: AppTextStyle.textStylePoppins16w500,
-                            ),
+                          await addTask(
+                              Utils.selectedProjectId,
+                              Utils.categoryForAddTask,
+                              Utils.userInformation!.data.userAuthentication.employeeId,
+                              viewModel.textFieldController.text.trim(),
+                              viewModel.getDueDate(),
+                              viewModel.newTaskPriority);
+
+                          Utils.categoryForAddTask=0;
+                          viewModel.textFieldController.text="";
+                          Navigator.pop(context);
+                          Utils.showBottomSheet(context, Icons.done, Colors.green, "Task added successfully");
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 48.Sh,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFF1589CA),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Add Task',
+                            style: AppTextStyle.textStylePoppins16w500,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ))));
+                  ),
+                ],
+              ))),
+    );
   }
 
   Future<void> onStartButtonClicked(DashboardViewModel viewModel) async {
